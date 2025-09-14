@@ -58,7 +58,11 @@ export const JoinButton = (): JSX.Element => {
   if (!isEligibleToVote && gatekeeperTrait === GatekeeperTrait.Zupass) {
     return (
       <div>
-        <Button variant={isRegistered === undefined || isLoading ? "disabled" : "primary"} onClick={handleZupassVerify}>
+        <Button
+          size="auto"
+          variant={isRegistered === undefined || isLoading ? "disabled" : "primary"}
+          onClick={handleZupassVerify}
+        >
           Generate Zupass Proof
         </Button>
       </div>
@@ -68,7 +72,11 @@ export const JoinButton = (): JSX.Element => {
   if (isEligibleToVote && !isRegistered) {
     return (
       <div>
-        <Button variant={isRegistered === undefined || isLoading ? "disabled" : "primary"} onClick={handleSignup}>
+        <Button
+          size="auto"
+          variant={isRegistered === undefined || isLoading ? "disabled" : "primary"}
+          onClick={handleSignup}
+        >
           Voter sign up
         </Button>
       </div>
@@ -78,7 +86,9 @@ export const JoinButton = (): JSX.Element => {
   if (!isEligibleToVote) {
     return (
       <div>
-        <Button variant="disabled">You are not allowed to vote</Button>
+        <Button size="auto" variant="disabled">
+          You are not allowed to vote
+        </Button>
       </div>
     );
   }

@@ -1,0 +1,106 @@
+.bgWrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: #000000;
+}
+
+.gridWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.grid {
+  position: absolute;
+  width: 850px;
+  height: 50%;
+  opacity: 0.28;
+}
+
+.grid1,
+.grid3 {
+  background-position-x: 120px !important;
+}
+
+.grid1 {
+  background: url("/top-left-grid.svg");
+  top: 40px;
+  right: 50%;
+}
+
+.grid2 {
+  background: url("/top-right-grid.svg");
+  background-position-y: -0px;
+  top: 40px;
+  left: 50%;
+}
+
+.grid3 {
+  background: url("/bottom-left-grid.svg");
+  background-position-y: -0px;
+  top: 50%;
+  right: 50%;
+}
+
+.grid4 {
+  background: url("/bottom-right-grid.svg");
+  background-position-y: -22px;
+  top: 50%;
+  left: 50%;
+}
+
+.colorWrapper {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.topColor {
+  position: absolute;
+  top: 50%;
+  left: 20%;
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(250, 117, 248, 0.28) 0%, rgba(250, 117, 248, 0) 100%);
+}
+
+.bottomColor {
+  position: absolute;
+  top: 40px;
+  right: 20%;
+  width: 100%;
+  height: 100%;
+  opacity: 0.8;
+  background: radial-gradient(50% 50% at 50% 50%, rgba(158, 110, 230, 0.28) 0%, rgba(158, 110, 230, 0) 100%);
+}
+
+.shadeTop {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .grid {
+    opacity: 0.25;
+  }
+  .colorLayer {
+    width: 900px;
+    height: 900px;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    opacity: 0.2;
+  }
+  .colorLayer {
+    width: 700px;
+    height: 700px;
+  }
+}

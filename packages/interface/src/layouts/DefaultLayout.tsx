@@ -79,11 +79,11 @@ export const Layout = ({ children = null, ...props }: ILayoutProps): JSX.Element
             href: "/voters",
             name: "Voters",
           },
-          {
-            label: "coordinator",
-            href: "/coordinator",
-            name: "Coordinator",
-          },
+          // {
+          //   label: "coordinator",
+          //   href: "/coordinator",
+          //   name: "Coordinator",
+          // },
         ],
       );
     }

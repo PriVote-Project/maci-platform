@@ -38,7 +38,7 @@ export const ProjectItemContent = ({
   impactCategory = undefined,
   actionButton = undefined,
 }: IProjectItemContentProps): JSX.Element => (
-  <article className="dark:bg-lightBlack shadow-project-card group w-full rounded-[10px] border border-gray-50 bg-white">
+  <article className="group w-full rounded-[12px] border border-[var(--glass-stroke)] bg-white backdrop-blur-md dark:bg-[var(--glass-bg-08)]">
     <div className="opacity-70 transition-opacity duration-200 group-hover:opacity-100">
       <ProjectBanner className="!rounded-b-none" size="sm" url={bannerImageUrl} />
 
@@ -47,7 +47,7 @@ export const ProjectItemContent = ({
 
     <div className="flex flex-col gap-5 p-4 pt-2">
       <div className="flex flex-col gap-1">
-        <span className="font-sans text-base font-semibold uppercase text-black dark:text-white">{name}</span>
+        <span className="font-sans text-base font-semibold uppercase text-[var(--text-primary)]">{name}</span>
 
         <span className="line-clamp-2 h-10 font-sans text-sm text-gray-400">{removeMarkdown(shortBio || "")}</span>
       </div>
@@ -146,7 +146,7 @@ export interface IProjectItemAwardedProps {
 }
 
 export const ProjectItemAwarded = ({ amount = 0 }: IProjectItemAwardedProps): JSX.Element => (
-  <div className="absolute right-2 top-[100px] z-10 -mt-2 rounded bg-gray-100 p-1 text-sm">
+  <div className="absolute right-2 top-[100px] z-10 -mt-2 rounded bg-gray-100 p-1 text-sm text-black dark:bg-[var(--surface-2)] dark:text-white">
     <span className="mr-1 font-bold">{formatNumber(amount)}</span>
 
     <span>{config.tokenName}</span>
