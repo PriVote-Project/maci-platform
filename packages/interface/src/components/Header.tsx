@@ -21,7 +21,7 @@ interface INavLinkProps extends ComponentPropsWithRef<typeof Link> {
 }
 
 const NavLink = ({ isActive, ...props }: INavLinkProps) => (
-  <Link className={cn("relative flex h-full w-full min-w-[95px] flex-col items-center")} {...props}>
+  <Link className={cn("relative flex h-full w-full min-w-[95px] flex-col items-center no-scrollbar")} {...props}>
     <span className="p-2 font-sans text-sm font-medium leading-5">{props.children}</span>
 
     <div className={cn("absolute bottom-0 h-[2px] w-full bg-blue-400", isActive ? "opacity-100" : "opacity-0")} />
@@ -135,7 +135,7 @@ const Header = ({ navLinks, pollId = "" }: IHeaderProps) => {
           </Link>
         </div>
 
-        <div className="hidden h-full items-center gap-[36px] overflow-x-auto uppercase md:flex">
+        <div className="hidden h-full items-center gap-[36px] overflow-x-hidden uppercase md:flex">
           {navLinks.map((link) => {
             const isActive =
               (link.label !== "round" && asPath.includes(link.label)) || (link.label === "round" && isRoundIndexPage);
