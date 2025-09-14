@@ -27,7 +27,7 @@ const TimeBar = ({ start, end }: ITimeBarProps): JSX.Element => {
   const periodString = useMemo(() => formatPeriod({ start, end }), [start, end]);
 
   return (
-    <div className="flex items-center gap-2 text-sm">
+    <div className="flex items-center gap-2 text-sm text-[var(--text-secondary)]">
       <FiCalendar />
 
       <p>{periodString}</p>
@@ -51,8 +51,8 @@ const RoundTag = ({ state }: IRoundTagProps): JSX.Element => {
       className={clsx(
         "w-max rounded-md border px-1.5 py-1 text-xs uppercase",
         state === ERoundState.APPLICATION || state === ERoundState.VOTING
-          ? "border-[#8aca6c] text-[#8aca6c]"
-          : "border-[#fc6e31] text-[#fc6e31]",
+          ? "border-[var(--success)] text-[var(--success)]"
+          : "border-[var(--warning)] text-[var(--warning)]",
       )}
     >
       {tagText}
@@ -65,10 +65,10 @@ export const RoundItem = ({ round }: IRoundItemProps): JSX.Element => {
 
   return (
     <Link href={`/rounds/${round.pollId}`}>
-      <div className="m-2 rounded-md border-gray-50 bg-white px-5 py-6 drop-shadow-md">
+      <div className="m-2 rounded-[12px] border border-[var(--glass-stroke)] bg-white px-5 py-6 backdrop-blur-md dark:bg-[var(--glass-bg-08)]">
         <TimeBar end={new Date(round.votingEndsAt)} start={new Date(round.startsAt)} />
 
-        <Heading className="dark:text-black" size="md">
+        <Heading className="text-black dark:text-[var(--text-primary)]" size="md">
           {round.roundId}
         </Heading>
 

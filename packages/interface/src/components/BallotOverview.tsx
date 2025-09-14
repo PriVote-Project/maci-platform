@@ -43,7 +43,7 @@ export const BallotOverview = ({ title = undefined, pollId }: IBallotOverviewPro
           : `/rounds/${pollId}/ballot`
       }
     >
-      <div className="dark:bg-lightBlack sm:w-66 w-full flex-col items-center gap-2 bg-white uppercase dark:text-white">
+      <div className="sm:w-66 w-full flex-col items-center gap-2 rounded-[12px] uppercase text-[var(--text-primary)]">
         <Heading as="h3" size="3xl">
           {title}
         </Heading>

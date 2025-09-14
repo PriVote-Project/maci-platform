@@ -38,18 +38,14 @@ const FooterNavLink = ({
 );
 
 const Footer = (): JSX.Element => (
-  <footer className="dark:border-lighterBlack border-t border-gray-200 bg-gray-50 dark:bg-black dark:text-white">
+  <footer className="dark:border-lighterBlack border-t border-gray-200 bg-white/80 backdrop-blur-md dark:bg-[rgba(15,14,13,0.1)] dark:text-white">
     <AppContainer className="flex flex-col items-center justify-between gap-4 py-12 md:flex-row md:py-9">
       <div className="flex items-center justify-start gap-6 md:gap-4">
-        <FooterNavLink ariaLabel="twitter" href="https://x.com/zkMACI" showExternalIcon={false}>
+        <FooterNavLink ariaLabel="twitter" href="https://x.com/privoteweb3" showExternalIcon={false}>
           <FaXTwitter size={20} />
         </FooterNavLink>
 
-        <FooterNavLink
-          ariaLabel="github"
-          href="https://github.com/privacy-scaling-explorations/maci-platform/"
-          showExternalIcon={false}
-        >
+        <FooterNavLink ariaLabel="github" href="https://github.com/privoteweb3/maci-platform" showExternalIcon={false}>
           <FaGithub size={20} />
         </FooterNavLink>
 

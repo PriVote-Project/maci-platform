@@ -53,9 +53,6 @@ async function encodeData({ values, schemaUID }: Params, signer: JsonRpcSigner) 
         const isHexBytes32 = typeof str === "string" && /^0x[0-9a-fA-F]{64}$/.test(str);
         value = (isHexBytes32 ? str : encodeBytes32String(String(value))) as unknown as SchemaValue;
       }
-      console.log(value);
-      console.log(name);
-      console.log(type);
       return { name, type, value };
     }
     throw new Error(`Attestation data: ${name} not found in ${JSON.stringify(values)}`);

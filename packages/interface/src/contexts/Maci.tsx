@@ -89,8 +89,6 @@ export const MaciProvider: React.FC<MaciProviderProps> = ({ children }: MaciProv
 
   // fetch the voting attestation (only if gatekeeper is EAS)
   const attestationId = useMemo(() => {
-    console.log(address);
-    console.log(attestations.data);
     const values = attestations.data?.valueOf() as Attestation[] | undefined;
 
     const attestation = values?.find(({ attester }) => config.admin === attester);
@@ -195,19 +193,10 @@ export const MaciProvider: React.FC<MaciProviderProps> = ({ children }: MaciProv
   // just by fetching the attestation. On the other hand, with other
   // gatekeepers it might be more difficult to determine it
   // for instance with semaphore
-  const isEligibleToVote = useMemo(() => {
-    // Debug logging to understand why isEligibleToVote might be false
-    // eslint-disable-next-line no-console
-    console.log("isEligibleToVote debug:", {
-      gatekeeperTrait,
-      sgData,
-      address,
-      isFreeForAll: gatekeeperTrait === GatekeeperTrait.FreeForAll,
-      hasSgData: Boolean(sgData),
-      hasAddress: Boolean(address),
-    });
-    return gatekeeperTrait && (gatekeeperTrait === GatekeeperTrait.FreeForAll || Boolean(sgData)) && Boolean(address);
-  }, [sgData, address, gatekeeperTrait]);
+  const isEligibleToVote = useMemo(
+    () => gatekeeperTrait && (gatekeeperTrait === GatekeeperTrait.FreeForAll || Boolean(sgData)) && Boolean(address),
+    [sgData, address, gatekeeperTrait],
+  );
 
   // on load get the key pair from local storage and set the signature message
   useEffect(() => {

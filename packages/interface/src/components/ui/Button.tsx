@@ -5,22 +5,24 @@ import { tv } from "tailwind-variants";
 import { createComponent } from ".";
 
 const button = tv({
-  base: "font-sans inline-flex items-center justify-center font-semibold uppercase rounded-lg text-center transition-colors duration-150 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
+  base: "font-sans inline-flex items-center justify-center font-semibold uppercase rounded-lg text-center transition-colors duration-150 whitespace-nowrap focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
   variants: {
     variant: {
-      primary: "bg-black text-white hover:bg-blue-950 dark:bg-white dark:text-black dark:hover:bg-blue-100",
+      primary:
+        "text-white bg-[var(--brand-300)] [background:var(--brand-gradient)] hover:[background:var(--brand-50)] hover:text-[var(--brand-500)]",
       inverted:
         "text-black border border-black hover:text-blue-500 hover:border-blue-500 dark:border-white dark:text-white",
-      tertiary: "bg-blue-50 text-blue-500 border border-blue-500 hover:bg-blue-100",
-      secondary: "bg-blue-500 text-white hover:bg-blue-600",
+      tertiary: "bg-[var(--brand-50)] text-[var(--brand-500)] border border-[var(--brand-500)] hover:opacity-90",
+      secondary: "bg-[var(--brand-300)] text-white hover:[background:var(--brand-50)] hover:text-[var(--brand-500)]",
       ghost: "hover:bg-gray-100 dark:invert",
       outline: "border border-gray-200 hover:border-gray-300 dark:text-white dark:border-white",
-      disabled: "border border-gray-200 bg-gray-50 text-gray-200 cursor-not-allowed",
+      disabled:
+        "cursor-not-allowed border border-[var(--glass-stroke)] bg-white/60 text-gray-400 dark:bg-[var(--glass-bg-08)] dark:text-[var(--text-tertiary)]",
       none: "",
     },
     size: {
       xs: "px-2 text-xs rounded-md",
-      md: "py-2 px-5 text-base leading-6 rounded-[6px] !normal-case",
+      md: "py-3 px-6 text-base leading-6 rounded-[8px] !normal-case",
       sm: "px-3 py-2 h-8 text-xs rounded-md",
       default: "px-4 py-2 h-10 w-full",
       auto: "px-4 py-2 h-10 w-auto",

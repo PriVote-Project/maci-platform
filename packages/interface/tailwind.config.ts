@@ -83,8 +83,8 @@ export default {
         "info-card": "0px 0px 1px 0px rgba(0, 0, 0, 0.05), 0px 8px 18px 0px rgba(0, 0, 0, 0.08)",
       },
       fontFamily: {
-        sans: ["var(--font-dm-sans)", ...theme.fontFamily.sans],
-        mono: ["var(--font-share-tech-mono)", ...theme.fontFamily.mono],
+        sans: ["var(--font-satoshi-regular)", ...theme.fontFamily.sans],
+        mono: ["Monaco", "Menlo", "Ubuntu Mono", ...theme.fontFamily.mono],
         inter: ["var(--font-inter)", ...theme.fontFamily.sans],
       },
       width: {

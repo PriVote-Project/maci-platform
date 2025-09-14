@@ -12,6 +12,6 @@ export const Card = createComponent(
 export const CardTitle = createComponent(
   "h3",
   tv({
-    base: "text-base md:text-lg font-bold",
+    base: "font-sans text-base md:text-lg font-semibold tracking-[0.6px]",
   }),
 );

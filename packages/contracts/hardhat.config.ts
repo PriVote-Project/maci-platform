@@ -38,6 +38,38 @@ const NETWORKS_RPC_URL = getNetworkRpcUrls();
 const GAS_PRICE: number | "auto" = process.env.GAS_PRICE ? Number(process.env.GAS_PRICE) : "auto";
 const ETHERSCAN_API_KEYS = getEtherscanApiKeys();
 
+// Prefer using private key(s) if provided via env; otherwise fallback to mnemonic
+const getAccountsConfig = (
+  mnemonic?: string,
+):
+  | string[]
+  | {
+      mnemonic: string;
+      path: string;
+      initialIndex: number;
+      count: number;
+    } => {
+  const pksEnv = process.env.PRIVATE_KEYS || process.env.PRIVATE_KEY;
+  if (pksEnv) {
+    const privateKeys = pksEnv
+      .split(",")
+      .map((k) => k.trim())
+      .filter((k) => k.length > 0)
+      .map((k) => (k.startsWith("0x") ? k : `0x${k}`));
+
+    if (privateKeys.length > 0) {
+      return privateKeys;
+    }
+  }
+
+  return {
+    mnemonic: mnemonic || process.env.MNEMONIC || TEST_MNEMONIC,
+    path: "m/44'/60'/0'/0",
+    initialIndex: 0,
+    count: 20,
+  };
+};
+
 const getCommonNetworkConfig = (networkName: ESupportedChains, chainId: number, mnemonic?: string) => ({
   url: NETWORKS_RPC_URL[networkName],
   blockGasLimit: DEFAULT_BLOCK_GAS_LIMIT,
@@ -45,12 +77,7 @@ const getCommonNetworkConfig = (networkName: ESupportedChains, chainId: number, 
   gasPrice: GAS_PRICE,
   saveDeployments: true,
   chainId,
-  accounts: {
-    mnemonic: mnemonic || process.env.MNEMONIC || TEST_MNEMONIC,
-    path: "m/44'/60'/0'/0",
-    initialIndex: 0,
-    count: 20,
-  },
+  accounts: getAccountsConfig(mnemonic),
 });
 
 const config: HardhatUserConfig = {

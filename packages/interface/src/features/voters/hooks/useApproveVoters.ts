@@ -1,10 +1,10 @@
 import { type UseMutationResult, useMutation } from "@tanstack/react-query";
+import { encodeBytes32String } from "ethers";
 
 import { config, eas } from "~/config";
 import { useAttest } from "~/hooks/useEAS";
 import { useEthersSigner } from "~/hooks/useEthersSigner";
 import { createAttestation } from "~/lib/eas/createAttestation";
-import { encodeBytes32String } from "ethers";
 
 // TODO: Move this to a shared folders
 export interface TransactionError {
@@ -15,11 +15,11 @@ export interface TransactionError {
 export function useApproveVoters(options: {
   onSuccess: () => void;
   onError: (err: TransactionError) => void;
-}): UseMutationResult<void, TransactionError, string[]> {
+}): UseMutationResult<unknown, TransactionError, string[]> {
   const attest = useAttest();
   const signer = useEthersSigner();
 
-  return useMutation<void, TransactionError, string[]>({
+  return useMutation<unknown, TransactionError, string[]>({
     mutationFn: async (voters: string[]) => {
       if (!signer) {
         throw new Error("Connect wallet first");
@@ -42,7 +42,6 @@ export function useApproveVoters(options: {
         ),
       );
       await attest.mutateAsync(attestations.map((att) => ({ ...att, data: [att.data] })));
-      return;
     },
     ...options,
   });

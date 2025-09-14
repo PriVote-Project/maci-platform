@@ -1,21 +1,15 @@
-import { DM_Sans as DmSans, Share_Tech_Mono as ShareTechMono, Inter } from "next/font/google";
+import { Share_Tech_Mono as ShareTechMono, Inter } from "next/font/google";
 
-const dmSans = DmSans({
+export const satoshi = Inter({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-dm-sans",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-satoshi-regular",
 });
 
-const shareTechMono = ShareTechMono({
+export const shareTechMono = ShareTechMono({
   subsets: ["latin"],
   weight: ["400"],
   variable: "--font-share-tech-mono",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-inter",
-});
-
-export const fontVariables = `${dmSans.className} ${dmSans.variable} ${shareTechMono.variable} ${inter.variable}`;
+export const fontVariables = `${satoshi.className} ${satoshi.variable} ${shareTechMono.variable}`;

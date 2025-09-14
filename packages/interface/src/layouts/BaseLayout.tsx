@@ -7,6 +7,7 @@ import { tv } from "tailwind-variants";
 import { useAccount } from "wagmi";
 
 import Footer from "~/components/Footer";
+import Background from "~/components/shared/Background";
 import { createComponent } from "~/components/ui";
 import { metadata } from "~/config";
 import { fontVariables } from "~/utils/fonts";
@@ -58,6 +59,7 @@ export const BaseLayout = ({
 }: IBaseLayoutProps): JSX.Element => {
   const { theme, resolvedTheme } = useTheme();
   const [clientTheme, setClientTheme] = useState("");
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const { address, isConnecting } = useAccount();
 
@@ -75,6 +77,10 @@ export const BaseLayout = ({
     // Ensure the theme is consistent on the client side
     setClientTheme(theme || resolvedTheme || "");
   }, [theme, resolvedTheme]);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const wrappedSidebar = <Sidebar side={sidebar}>{sidebarComponent}</Sidebar>;
 
@@ -115,28 +121,30 @@ export const BaseLayout = ({
         <meta content={metadata.image} name="twitter:image" />
       </Head>
 
-      <div
-        className={clsx("flex h-full min-h-screen flex-1 flex-col bg-white dark:bg-black", clientTheme, fontVariables)}
-      >
-        {header}
+      <div className={clsx("relative flex h-full min-h-screen flex-1 flex-col ", clientTheme, fontVariables)}>
+        {mounted && resolvedTheme === "dark" ? <Background /> : null}
 
-        <AppContainer fullWidth={!hasSidebar}>
-          <MainContainer type={type}>
-            {sidebar === "left" ? wrappedSidebar : null}
+        <div className="relative z-10">
+          {header}
 
-            <div
-              className={clsx("min-h-[90vh] w-full pb-24", {
-                "px-4 lg:px-2": hasSidebar || !isHome,
-              })}
-            >
-              {children}
-            </div>
+          <AppContainer fullWidth={!hasSidebar}>
+            <MainContainer type={type}>
+              {sidebar === "left" ? wrappedSidebar : null}
 
-            {sidebar === "right" ? wrappedSidebar : null}
-          </MainContainer>
-        </AppContainer>
+              <div
+                className={clsx("min-h-[90vh] w-full pb-24", {
+                  "px-4 lg:px-2": hasSidebar || !isHome,
+                })}
+              >
+                {children}
+              </div>
 
-        <Footer />
+              {sidebar === "right" ? wrappedSidebar : null}
+            </MainContainer>
+          </AppContainer>
+
+          <Footer />
+        </div>
       </div>
     </Context.Provider>
   );

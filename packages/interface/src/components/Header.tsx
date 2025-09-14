@@ -1,4 +1,16 @@
-import { Menu, MoonIcon, SunIcon, X } from "lucide-react";
+import {
+  Menu,
+  MoonIcon,
+  SunIcon,
+  X,
+  BarChart3,
+  ClipboardList,
+  Pencil,
+  FolderKanban,
+  Home,
+  Shield,
+  Users,
+} from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -21,12 +33,42 @@ interface INavLinkProps extends ComponentPropsWithRef<typeof Link> {
 }
 
 const NavLink = ({ isActive, ...props }: INavLinkProps) => (
-  <Link className={cn("relative flex h-full w-full min-w-[95px] flex-col items-center no-scrollbar")} {...props}>
-    <span className="p-2 font-sans text-sm font-medium leading-5">{props.children}</span>
-
-    <div className={cn("absolute bottom-0 h-[2px] w-full bg-blue-400", isActive ? "opacity-100" : "opacity-0")} />
+  <Link
+    className={cn(
+      "no-scrollbar relative flex h-full min-w-[110px] flex-row items-center gap-2 whitespace-nowrap uppercase text-black transition-all duration-200 ease-linear hover:text-[#c45ec6] dark:text-white",
+      isActive && "text-[#c45ec6]",
+    )}
+    {...props}
+  >
+    {props.children}
   </Link>
 );
+
+const NavIcon = ({ link }: { link: { label: string; href: string } }): JSX.Element => {
+  let IconComp = Home;
+
+  if (link.label === "round") {
+    IconComp = FolderKanban;
+  } else if (link.label === "ballot") {
+    if (link.href.includes("confirmation")) {
+      IconComp = Shield;
+    } else {
+      IconComp = ClipboardList;
+    }
+  } else if (link.label === "result") {
+    IconComp = BarChart3;
+  } else if (link.label === "proposals") {
+    IconComp = Pencil;
+  } else if (link.label === "voters") {
+    IconComp = Users;
+  } else if (link.label === "coordinator") {
+    IconComp = Shield;
+  } else {
+    IconComp = Home;
+  }
+
+  return <IconComp className="h-[21px] w-[21px] shrink-0" />;
+};
 
 interface IMobileMenuProps {
   isOpen?: boolean;
@@ -48,28 +90,35 @@ const MobileMenu = ({ isOpen = false, navLinks, pollId, setOpen }: IMobileMenuPr
     >
       <Link
         key="home"
-        className={cn("block p-4 text-2xl  font-semibold")}
+        className={cn(
+          "flex items-center gap-2 p-4 text-2xl font-medium uppercase tracking-[0.6px] text-black transition-all duration-200 ease-linear hover:text-[#c45ec6] dark:text-white",
+        )}
         href="/"
         onClick={() => {
           setOpen(false);
         }}
       >
+        <Home className="h-[21px] w-[21px]" />
         Home
       </Link>
 
       {navLinks.map((link) => (
         <Link
           key={link.href}
-          className={cn("block p-4 text-2xl font-semibold uppercase  text-black dark:text-white")}
+          className={cn(
+            "flex items-center gap-2 p-4 text-2xl font-medium uppercase tracking-[0.6px] text-black transition-all duration-200 ease-linear hover:text-[#c45ec6] dark:text-white",
+          )}
           href={link.href}
           onClick={() => {
             setOpen(false);
           }}
         >
+          <NavIcon link={link} />
+
           {link.name}
 
           {roundState === ERoundState.VOTING && link.href.includes("/ballot") && ballot.votes.length > 0 && (
-            <div className="ml-2 h-5 w-5 rounded-full bg-blue-50 font-sans text-sm font-medium leading-5 text-blue-400">
+            <div className="ml-2 inline-flex h-5 w-5 items-center justify-center rounded-full bg-[var(--brand-50)] font-sans text-sm font-medium leading-5 text-[var(--accent-color)]">
               {ballot.votes.length}
             </div>
           )}
@@ -99,11 +148,10 @@ const Header = ({ navLinks, pollId = "" }: IHeaderProps) => {
 
   const ballot = useMemo(() => getBallot(pollId), [pollId, getBallot]);
 
-  // set default theme to light if it's not set
+  // set default theme to dark if it's not set
   useEffect(() => {
-    const defaultTheme = theme === "dark" ? "dark" : "light";
     if (!["dark", "light"].includes(theme ?? "")) {
-      setTheme(defaultTheme);
+      setTheme("dark");
     }
   }, []);
 
@@ -118,8 +166,8 @@ const Header = ({ navLinks, pollId = "" }: IHeaderProps) => {
   );
 
   return (
-    <header className="dark:border-lighterBlack dark:bg-lightBlack relative z-[100] border-b border-gray-200 bg-white py-[18px] dark:text-white">
-      <AppContainer as="div" className="container mx-auto flex items-center px-2">
+    <header className="dark:border-lighterBlack relative z-[100] border-b border-gray-200 bg-white/90 py-[18px] backdrop-blur-md dark:bg-[rgba(15,14,13,0.1)] dark:text-white">
+      <AppContainer as="div" className="container relative mx-auto flex items-center px-2">
         <div className="mr-4 flex items-center md:mr-16">
           <IconButton
             className="mr-1 text-gray-600 md:hidden"
@@ -135,17 +183,19 @@ const Header = ({ navLinks, pollId = "" }: IHeaderProps) => {
           </Link>
         </div>
 
-        <div className="hidden h-full items-center gap-[36px] overflow-x-hidden uppercase md:flex">
+        <div className="absolute left-1/2 top-1/2 hidden h-full -translate-x-1/2 -translate-y-1/2 items-center gap-[48px] overflow-x-hidden uppercase md:flex">
           {navLinks.map((link) => {
             const isActive =
               (link.label !== "round" && asPath.includes(link.label)) || (link.label === "round" && isRoundIndexPage);
 
             return (
               <NavLink key={link.label} href={link.href} isActive={isActive}>
-                {link.name}
+                <NavIcon link={link} />
+
+                <span className="font-sans text-base font-medium leading-5 tracking-[0.6px]">{link.name}</span>
 
                 {roundState === ERoundState.VOTING && link.href.includes("/ballot") && ballot.votes.length > 0 && (
-                  <div className="ml-2 h-5 w-5 rounded-full bg-blue-50 font-sans text-sm font-medium leading-5 text-blue-400">
+                  <div className="ml-2 h-5 w-5 rounded-full bg-[var(--brand-50)] font-sans text-sm font-medium leading-5 text-[var(--accent-color)]">
                     {ballot.votes.length}
                   </div>
                 )}
