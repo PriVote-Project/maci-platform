@@ -70,7 +70,7 @@ export const getRPCURL = (): string | undefined => {
 };
 
 export const config = {
-  logoUrl: "/Logo.svg",
+  logoUrl: "/privote.svg",
   pageSize: 3 * 4,
   // TODO: temp solution until we come up with solid one
   // https://github.com/privacy-scaling-explorations/maci-platform/issues/31
@@ -90,7 +90,7 @@ export const config = {
 };
 
 export const theme = {
-  colorMode: "light",
+  colorMode: "dark",
 };
 
 export const eas = {

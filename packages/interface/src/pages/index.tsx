@@ -23,7 +23,7 @@ const HomePage = (): JSX.Element => {
   const singleRound = useMemo(() => (rounds && rounds.length === 1 ? rounds[0] : undefined), [rounds]);
 
   return (
-    <div className="bg-blue-50  dark:bg-black">
+    <div className="bg-blue-50 dark:bg-transparent">
       <Layout pollId={singleRound ? singleRound.pollId : ""} type="home">
         {singleRound && <SingleRoundHome round={singleRound} />}
 

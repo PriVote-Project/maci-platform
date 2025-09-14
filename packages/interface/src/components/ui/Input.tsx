@@ -7,11 +7,11 @@ export const inputBase = [
   "duration-200",
   "disabled:opacity-30",
   "checked:bg-gray-800",
-  "rounded border outline border-gray-200 outline-transparent",
-  "py-[9px] px-[10px]",
-  "placeholder:text-gray-300",
-  "dark:bg-black dark:text-white dark:border-gray-800",
-  "focus:border-blue-300 focus:outline-blue-300",
+  "rounded-[10px] border-2 outline outline-transparent",
+  "py-[14px] px-[16px]",
+  "placeholder:text-gray-400",
+  "dark:bg-[rgba(255,255,255,0.06)] dark:text-white dark:border-[rgba(255,255,255,0.15)]",
+  "focus:border-[rgba(250,117,248,0.5)] focus:shadow-[0_0_0_4px_rgba(250,117,248,0.15)]",
 ];
 
 export const Input = createComponent(

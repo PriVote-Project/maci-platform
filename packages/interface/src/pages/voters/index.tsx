@@ -16,6 +16,7 @@ const VotersPage = (): JSX.Element => (
 
       <div>
         <h1 className="text-2xl font-semibold text-black dark:text-white">Voters</h1>
+
         <div className="mt-4">
           <VotersList />
         </div>

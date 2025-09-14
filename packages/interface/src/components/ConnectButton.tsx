@@ -1,6 +1,5 @@
 import { ConnectButton as RainbowConnectButton } from "@rainbow-me/rainbowkit";
 import dynamic from "next/dynamic";
-import Image from "next/image";
 import { useMemo } from "react";
 
 import { config } from "~/config";
@@ -22,9 +21,21 @@ const ConnectedDetails = ({ openAccountModal, account, isMobile }: IConnectedDet
     <div>
       <div className="flex gap-2 text-white">
         <Chip color="neutral" onClick={openAccountModal}>
-          <span className="font-sans text-base font-bold leading-none">{displayName}</span>
+          {/* Avatar inside modal is controlled by Provider; here we just show name with spacing */}
+          <span className="mr-2 font-sans text-base font-bold leading-none">{displayName}</span>
 
-          <Image alt="dropdown" height="18" src="/dropdown.svg" width="18" />
+          {/* Inline SVG so it inherits current text color exactly */}
+          <svg
+            aria-hidden
+            className="-mr-0.5"
+            fill="currentColor"
+            height="18"
+            viewBox="0 0 24 24"
+            width="18"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M7.41 8.58L12 13.17l4.59-4.59L18 10l-6 6-6-6 1.41-1.42z" />
+          </svg>
         </Chip>
       </div>
     </div>
