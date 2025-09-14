@@ -58,7 +58,6 @@ const ApproveVoters = () => {
       setOpen(false);
     },
     onError: (err: { reason?: string; data?: { message: string } }) => {
-      console.log("Voter approve error:", err);
       toast.error("Voter approve error", {
         description: err.reason ?? err.data?.message,
       });

@@ -23,10 +23,10 @@ export function useCreateAttestation(): UseMutationResult<
   });
 }
 
-export function useAttest(): UseMutationResult<void, DefaultError, MultiAttestationRequest[]> {
+export function useAttest(): UseMutationResult<unknown, DefaultError, MultiAttestationRequest[]> {
   const signer = useEthersSigner();
 
-  return useMutation<void, DefaultError, MultiAttestationRequest[]>({
+  return useMutation<unknown, DefaultError, MultiAttestationRequest[]>({
     mutationFn: async (attestations: MultiAttestationRequest[]) => {
       if (!signer) {
         throw new Error("Connect wallet first");
@@ -35,7 +35,6 @@ export function useAttest(): UseMutationResult<void, DefaultError, MultiAttestat
 
       const tx = await eas.multiAttest(attestations);
       await tx.wait();
-      return;
     },
   });
 }

@@ -12,12 +12,12 @@ export const RequestsHeader = ({ requests = [] }: IRequestsHeaderProps): JSX.Ele
       <SelectAllButton requests={requests} />
     </div>
 
-    <div className="flex-[2] sm:flex-[7] sm:pl-6">Project</div>
+    <div className="flex-[2] font-sans text-sm font-medium tracking-[0.6px] sm:flex-[7] sm:pl-6">Project</div>
 
-    <div className="flex-[3]">Submitted on</div>
+    <div className="flex-[3] font-sans text-sm font-medium tracking-[0.6px]">Submitted on</div>
 
-    <div className="flex-[2]">Type</div>
+    <div className="flex-[2] font-sans text-sm font-medium tracking-[0.6px]">Type</div>
 
-    <div className="flex-[2]">Status</div>
+    <div className="flex-[2] font-sans text-sm font-medium tracking-[0.6px]">Status</div>
   </div>
 );
