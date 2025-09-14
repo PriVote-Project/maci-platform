@@ -57,10 +57,12 @@ const ApproveVoters = () => {
       toast.success("Voters approved successfully!");
       setOpen(false);
     },
-    onError: (err: { reason?: string; data?: { message: string } }) =>
+    onError: (err: { reason?: string; data?: { message: string } }) => {
+      console.log("Voter approve error:", err);
       toast.error("Voter approve error", {
         description: err.reason ?? err.data?.message,
-      }),
+      });
+    },
   });
 
   const buttonText = isAdmin ? `Add voters` : "You must be an admin";
@@ -102,7 +104,7 @@ const ApproveVoters = () => {
             <Textarea placeholder="Comma-separated list of addresses to approve" rows={8} />
           </FormControl>
 
-          <div className="flex items-center justify-end">
+          <div className="mt-4 flex items-center justify-end">
             <ApproveButton isAdmin={isAdmin} isLoading={approve.isPending} />
           </div>
         </Form>

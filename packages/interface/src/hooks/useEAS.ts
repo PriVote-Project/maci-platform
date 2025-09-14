@@ -1,4 +1,4 @@
-import { AttestationRequest, Transaction, type MultiAttestationRequest } from "@ethereum-attestation-service/eas-sdk";
+import { AttestationRequest, type MultiAttestationRequest } from "@ethereum-attestation-service/eas-sdk";
 import { type DefaultError, type UseMutationResult, useMutation } from "@tanstack/react-query";
 
 import { useEthersSigner } from "~/hooks/useEthersSigner";
@@ -23,17 +23,19 @@ export function useCreateAttestation(): UseMutationResult<
   });
 }
 
-export function useAttest(): UseMutationResult<Transaction<string[]>, DefaultError, MultiAttestationRequest[]> {
+export function useAttest(): UseMutationResult<void, DefaultError, MultiAttestationRequest[]> {
   const signer = useEthersSigner();
 
-  return useMutation({
-    mutationFn: (attestations: MultiAttestationRequest[]) => {
+  return useMutation<void, DefaultError, MultiAttestationRequest[]>({
+    mutationFn: async (attestations: MultiAttestationRequest[]) => {
       if (!signer) {
         throw new Error("Connect wallet first");
       }
       const eas = createEAS(signer);
 
-      return eas.multiAttest(attestations);
+      const tx = await eas.multiAttest(attestations);
+      await tx.wait();
+      return;
     },
   });
 }

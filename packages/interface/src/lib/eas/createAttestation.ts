@@ -5,7 +5,7 @@ import {
   type AttestationRequest,
   type TransactionSigner,
 } from "@ethereum-attestation-service/eas-sdk";
-import { type JsonRpcSigner } from "ethers";
+import { type JsonRpcSigner, encodeBytes32String } from "ethers";
 
 import * as config from "~/config";
 
@@ -45,7 +45,17 @@ async function encodeData({ values, schemaUID }: Params, signer: JsonRpcSigner) 
   const dataToEncode = schemaRecord.schema.split(",").map((param) => {
     const [type, name] = param.trim().split(" ");
     if (name && type) {
-      const value = values[name] as SchemaValue;
+      let value = values[name] as SchemaValue;
+
+      // Auto-handle bytes32 fields if user passed a plain string
+      if (type === "bytes32") {
+        const str = value as unknown as string;
+        const isHexBytes32 = typeof str === "string" && /^0x[0-9a-fA-F]{64}$/.test(str);
+        value = (isHexBytes32 ? str : encodeBytes32String(String(value))) as unknown as SchemaValue;
+      }
+      console.log(value);
+      console.log(name);
+      console.log(type);
       return { name, type, value };
     }
     throw new Error(`Attestation data: ${name} not found in ${JSON.stringify(values)}`);
