@@ -252,7 +252,7 @@ export const MetadataForm = ({ pollId }: IMetadataFormProps): JSX.Element => {
         {step === EMetadataStep.REVIEW && <ReviewProposalDetails />}
 
         {step === EMetadataStep.REVIEW && (
-          <div className="mb-2 w-full text-right text-sm italic text-blue-400">
+          <div className="mb-2 w-full text-right text-sm italic text-[var(--brand-500)]">
             {!address && <p>You must connect wallet to create a proposal of a project</p>}
 
             {!isCorrectNetwork && <p className="gap-2">You must be connected to {correctNetwork.name}</p>}

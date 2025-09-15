@@ -65,7 +65,7 @@ const ConfirmProposalPage = ({ pollId }: { pollId: string }): JSX.Element => {
               Thank you for submitting your project proposal. Our team is now reviewing it.
             </p>
 
-            <p className="flex gap-1 text-blue-400">
+            <p className="flex gap-1 text-[var(--brand-500)]">
               <FiAlertCircle className="h-4 w-4" />
 
               <i className="text-sm">Proposal can be approved until the Application period ends.</i>

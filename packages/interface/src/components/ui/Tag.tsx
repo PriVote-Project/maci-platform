@@ -14,7 +14,7 @@ export const Tag = createComponent(
         lg: "rounded-xl py-2 px-4 text-lg",
       },
       selected: {
-        true: "text-white [background:var(--brand-gradient)] border border-transparent hover:opacity-90",
+        true: "text-white dark:text-white hover:bg-transparent dark:hover:bg-transparent hover:text-white dark:hover:text-white hover:opacity-90",
       },
       disabled: {
         true: "border-gray-200 text-gray-200 cursor-not-allowed",

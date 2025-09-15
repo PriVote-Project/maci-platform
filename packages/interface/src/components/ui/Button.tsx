@@ -11,7 +11,7 @@ const button = tv({
       primary:
         "text-white bg-[var(--brand-300)] [background:var(--brand-gradient)] hover:[background:var(--brand-50)] hover:text-[var(--brand-500)]",
       inverted:
-        "text-black border border-black hover:text-blue-500 hover:border-blue-500 dark:border-white dark:text-white",
+        "text-black border border-black hover:text-[var(--brand-500)] hover:border-[var(--brand-500)] dark:border-white dark:text-white",
       tertiary: "bg-[var(--brand-50)] text-[var(--brand-500)] border border-[var(--brand-500)] hover:opacity-90",
       secondary: "bg-[var(--brand-300)] text-white hover:[background:var(--brand-50)] hover:text-[var(--brand-500)]",
       ghost: "hover:bg-gray-100 dark:invert",
