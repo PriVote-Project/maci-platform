@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { useAccount } from "wagmi";
 
+import DepositButton from "~/components/DepositButton";
 import { Info } from "~/components/Info";
 import { JoinButton } from "~/components/JoinButton";
 import { Button } from "~/components/ui/Button";
@@ -37,6 +38,8 @@ export const SingleRoundHome = ({ round }: ISingleRoundHomeProps): JSX.Element =
             View Results
           </Button>
         )}
+
+        {roundState === ERoundState.RESULTS && <DepositButton tallyAddress={round.tallyAddress} />}
 
         {isConnected && isEligibleToVote && !isRegistered && <JoinButton />}
       </div>
