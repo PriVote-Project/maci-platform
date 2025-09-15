@@ -54,7 +54,7 @@ export const ProjectDescriptionSection = ({
               {funding.description}
             </span>
 
-            <div className="h-0.5 w-8 bg-blue-400" />
+            <div className="h-0.5 w-8 bg-[var(--brand-500)]" />
 
             <p className="capitalize">{funding.type.split("_").join(" ").toLowerCase()}</p>
 

@@ -58,7 +58,7 @@ export const ProposalsToApprove = ({ pollId }: IProposalsToApproveProps): JSX.El
           Select the proposals you want to approve. You must be an admin to be able to approve them.
         </p>
 
-        <p className="flex items-center gap-2 text-blue-400">
+        <p className="flex items-center gap-2 text-[var(--brand-500)]">
           <FiAlertCircle className="h-4 w-4" />
 
           <span>Newly submitted proposals can take 10 minutes to show up.</span>

@@ -121,7 +121,7 @@ const BallotAllocationForm = ({ pollId, mode }: IBallotAllocationFormProps): JSX
       )}
 
       {ballot.published && (
-        <Link className="text-blue-400 hover:underline" href={`/rounds/${pollId}/ballot/confirmation`}>
+        <Link className="text-[var(--brand-500)] hover:underline" href={`/rounds/${pollId}/ballot/confirmation`}>
           Check your submitted ballot
         </Link>
       )}

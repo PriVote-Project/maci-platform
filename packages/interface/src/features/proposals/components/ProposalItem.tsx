@@ -53,7 +53,7 @@ export const ProposalItem = ({
 
   return (
     <Link href={`/rounds/${pollId}/${recipient.id}`} target="_blank">
-      <div className="dark:hover:bg-lighterBlack flex cursor-pointer items-center gap-1 py-4 hover:bg-blue-50 sm:gap-2">
+      <div className="dark:hover:bg-lighterBlack flex cursor-pointer items-center gap-1 py-4 hover:bg-[var(--brand-50)] sm:gap-2">
         <label className="flex flex-1 cursor-pointer justify-center sm:p-2">
           <Checkbox disabled={isApproved} value={index} {...form.register(`selected`)} type="checkbox" />
         </label>

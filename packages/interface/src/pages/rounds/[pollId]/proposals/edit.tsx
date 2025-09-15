@@ -47,7 +47,7 @@ const EditProposalPage = ({ pollId }: { pollId: string }): JSX.Element => {
             </span>
           </p>
 
-          <p className="flex gap-1 text-blue-400">
+          <p className="flex gap-1 text-[var(--brand-500)]">
             <FiAlertCircle className="h-4 w-4" />
 
             <i className="text-sm">Edit proposals can be approved until the Application period ends.</i>
