@@ -84,7 +84,7 @@ export const LinkField = ({
     <div className="flex w-full flex-col justify-start gap-2">
       <p className="text-sm text-gray-400">{title}</p>
 
-      <div className="flex items-center gap-2 text-sm text-black dark:text-blue-200">
+      <div className="flex items-center gap-2 text-sm text-black dark:text-[var(--brand-300)]">
         {logo}
 
         {content}
