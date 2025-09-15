@@ -9,7 +9,7 @@ import { createComponent } from ".";
 export const Link = createComponent(
   NextLink,
   tv({
-    base: "flex items-center font-normal text-base leading-6 gap-1 text-blue-500 underline duration-200 hover:opacity-50",
+    base: "flex items-center font-normal text-base leading-6 gap-1 text-[var(--brand-500)] underline duration-200 hover:opacity-50",
   }),
 );
 

@@ -22,7 +22,7 @@ export const ImpactTags = (): JSX.Element => {
     <div className="flex flex-col gap-2">
       <div className="flex flex-col gap-1">
         <Label>
-          Impact categories<span className="text-blue-400">*</span>
+          Impact categories<span className="text-[var(--brand-500)]">*</span>
         </Label>
 
         <span className="font-sans text-sm font-normal leading-5 text-gray-400">

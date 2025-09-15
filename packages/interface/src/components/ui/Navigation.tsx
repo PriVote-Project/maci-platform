@@ -11,7 +11,7 @@ export const Navigation = ({ projectName, pollId }: INavigationProps): JSX.Eleme
 
     <span>{">"}</span>
 
-    <span className="font-bold tracking-[0.1px] text-blue-500">
+    <span className="font-bold tracking-[0.1px] text-[var(--brand-500)]">
       <b>{projectName}</b>
     </span>
   </div>

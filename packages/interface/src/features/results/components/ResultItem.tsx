@@ -26,8 +26,8 @@ export const ResultItem = ({ pollId, rank, project }: IResultItemProps): JSX.Ele
 
   return (
     <Link href={`/rounds/${pollId}/${project.id}`}>
-      <div className="flex cursor-pointer gap-[14px] overflow-hidden rounded p-[10px] leading-8 duration-200 hover:bg-blue-50 dark:hover:bg-blue-50/10">
-        <div className="flex flex-none items-center justify-center gap-2 text-center font-sans text-base font-semibold text-black dark:text-white">
+      <div className="group flex cursor-pointer gap-[14px] overflow-hidden rounded p-[10px] leading-8 duration-200 hover:bg-[var(--brand-50)] dark:hover:[background:var(--brand-gradient)]">
+        <div className="flex flex-none items-center justify-center gap-2 text-center font-sans text-base font-semibold text-black dark:text-white dark:group-hover:text-white">
           <span className="w-3">{rank}</span>
 
           <div className="w-4">
@@ -39,9 +39,11 @@ export const ResultItem = ({ pollId, rank, project }: IResultItemProps): JSX.Ele
           </div>
         </div>
 
-        <div className="flex-1 font-sans text-lg font-medium leading-[28px] dark:text-white">{metadata.data?.name}</div>
+        <div className="flex-1 font-sans text-lg font-medium leading-[28px] dark:text-white dark:group-hover:text-white">
+          {metadata.data?.name}
+        </div>
 
-        <div className="flex-none text-end font-sans text-base font-normal text-black dark:text-white">{`${project.votes} votes`}</div>
+        <div className="flex-none text-end font-sans text-base font-normal text-black dark:text-white dark:group-hover:text-white">{`${project.votes} votes`}</div>
       </div>
     </Link>
   );

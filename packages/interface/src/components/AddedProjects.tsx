@@ -28,7 +28,7 @@ export const AddedProjects = ({ pollId }: IAddedProjectsProps): JSX.Element => {
     <div className="border-b border-gray-200 py-2">
       <h4 className="font-sans text-base font-normal uppercase text-gray-400">Projects Added</h4>
 
-      <div className="flex gap-1 font-sans text-2xl font-extrabold">
+      <div className="flex gap-1 font-sans text-2xl font-extrabold text-black dark:text-white">
         <span>
           <b>{ballot.votes.length}</b>
         </span>

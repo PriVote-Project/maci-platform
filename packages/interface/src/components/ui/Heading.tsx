@@ -5,7 +5,7 @@ import { createComponent } from ".";
 export const Heading = createComponent(
   "div",
   tv({
-    base: "font-sans font-medium dark:text-white tracking-[0.6px]",
+    base: "font-sans font-medium text-black dark:text-white tracking-[0.6px]",
     variants: {
       size: {
         md: "text-base leading-6",

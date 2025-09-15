@@ -32,9 +32,9 @@ const NewProposalPage = ({ pollId }: { pollId: string }): JSX.Element => {
             </p>
 
             <div className="flex items-center gap-[6px]">
-              <FiAlertCircle className="h-4 w-4 text-blue-400" />
+              <FiAlertCircle className="h-4 w-4 text-[var(--brand-500)]" />
 
-              <span className="font-sans text-xs font-normal italic leading-[18px] text-blue-400">
+              <span className="font-sans text-xs font-normal italic leading-[18px] text-[var(--brand-500)]">
                 Proposals can be approved until the Application period ends.
               </span>
             </div>

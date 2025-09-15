@@ -58,7 +58,7 @@ export const Label = createComponent(
     base: "block tracking-wider font-medium text-black font-sans text-sm leading-5 dark:text-white",
     variants: {
       required: {
-        true: "after:content-['*'] after:text-blue-400",
+        true: "after:content-['*'] after:text-[var(--brand-500)]",
         false:
           "after:content-['(optional)'] after:text-gray-300 after:leading-[18px] after:text-xs after:font-normal after:ml-1",
       },
@@ -169,7 +169,7 @@ export const FieldArray = <S extends z.Schema>({
           <div className="gap-4 md:flex">{renderField(field, i)}</div>
 
           <button
-            className="absolute bottom-0 right-0 font-sans text-sm text-gray-400 underline duration-200 hover:text-blue-500"
+            className="absolute bottom-0 right-0 font-sans text-sm text-gray-400 underline duration-200 hover:text-[var(--brand-500)]"
             type="button"
             onClick={() => {
               remove(i);
@@ -181,7 +181,7 @@ export const FieldArray = <S extends z.Schema>({
       ))}
 
       <button
-        className="flex w-full items-center gap-[6px] border-t border-gray-100 p-[6px] pt-4 font-sans text-xs font-semibold uppercase text-black duration-200 hover:text-blue-500 dark:text-white"
+        className="flex w-full items-center gap-[6px] border-t border-gray-100 p-[6px] pt-4 font-sans text-xs font-semibold uppercase text-black duration-200 hover:text-[var(--brand-500)] dark:text-white"
         type="button"
         onClick={() => {
           append({});

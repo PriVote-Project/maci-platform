@@ -20,7 +20,7 @@ export const VotingUsage = ({ pollId }: IVotingUsageProps): JSX.Element => {
       <h4 className="font-sans text-base font-normal uppercase text-gray-400">Voting Power</h4>
 
       <div>
-        <div className="flex gap-1 font-sans text-2xl font-extrabold">
+        <div className="flex gap-1 font-sans text-2xl font-extrabold text-black dark:text-white">
           <span className={clsx(sum > initialVoiceCredits && "text-red")}>{sum}</span>
 
           <span className="text-gray-300">{`of ${initialVoiceCredits}`}</span>

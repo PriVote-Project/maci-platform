@@ -8,9 +8,9 @@ const notice = tv({
   base: "w-full flex items-start text-sm gap-1 text-base",
   variants: {
     variant: {
-      default: "text-blue-400 justify-center",
-      block: "text-blue-700 bg-blue-400 border border-blue-700 rounded-lg p-4",
-      note: "text-blue-400 justify-left",
+      default: "text-[var(--brand-500)] justify-center",
+      block: "text-[var(--brand-700)] bg-[var(--brand-50)] border border-[var(--brand-700)] rounded-lg p-4",
+      note: "text-[var(--brand-500)] justify-left",
     },
   },
   defaultVariants: {

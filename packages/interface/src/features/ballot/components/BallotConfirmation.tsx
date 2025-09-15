@@ -28,11 +28,11 @@ const feedbackUrl = process.env.NEXT_PUBLIC_FEEDBACK_URL!;
 const Card = createComponent(
   "div",
   tv({
-    base: "rounded-lg border p-8 justify-between items-center gap-8 my-14",
+    base: "rounded-lg border p-8 justify-between items-center gap-8 my-14 text-black dark:text-white",
     variants: {
       variant: {
-        default: "border-blue-400 bg-blue-50 flex",
-        invert: "text-blue-700 bg-blue-400 border-blue-700",
+        default: "border-[var(--brand-500)] bg-[var(--brand-50)] flex",
+        invert: "text-white bg-[var(--brand-500)] dark:bg-[var(--brand-300)] border-[var(--brand-300)]",
       },
     },
     defaultVariants: {
@@ -170,7 +170,7 @@ export const BallotConfirmation = ({ pollId }: IBallotConfirmationProps): JSX.El
         {roundState === ERoundState.VOTING && (
           <Card className="flex-col sm:flex-row">
             <div className="flex-3 flex flex-col gap-4">
-              <b className="font-mono text-2xl uppercase">Change your mind?</b>
+              <b className="font-mono text-2xl uppercase text-black">Change your mind?</b>
 
               <p className="text-gray-400">
                 Your can edit your ballot and resubmit it anytime during the voting period.
@@ -187,7 +187,7 @@ export const BallotConfirmation = ({ pollId }: IBallotConfirmationProps): JSX.El
 
         <Card className="flex-col sm:flex-row">
           <div className="flex-3 flex flex-col gap-4">
-            <b className="font-mono text-2xl uppercase">{`Help us improve our next round of ${config.eventName}`}</b>
+            <b className="font-mono text-2xl uppercase text-black">{`Help us improve our next round of ${config.eventName}`}</b>
 
             <p className="text-gray-400">
               {`Your feedback will be influential to help us iterate on
@@ -204,7 +204,7 @@ export const BallotConfirmation = ({ pollId }: IBallotConfirmationProps): JSX.El
 
         <Card className="flex-col sm:flex-row">
           <div className="flex-3 flex flex-col gap-4">
-            <b className="font-mono text-2xl uppercase">Want to run a round?</b>
+            <b className="font-mono text-2xl uppercase text-black">Want to run a round?</b>
 
             <p className="text-gray-400">
               Our code is open source so you can fork it and run a round anytime. If you need any assistance or want to
