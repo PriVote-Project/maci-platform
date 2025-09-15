@@ -81,4 +81,15 @@ body {
   .markdown-support p {
     margin-top: 0.5rem;
   }
+
+  /* Hide number input spinners for consistent addon layout */
+  .no-spinner::-webkit-outer-spin-button,
+  .no-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  .no-spinner[type="number"] {
+    -moz-appearance: textfield;
+  }
 }
