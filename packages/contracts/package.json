@@ -54,7 +54,8 @@
     "submitOnChain": "hardhat submitOnChain",
     "submitOnChain:localhost": "pnpm run submitOnChain",
     "submitOnChain:optimism-sepolia": "pnpm run submitOnChain --network optimism_sepolia",
-    "upload-round-metadata": "ts-node ./scripts/uploadRoundMetadata.ts"
+    "upload-round-metadata": "ts-node ./scripts/uploadRoundMetadata.ts",
+    "deploy-mock-erc20": "TS_NODE_TRANSPILE_ONLY=1 ts-node ./scripts/deployMockERC20.ts --network optimism_sepolia"
   },
   "dependencies": {
     "@nomicfoundation/hardhat-ethers": "^3.0.8",

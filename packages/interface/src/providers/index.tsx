@@ -8,7 +8,7 @@ import {
 } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider, useTheme } from "next-themes";
-import { useMemo, type PropsWithChildren } from "react";
+import { useEffect, useMemo, useState, type PropsWithChildren } from "react";
 import { http, WagmiProvider } from "wagmi";
 
 import { Toaster } from "~/components/Toaster";
@@ -126,12 +126,24 @@ const lightCustomTheme: Theme = {
   },
 };
 
-const RainbowKitThemeProvider = ({ children }: PropsWithChildren): JSX.Element => {
+const RainbowKitThemeProvider = ({ children }: PropsWithChildren): JSX.Element | null => {
   const { resolvedTheme } = useTheme();
-  const rkTheme = resolvedTheme === "dark" ? darkCustomTheme : lightCustomTheme;
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // Avoid theme mismatch on SSR; wait until mounted
+  if (!mounted) {
+    return null;
+  }
+
+  const isDark = resolvedTheme === "dark";
+  const rkTheme = isDark ? darkCustomTheme : lightCustomTheme;
 
   return (
-    <RainbowKitProvider coolMode theme={rkTheme}>
+    <RainbowKitProvider key={isDark ? "dark" : "light"} coolMode theme={rkTheme}>
       {children}
     </RainbowKitProvider>
   );

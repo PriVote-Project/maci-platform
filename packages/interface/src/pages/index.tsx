@@ -5,7 +5,6 @@ import ConnectButton from "~/components/ConnectButton";
 import { JoinButton } from "~/components/JoinButton";
 import { SingleRoundHome } from "~/components/SingleRoundHome";
 import { Button } from "~/components/ui/Button";
-import { Heading } from "~/components/ui/Heading";
 import { config } from "~/config";
 import { useMaci } from "~/contexts/Maci";
 import { useRound } from "~/contexts/Round";
@@ -29,13 +28,11 @@ const HomePage = (): JSX.Element => {
 
         {!singleRound && (
           <div className="flex h-auto flex-col items-center justify-center gap-4 px-2 pb-4 sm:min-h-[90vh]">
-            <Heading className="mt-4 max-w-screen-lg text-center sm:mt-8" size="6xl">
+            <h1 className="mb-0 mt-4 max-w-[858px] text-center text-[40px] font-medium leading-[48px] text-[var(--brand-500)] sm:mt-0 sm:text-[80px] sm:leading-[96px] dark:bg-[radial-gradient(70.54%_70.54%_at_50%_50%,#fff_0%,rgba(255,255,255,0.57)_92.71%,rgba(255,255,255,0.6)_92.72%)] dark:bg-clip-text dark:text-transparent">
               {config.eventName}
-            </Heading>
+            </h1>
 
-            <Heading className="max-w-screen-lg text-center" size="3xl">
-              {config.eventDescription}
-            </Heading>
+            <p className="text-gray-400">{config.eventDescription}</p>
 
             {!isConnected && <p className="text-gray-400">Connect your wallet to get started.</p>}
 

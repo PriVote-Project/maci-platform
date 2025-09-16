@@ -6,6 +6,7 @@ import { Button } from "~/components/ui/Button";
 import { Dialog } from "~/components/ui/Dialog";
 import { Input, InputAddon, InputWrapper } from "~/components/ui/Input";
 import { useEthersSigner } from "~/hooks/useEthersSigner";
+import { useTokenMeta } from "~/hooks/useTokenMeta";
 
 interface IDepositButtonProps {
   tallyAddress: string;
@@ -24,6 +25,7 @@ const ERC20_ABI = [
 export const DepositButton = ({ tallyAddress }: IDepositButtonProps): JSX.Element | null => {
   const { address, isConnected } = useAccount();
   const signer = useEthersSigner();
+  const tokenMeta = useTokenMeta(tallyAddress);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -50,48 +52,30 @@ export const DepositButton = ({ tallyAddress }: IDepositButtonProps): JSX.Elemen
     }
     try {
       setError(undefined);
-      interface TallyContract {
-        token: () => Promise<string>;
-      }
-      const tally = new Contract(tallyAddress, TALLY_ABI, signer) as unknown as TallyContract;
-    //   const tknAddr: string = await (tally.token as () => Promise<string>)();
-        const tknAddr = "0xbD2918c10C6aF641220020FcAb50f3353356f808";
+      const tknAddr: string = tokenMeta.tokenAddress || ZeroAddress;
       setTokenAddress(tknAddr);
       if (tknAddr && tknAddr !== ZeroAddress) {
         interface ERC20Contract {
-          symbol?: () => Promise<string>;
-          decimals?: () => Promise<number>;
           balanceOf: (owner: string) => Promise<bigint>;
           allowance: (owner: string, spender: string) => Promise<bigint>;
         }
         const erc20 = new Contract(tknAddr, ERC20_ABI, signer) as unknown as ERC20Contract;
-        let sym = "TOKEN";
-        let dec = 18;
-        try {
-          sym = (await (erc20.symbol as () => Promise<string>)()) || "TOKEN";
-        } catch {
-          sym = "TOKEN";
-        }
-        try {
-          dec = Number(await (erc20.decimals as () => Promise<number>)());
-        } catch {
-          dec = 18;
-        }
         const [bal, allo] = await Promise.all([
           (erc20.balanceOf as (owner: string) => Promise<bigint>)(address),
           (erc20.allowance as (owner: string, spender: string) => Promise<bigint>)(address, tallyAddress),
         ]);
-        setTokenSymbol(sym);
-        setTokenDecimals(Number(dec));
-        setBalance(formatUnits(bal, Number(dec)));
-        setAllowance(formatUnits(allo, Number(dec)));
+        const dec = Number(tokenMeta.decimals || 18);
+        setTokenSymbol(tokenMeta.symbol || "TOKEN");
+        setTokenDecimals(dec);
+        setBalance(formatUnits(bal, dec));
+        setAllowance(formatUnits(allo, dec));
       }
     } catch (e: unknown) {
       // Non-critical metadata fetch error; keep defaults and avoid surfacing error to the UI
       // eslint-disable-next-line no-console
       console.error("token metadata fetch error:", e);
     }
-  }, [signer, address, tallyAddress]);
+  }, [signer, address, tallyAddress, tokenMeta.tokenAddress, tokenMeta.symbol, tokenMeta.decimals]);
 
   useEffect(() => {
     if (!isOpen) {
