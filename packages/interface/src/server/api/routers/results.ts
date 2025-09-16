@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { fetchApprovedProjects } from "~/utils/fetchProjects";
-import { fetchTally } from "~/utils/fetchTally";
+import { fetchTally, fetchTallyFunds, fetchTallyClaims } from "~/utils/fetchTally";
 
 import type { IRecipient } from "~/utils/types";
 
@@ -30,6 +30,16 @@ export const resultsRouter = createTRPCRouter({
 
       return mappedProjectsResults(results, projects);
     }),
+
+  totals: publicProcedure.input(z.object({ tallyAddress: z.string() })).query(async ({ input }) => {
+    const { deposited, claimed, available } = await fetchTallyFunds(input.tallyAddress);
+    return { deposited, claimed, available };
+  }),
+
+  claimsByRecipient: publicProcedure.input(z.object({ tallyAddress: z.string() })).query(async ({ input }) => {
+    const claims = await fetchTallyClaims(input.tallyAddress);
+    return claims;
+  }),
 });
 
 /**

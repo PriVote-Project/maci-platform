@@ -42,6 +42,16 @@ export function useProjectResults(
   );
 }
 
+export function useTallyTotals(
+  tallyAddress: string,
+): UseTRPCQueryResult<{ deposited: string; claimed: string; available: string }, unknown> {
+  return api.results.totals.useQuery({ tallyAddress });
+}
+
+export function useClaimsByRecipient(tallyAddress: string): UseTRPCQueryResult<Record<string, string>, unknown> {
+  return api.results.claimsByRecipient.useQuery({ tallyAddress }, { enabled: Boolean(tallyAddress) });
+}
+
 export function useIsTallied(tallyAddress: string): UseTRPCQueryResult<{ isTallied: boolean }, unknown> {
   return api.maci.isTallied.useQuery({ tallyAddress });
 }
