@@ -6,7 +6,8 @@ import { Hex, zeroAddress } from "viem";
 import { Heading } from "~/components/ui/Heading";
 import { useRound } from "~/contexts/Round";
 import { ResultItem } from "~/features/results/components/ResultItem";
-import { useProjectsResults } from "~/hooks/useResults";
+import { TallyTotals } from "~/features/results/components/TallyTotals";
+import { useProjectsResults, useTallyTotals } from "~/hooks/useResults";
 import { LayoutWithSidebar } from "~/layouts/DefaultLayout";
 import { useRoundState } from "~/utils/state";
 import { ERoundState } from "~/utils/types";
@@ -27,6 +28,7 @@ const ResultPage = ({ pollId }: IResultPageProps): JSX.Element => {
   );
 
   const roundState = useRoundState({ pollId });
+  const totals = useTallyTotals(round?.tallyAddress ?? "");
 
   useEffect(() => {
     if (projectsResults.data) {
@@ -55,9 +57,19 @@ const ResultPage = ({ pollId }: IResultPageProps): JSX.Element => {
             </span>
           </div>
 
+          {round?.tallyAddress && totals.data?.deposited && BigInt(totals.data.deposited) > 0n && (
+            <TallyTotals tallyAddress={round.tallyAddress} />
+          )}
+
           <div className="rounded-lg border border-gray-200 p-[10px]">
             {projectsResults.data?.map((item, i) => (
-              <ResultItem key={item.index} pollId={pollId} project={item} rank={i + 1} />
+              <ResultItem
+                key={item.index}
+                pollId={pollId}
+                project={item}
+                rank={i + 1}
+                tallyAddress={round?.tallyAddress ?? ""}
+              />
             ))}
           </div>
         </div>

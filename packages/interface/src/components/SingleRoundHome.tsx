@@ -30,11 +30,11 @@ export const SingleRoundHome = ({ round }: ISingleRoundHomeProps): JSX.Element =
 
       <div className="flex flex-row flex-wrap items-center justify-center gap-3">
         <Button as={Link} href={`/rounds/${round.pollId}`} size="auto" variant="primary">
-          View Projects
+          {roundState === ERoundState.APPLICATION ? "Add Project" : "View Projects"}
         </Button>
 
         {roundState === ERoundState.RESULTS && (
-          <Button as={Link} href={`/rounds/${round.pollId}`} size="auto" variant="primary">
+          <Button as={Link} href={`/rounds/${round.pollId}/result`} size="auto" variant="primary">
             View Results
           </Button>
         )}
