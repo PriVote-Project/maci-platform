@@ -30,7 +30,7 @@ export const ReviewBar = ({ pollId, projectId, edition = undefined }: IReviewBar
   const isAdmin = useIsAdmin();
   const { isCorrectNetwork, correctNetwork } = useIsCorrectNetwork();
 
-  const proposal = useRequestByProjectId(projectId, round?.registryAddress ?? zeroAddress);
+  const proposal = useRequestByProjectId(String(projectId), round?.registryAddress ?? "");
   const approve = useApproveRequest({});
 
   const { address } = useAccount();
