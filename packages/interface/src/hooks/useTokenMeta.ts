@@ -37,7 +37,7 @@ const ERC20_ABI = [
   },
 ] as const;
 
-export function useTokenMeta(tallyAddress: string | Hex | undefined): TokenMeta {
+export function useTokenMeta(tallyAddress: string | undefined): TokenMeta {
   const [meta, setMeta] = useState<TokenMeta>({
     symbol: "TOKEN",
     decimals: 18,
@@ -61,23 +61,20 @@ export function useTokenMeta(tallyAddress: string | Hex | undefined): TokenMeta 
 
         let symbol = "TOKEN";
         let decimals = 18;
-        if (tokenAddress) {
-          try {
-            symbol = await client.readContract({
-              abi: ERC20_ABI,
-              address: tokenAddress,
-              functionName: "symbol",
-            });
-          } catch {
-            symbol = "TOKEN";
-          }
-          try {
-            decimals = Number(
-              await client.readContract({ abi: ERC20_ABI, address: tokenAddress, functionName: "decimals" }),
-            );
-          } catch {
-            decimals = 18;
-          }
+        try {
+          symbol = await client.readContract({
+            abi: ERC20_ABI,
+            address: tokenAddress,
+            functionName: "symbol",
+          });
+        } catch {
+          symbol = "TOKEN";
+        }
+        try {
+          const dec = await client.readContract({ abi: ERC20_ABI, address: tokenAddress, functionName: "decimals" });
+          decimals = Number(dec);
+        } catch {
+          decimals = 18;
         }
 
         setMeta({ symbol, decimals, isLoading: false, tokenAddress });
@@ -86,7 +83,7 @@ export function useTokenMeta(tallyAddress: string | Hex | undefined): TokenMeta 
       }
     }
 
-    void run();
+    run().catch(() => undefined);
   }, [tallyAddress]);
 
   return meta;

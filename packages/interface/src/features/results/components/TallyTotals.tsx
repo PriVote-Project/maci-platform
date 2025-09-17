@@ -6,11 +6,9 @@ import { useTokenMeta } from "~/hooks/useTokenMeta";
 
 interface ITallyTotalsProps {
   tallyAddress: string;
-  tokenDecimals?: number; // optional; if unknown, display raw units
-  tokenSymbol?: string; // optional symbol
 }
 
-export const TallyTotals = ({ tallyAddress, tokenDecimals = 18, tokenSymbol = "TOKEN" }: ITallyTotalsProps) => {
+export const TallyTotals = ({ tallyAddress }: ITallyTotalsProps): JSX.Element => {
   const { data, isLoading } = useTallyTotals(tallyAddress);
   const tokenMeta = useTokenMeta(tallyAddress);
 
@@ -24,8 +22,8 @@ export const TallyTotals = ({ tallyAddress, tokenDecimals = 18, tokenSymbol = "T
     return dec.length > 4 ? `${int}.${dec.slice(0, 4)}` : value;
   };
 
-  const decimals = tokenMeta.decimals ?? tokenDecimals;
-  const symbol = tokenMeta.symbol || tokenSymbol;
+  const { decimals } = tokenMeta;
+  const { symbol } = tokenMeta;
   const deposited = data?.deposited ? trim4(formatUnits(BigInt(data.deposited), Number(decimals))) : "0";
   const claimed = data?.claimed ? trim4(formatUnits(BigInt(data.claimed), Number(decimals))) : "0";
 
@@ -42,17 +40,19 @@ export const TallyTotals = ({ tallyAddress, tokenDecimals = 18, tokenSymbol = "T
           <div className="flex flex-col">
             <span className="text-xs uppercase text-gray-400">Deposited</span>
 
-            <span className="font-sans text-xl font-bold text-black dark:text-white">
-              {deposited} {symbol}
-            </span>
+            <div className="font-sans text-xl font-bold text-black dark:text-white flex items-baseline gap-1">
+              <span>{deposited}</span>
+              <span>{symbol}</span>
+            </div>
           </div>
 
           <div className="flex flex-col">
             <span className="text-xs uppercase text-gray-400">Claimed</span>
 
-            <span className="font-sans text-xl font-bold text-black dark:text-white">
-              {claimed} {symbol}
-            </span>
+            <div className="font-sans text-xl font-bold text-black dark:text-white flex items-baseline gap-1">
+              <span>{claimed}</span>
+              <span>{symbol}</span>
+            </div>
           </div>
         </div>
       )}
