@@ -23,7 +23,7 @@ export const votersRouter = createTRPCRouter({
   list: publicProcedure.input(FilterSchema).query(async () =>
     fetchAttestations([eas.schemas.approval], {
       where: {
-        AND: [createDataFilter("type", "bytes32", "voter"), createDataFilter("round", "bytes32", config.eventName)],
+        ...createDataFilter("type", "bytes32", "voter"),
         attester: { equals: config.admin },
       },
     }),
