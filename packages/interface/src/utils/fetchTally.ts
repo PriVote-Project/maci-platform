@@ -146,11 +146,7 @@ export async function fetchTallyClaims(id: string): Promise<Record<string, strin
     .then((raw) => {
       const response = raw as ClaimsResp;
       const claims = response.data?.claims ?? [];
-      const byIndex = new Map<string, string>();
-      for (const c of claims) {
-        byIndex.set(String(c.id), String(c.amount));
-      }
-      return Object.fromEntries(byIndex.entries());
+      return Object.fromEntries(claims.map((c) => [String(c.id), String(c.amount)] as const));
     })
     .catch(() => ({}));
 }

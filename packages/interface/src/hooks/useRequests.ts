@@ -1,3 +1,5 @@
+import { isAddress } from "viem";
+
 import { api } from "~/utils/api";
 
 import type { UseTRPCQueryResult } from "@trpc/react-query/shared";
@@ -15,7 +17,10 @@ export function useRequestByProjectId(
   projectId: string,
   registryAddress: string,
 ): UseTRPCQueryResult<IRequest, unknown> {
-  return api.requests.getByProjectId.useQuery({ projectId, registryAddress });
+  return api.requests.getByProjectId.useQuery(
+    { projectId: String(projectId), registryAddress },
+    { enabled: Boolean(projectId) && isAddress(registryAddress) },
+  );
 }
 
 export function useRequestByIndex(registryAddress: string, index: string): UseTRPCQueryResult<IRequest, unknown> {

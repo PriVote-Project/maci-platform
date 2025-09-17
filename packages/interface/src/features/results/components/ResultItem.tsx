@@ -23,11 +23,11 @@ export const ResultItem = ({ pollId, rank, project, tallyAddress }: IResultItemP
   const claimedFormatted = useMemo(() => {
     const indexKey = String(project.index);
     const raw = claimsByRecipient.data?.[indexKey];
-    if (raw === undefined || raw === null) {
+    if (raw == null) {
       return null;
     }
     try {
-      const decimals = tokenMeta.decimals ?? 18;
+      const { decimals } = tokenMeta;
       const value = formatUnits(BigInt(raw), decimals);
       const [int, dec] = value.split(".");
       const trimmed = dec ? `${int}.${dec.slice(0, 4)}` : int;
