@@ -143,7 +143,7 @@ const BallotAllocationForm = ({ pollId, mode }: IBallotAllocationFormProps): JSX
             sum > initialVoiceCredits && "text-red",
           )}
         >
-          <h4>Total votes:</h4>
+          <h4>{mode.toString() === "0" ? "Total credits:" : "Total votes:"}</h4>
 
           <p>{formatNumber(sum)}</p>
         </div>
