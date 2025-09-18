@@ -68,15 +68,27 @@ export const AllocationFormWrapper = ({
             </Td>
 
             <Td className="pl-0 pr-0 sm:pl-2">
-              <AllocationInput
-                defaultValue={project.amount}
-                disabled={disabled}
-                name={`votes.${i}.amount`}
-                votingMaxProject={initialVoiceCredits}
-                onBlur={() => {
-                  onSave(form.getValues().votes, round?.pollId ?? "");
-                }}
-              />
+              <div className="flex flex-col">
+                <AllocationInput
+                  defaultValue={project.amount}
+                  disabled={disabled}
+                  name={`votes.${i}.amount`}
+                  votingMaxProject={initialVoiceCredits}
+                  onBlur={() => {
+                    onSave(form.getValues().votes, round?.pollId ?? "");
+                  }}
+                />
+
+                {round?.mode.toString() === "0" && (
+                  <div className="mt-1 text-center text-xs text-gray-500 dark:text-gray-400">
+                    <span>Weight: </span>
+
+                    {Number.isFinite(Number(form.watch(`votes.${i}.amount`)))
+                      ? Math.floor(Math.sqrt(Number(form.watch(`votes.${i}.amount`) || 0)))
+                      : 0}
+                  </div>
+                )}
+              </div>
             </Td>
 
             <Td className="pl-0" variant="last">
