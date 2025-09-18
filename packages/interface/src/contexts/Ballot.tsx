@@ -18,13 +18,14 @@ export const BallotProvider: React.FC<BallotProviderProps> = ({ children }: Ball
 
   const { isDisconnected } = useAccount();
 
-  // when summing the ballot we take the individual vote and square it
-  // if the mode is quadratic voting, otherwise we just add the amount
+  // When summing the ballot:
+  // - For quadratic voting (mode === "0"), amounts are voice credits entered by the user, so we sum credits directly
+  // - For linear voting, amounts are vote weights/credits, so we also sum directly
   const sumBallot = useCallback(
     (votes?: Vote[]) =>
       (votes ?? []).reduce((sum, x) => {
         const amount = !Number.isNaN(Number(x.amount)) ? Number(x.amount) : 0;
-        return sum + (rounds && rounds.length > 0 && rounds[0]?.mode.toString() === "0" ? amount ** 2 : amount);
+        return sum + amount;
       }, 0),
     [rounds],
   );

@@ -6,6 +6,7 @@ import { Button } from "~/components/ui/Button";
 import { Spinner } from "~/components/ui/Spinner";
 import { useBallot } from "~/contexts/Ballot";
 import { useMaci } from "~/contexts/Maci";
+import { useRound } from "~/contexts/Round";
 
 interface ISubmitBallotButtonProps {
   pollId: string;
@@ -15,6 +16,7 @@ export const SubmitBallotButton = ({ pollId }: ISubmitBallotButtonProps): JSX.El
   const router = useRouter();
   const { onVote, isLoading, initialVoiceCredits } = useMaci();
   const { getBallot, publishBallot, sumBallot } = useBallot();
+  const { getRoundByPollId } = useRound();
 
   const onVotingError = useCallback((err: string) => {
     toast.error(`Voting error: ${err}`);
@@ -23,17 +25,22 @@ export const SubmitBallotButton = ({ pollId }: ISubmitBallotButtonProps): JSX.El
   const ballot = useMemo(() => getBallot(pollId), [pollId, getBallot]);
   const sum = useMemo(() => sumBallot(ballot.votes), [ballot, sumBallot]);
   const ableToSubmit = useMemo(() => sum <= initialVoiceCredits && sum > 0, [sum, initialVoiceCredits]);
+  const round = useMemo(() => getRoundByPollId(pollId), [pollId, getRoundByPollId]);
 
   const handleSubmitBallot = useCallback(async () => {
     if (isLoading || !ableToSubmit) {
       return;
     }
 
-    const votes = ballot.votes.map(({ amount, projectId, projectIndex }) => ({
-      projectId,
-      voteOptionIndex: BigInt(projectIndex),
-      newVoteWeight: BigInt(amount),
-    }));
+    const votes = ballot.votes.map(({ amount, projectId, projectIndex }) => {
+      const credits = Number(amount);
+      const weight = round?.mode.toString() === "0" ? Math.floor(Math.sqrt(credits)) : credits;
+      return {
+        projectId,
+        voteOptionIndex: BigInt(projectIndex),
+        newVoteWeight: BigInt(weight),
+      };
+    });
 
     if (!pollId) {
       throw new Error("The pollId is undefined.");
@@ -43,7 +50,7 @@ export const SubmitBallotButton = ({ pollId }: ISubmitBallotButtonProps): JSX.El
       publishBallot(pollId);
       router.push(`/rounds/${pollId}/ballot/confirmation`);
     });
-  }, [ballot, router, onVote, publishBallot, onVotingError, pollId, isLoading, ableToSubmit]);
+  }, [ballot, router, onVote, publishBallot, onVotingError, pollId, isLoading, ableToSubmit, round?.mode]);
 
   return (
     <Button variant={ableToSubmit && !isLoading ? "primary" : "disabled"} onClick={handleSubmitBallot}>
