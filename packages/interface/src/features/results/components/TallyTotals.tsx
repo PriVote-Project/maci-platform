@@ -40,8 +40,9 @@ export const TallyTotals = ({ tallyAddress }: ITallyTotalsProps): JSX.Element =>
           <div className="flex flex-col">
             <span className="text-xs uppercase text-gray-400">Deposited</span>
 
-            <div className="font-sans text-xl font-bold text-black dark:text-white flex items-baseline gap-1">
+            <div className="flex items-baseline gap-1 font-sans text-xl font-bold text-black dark:text-white">
               <span>{deposited}</span>
+
               <span>{symbol}</span>
             </div>
           </div>
@@ -49,8 +50,9 @@ export const TallyTotals = ({ tallyAddress }: ITallyTotalsProps): JSX.Element =>
           <div className="flex flex-col">
             <span className="text-xs uppercase text-gray-400">Claimed</span>
 
-            <div className="font-sans text-xl font-bold text-black dark:text-white flex items-baseline gap-1">
+            <div className="flex items-baseline gap-1 font-sans text-xl font-bold text-black dark:text-white">
               <span>{claimed}</span>
+
               <span>{symbol}</span>
             </div>
           </div>
