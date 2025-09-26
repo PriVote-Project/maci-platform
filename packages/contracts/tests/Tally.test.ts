@@ -57,7 +57,6 @@ describe("Tally", () => {
 
   const cooldownTime = 1_000;
   const metadataUrl = encodeBytes32String("url");
-  const maxContribution = parseUnits("5", 18);
   const duration = 100;
   const keypair = new Keypair();
 
@@ -168,7 +167,6 @@ describe("Tally", () => {
 
   it("should not allow to deposit/claim/withdraw/addTallyResults before initialization", async () => {
     await expect(tally.deposit(1n)).to.be.revertedWithCustomError(tally, "NotInitialized");
-    await expect(tally.withdrawExtra([], [])).to.be.revertedWithCustomError(tally, "NotInitialized");
     await expect(tally.claim(emptyClaimParams)).to.be.revertedWithCustomError(tally, "NotInitialized");
     await expect(
       tally.addTallyResults({
@@ -220,20 +218,6 @@ describe("Tally", () => {
     ).to.be.revertedWithCustomError(tally, "AlreadyInitialized");
   });
 
-  it("should not withdraw extra if cooldown period is not over", async () => {
-    await expect(tally.withdrawExtra([owner, user], [1n])).to.be.revertedWithCustomError(
-      tally,
-      "CooldownPeriodNotOver",
-    );
-  });
-
-  it("should not allow non-owner to withdraw funds", async () => {
-    await expect(tally.connect(user).withdrawExtra([owner, user], [1n])).to.be.revertedWithCustomError(
-      tally,
-      "OwnableUnauthorizedAccount",
-    );
-  });
-
   it("should not allow non-owner to pause/unpause", async () => {
     await expect(tally.connect(user).pause()).to.be.revertedWithCustomError(tally, "OwnableUnauthorizedAccount");
 
@@ -245,8 +229,6 @@ describe("Tally", () => {
       await tally.pause().then((tx) => tx.wait());
 
       await expect(tally.deposit(1n)).to.be.revertedWithCustomError(tally, "EnforcedPause");
-
-      await expect(tally.withdrawExtra([owner, user], [1n])).to.be.revertedWithCustomError(tally, "EnforcedPause");
 
       await expect(tally.claim(emptyClaimParams)).to.be.revertedWithCustomError(tally, "EnforcedPause");
     } finally {
@@ -582,33 +564,5 @@ describe("Tally", () => {
       // eslint-disable-next-line no-await-in-loop
       await expect(tally.claim(params)).to.be.revertedWithCustomError(tally, "AlreadyClaimed");
     }
-  });
-
-  it("should withdraw extra after cooldown properly", async () => {
-    const [contractBalance, initialOwnerBalance, totalAmount] = await Promise.all([
-      payoutToken.balanceOf(tally),
-      payoutToken.balanceOf(owner),
-      tally.totalAmount(),
-    ]);
-
-    await tally.withdrawExtra([owner, user], [totalAmount, 0]).then((tx) => tx.wait());
-
-    const [balance, ownerBalance, totalExtraFunds] = await Promise.all([
-      payoutToken.balanceOf(tally),
-      payoutToken.balanceOf(owner),
-      tally.totalAmount(),
-    ]);
-
-    expect(balance).to.equal(0n);
-    expect(totalExtraFunds).to.equal(0n);
-    expect(initialOwnerBalance + totalAmount).to.equal(ownerBalance);
-    expect(contractBalance).to.equal(totalAmount);
-  });
-
-  it("should not withdraw extra if there is no enough funds", async () => {
-    await expect(tally.withdrawExtra([owner], [maxContribution])).to.be.revertedWithCustomError(
-      tally,
-      "InvalidWithdrawal",
-    );
   });
 });
