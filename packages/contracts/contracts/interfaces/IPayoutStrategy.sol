@@ -14,6 +14,8 @@ interface IPayoutStrategy {
     uint256 maxCap;
     /// @notice The payout token
     address payoutToken;
+    /// @notice The deposit window duration after voting ends
+    uint256 depositWindowTime;
   }
 
   /// @notice Claim params

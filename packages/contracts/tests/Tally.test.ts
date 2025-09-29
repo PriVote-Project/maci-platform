@@ -56,6 +56,7 @@ describe("Tally", () => {
   const maxRecipients = TALLY_RESULTS.tally.length;
 
   const cooldownTime = 1_000;
+  const depositWindowTime = 1_000;
   const metadataUrl = encodeBytes32String("url");
   const maxContribution = parseUnits("5", 18);
   const duration = 100;
@@ -159,6 +160,7 @@ describe("Tally", () => {
         maxContribution: 1,
         maxCap: 1,
         payoutToken,
+        depositWindowTime,
       })
       .then((tx) => tx.wait());
 
@@ -192,6 +194,7 @@ describe("Tally", () => {
         maxContribution: parseUnits("5", await payoutToken.decimals()),
         maxCap: parseUnits("10", await payoutToken.decimals()),
         payoutToken,
+        depositWindowTime,
       }),
     ).to.be.revertedWithCustomError(tally, "OwnableUnauthorizedAccount");
   });
@@ -203,6 +206,7 @@ describe("Tally", () => {
         maxContribution: parseUnits("5", await payoutToken.decimals()),
         maxCap: parseUnits("10", await payoutToken.decimals()),
         payoutToken,
+        depositWindowTime,
       })
       .then((tx) => tx.wait());
 
@@ -216,6 +220,7 @@ describe("Tally", () => {
         maxContribution: parseUnits("5", await payoutToken.decimals()),
         maxCap: parseUnits("10", await payoutToken.decimals()),
         payoutToken,
+        depositWindowTime,
       }),
     ).to.be.revertedWithCustomError(tally, "AlreadyInitialized");
   });

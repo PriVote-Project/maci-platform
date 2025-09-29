@@ -41,6 +41,9 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
   /// @notice The cooldown duration for withdrawal extra funds
   uint256 public cooldown;
 
+  /// @notice The deposit window duration after voting ends
+  uint256 public depositWindow;
+
   /// @notice The sum of tally result squares
   uint256 public totalVotesSquares;
 
@@ -71,6 +74,7 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
   error NotCompletedResults();
   error TooManyResults();
   error AlreadyClaimed();
+  error DepositsClosed();
 
   /// @notice Create a new Tally contract
   /// @param verifierContract The Verifier contract
@@ -109,6 +113,19 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
     _;
   }
 
+  /// @notice A modifier that causes the function to revert if deposits are not within the allowed window
+  modifier withinDepositWindow() {
+    (uint256 deployTime, uint256 duration) = poll.getDeployTimeAndDuration();
+    uint256 secondsPassed = block.timestamp - deployTime;
+
+    // Allow deposits only in (votingEnd, votingEnd + depositWindow]
+    if (secondsPassed <= duration || secondsPassed > duration + depositWindow) {
+      revert DepositsClosed();
+    }
+
+    _;
+  }
+
   /// @notice A modifier that causes the function to revert if the strategy is not initialized
   modifier isInitialized() {
     if (!initialized) {
@@ -127,6 +144,7 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
 
     initialized = true;
     cooldown = params.cooldownTime;
+    depositWindow = params.depositWindowTime;
     registry = IPoll(address(poll)).getRegistry();
     token = IERC20(params.payoutToken);
     maxContributionAmount = params.maxContribution;
@@ -146,7 +164,7 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
   }
 
   /// @inheritdoc IPayoutStrategy
-  function deposit(uint256 amount) public isInitialized whenNotPaused afterTallying {
+  function deposit(uint256 amount) public isInitialized whenNotPaused afterTallying withinDepositWindow {
     emit Deposited(msg.sender, amount);
 
     token.safeTransferFrom(msg.sender, address(this), amount);
