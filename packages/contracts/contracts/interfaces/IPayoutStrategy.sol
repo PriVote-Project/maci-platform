@@ -44,11 +44,6 @@ interface IPayoutStrategy {
   /// @param amount The amount
   function deposit(uint256 amount) external;
 
-  /// @notice Withdraw extra amount
-  /// @param receivers The receivers addresses
-  /// @param amounts The amounts
-  function withdrawExtra(address[] calldata receivers, uint256[] calldata amounts) external;
-
   /// @notice Claim funds for recipient
   /// @param params The claim params
   function claim(Claim calldata params) external;

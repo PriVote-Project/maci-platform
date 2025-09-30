@@ -153,34 +153,6 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
   }
 
   /// @inheritdoc IPayoutStrategy
-  function withdrawExtra(
-    address[] calldata receivers,
-    uint256[] calldata amounts
-  ) public override isInitialized onlyOwner whenNotPaused afterCooldown {
-    uint256 amountLength = amounts.length;
-    uint256 totalFunds = token.balanceOf(address(this));
-    uint256 sum = 0;
-
-    for (uint256 index = 0; index < amountLength; ) {
-      uint256 amount = amounts[index];
-      address receiver = receivers[index];
-      sum += amount;
-
-      if (sum > totalFunds) {
-        revert InvalidWithdrawal();
-      }
-
-      if (amount > 0) {
-        token.safeTransfer(receiver, amount);
-      }
-
-      unchecked {
-        index++;
-      }
-    }
-  }
-
-  /// @inheritdoc IPayoutStrategy
   function totalAmount() public view override returns (uint256) {
     return token.balanceOf(address(this));
   }
