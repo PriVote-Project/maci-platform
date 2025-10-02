@@ -55,9 +55,9 @@ describe("Tally", () => {
 
   const maxRecipients = TALLY_RESULTS.tally.length;
 
-  const cooldownTime = 1_000;
   const metadataUrl = encodeBytes32String("url");
   const duration = 100;
+  const depositWindow = 1_000;
   const keypair = new Keypair();
 
   const emptyClaimParams = {
@@ -154,10 +154,10 @@ describe("Tally", () => {
 
     const receipt = await tallyContract
       .init({
-        cooldownTime,
         maxContribution: 1,
         maxCap: 1,
         payoutToken,
+        depositWindow,
       })
       .then((tx) => tx.wait());
 
@@ -165,7 +165,7 @@ describe("Tally", () => {
     expect(await tallyContract.voiceCreditFactor()).to.equal(1n);
   });
 
-  it("should not allow to deposit/claim/withdraw/addTallyResults before initialization", async () => {
+  it("should not allow to deposit/claim/addTallyResults before initialization", async () => {
     await expect(tally.deposit(1n)).to.be.revertedWithCustomError(tally, "NotInitialized");
     await expect(tally.claim(emptyClaimParams)).to.be.revertedWithCustomError(tally, "NotInitialized");
     await expect(
@@ -186,10 +186,10 @@ describe("Tally", () => {
   it("should not allow non-owner to initialize tally", async () => {
     await expect(
       tally.connect(user).init({
-        cooldownTime,
         maxContribution: parseUnits("5", await payoutToken.decimals()),
         maxCap: parseUnits("10", await payoutToken.decimals()),
         payoutToken,
+        depositWindow,
       }),
     ).to.be.revertedWithCustomError(tally, "OwnableUnauthorizedAccount");
   });
@@ -197,10 +197,10 @@ describe("Tally", () => {
   it("should initialize tally properly", async () => {
     const receipt = await tally
       .init({
-        cooldownTime,
         maxContribution: parseUnits("5", await payoutToken.decimals()),
         maxCap: parseUnits("10", await payoutToken.decimals()),
         payoutToken,
+        depositWindow,
       })
       .then((tx) => tx.wait());
 
@@ -210,10 +210,10 @@ describe("Tally", () => {
   it("should not allow to initialize tally twice", async () => {
     await expect(
       tally.init({
-        cooldownTime,
         maxContribution: parseUnits("5", await payoutToken.decimals()),
         maxCap: parseUnits("10", await payoutToken.decimals()),
         payoutToken,
+        depositWindow,
       }),
     ).to.be.revertedWithCustomError(tally, "AlreadyInitialized");
   });
@@ -252,10 +252,6 @@ describe("Tally", () => {
     ).to.be.revertedWithCustomError(tally, "OwnableUnauthorizedAccount");
   });
 
-  it("should not deposit before votes are not tallied", async () => {
-    await expect(tally.deposit(1n)).to.be.revertedWithCustomError(tally, "VotesNotTallied");
-  });
-
   it("should not allow to claim before tallying", async () => {
     await expect(tally.claim(emptyClaimParams)).to.be.revertedWithCustomError(tally, "VotesNotTallied");
   });
@@ -267,7 +263,7 @@ describe("Tally", () => {
   });
 
   it("should merge properly", async () => {
-    await timeTravel(cooldownTime + duration, owner);
+    await timeTravel(duration, owner);
 
     // eslint-disable-next-line @typescript-eslint/prefer-for-of
     for (let index = 0; index < TALLY_RESULTS.tally.length; index += 1) {
@@ -289,10 +285,6 @@ describe("Tally", () => {
 
     expect(numSignups).to.equal(2);
     expect(numMessages).to.equal(3);
-  });
-
-  it("should not deposit before votes are not tallied without results", async () => {
-    await expect(tally.deposit(1n)).to.be.revertedWithCustomError(tally, "VotesNotTallied");
   });
 
   it("should not allow to claim before tallying without results", async () => {
@@ -423,6 +415,38 @@ describe("Tally", () => {
     expect(initialBalance - tokenBalance).to.equal(initialBalance - ownerAmount - userAmount);
   });
 
+  it("should not allow claims during deposit window", async () => {
+    // Tallying is complete but deposit window hasn't closed yet
+    // Replicate the same setup as successful claim test
+    const tallyResults = TALLY_RESULTS.tally.map((x) => BigInt(x));
+    const tallyResultProofs = TALLY_RESULTS.tally.map((_, index) =>
+      genTreeProof(index, tallyResults, Number(treeDepths.voteOptionTreeDepth)),
+    );
+
+    const params = {
+      index: 0,
+      voiceCreditsPerOption: PER_VO_SPENT_VOICE_CREDITS.tally[0],
+      tallyResultProof: tallyResultProofs[0],
+      tallyResultSalt: TALLY_RESULTS.salt,
+      voteOptionTreeDepth: treeDepths.voteOptionTreeDepth,
+      spentVoiceCreditsHash: TOTAL_SPENT_VOICE_CREDITS.commitment,
+      perVOSpentVoiceCreditsHash: PER_VO_SPENT_VOICE_CREDITS.commitment,
+    };
+
+    // Should fail because deposit window hasn't closed yet
+    await expect(tally.claim(params)).to.be.revertedWithCustomError(tally, "DepositWindowNotClosed");
+  });
+
+  it("should not allow deposits after deposit window closes", async () => {
+    // Move time past deposit window end
+    await timeTravel(duration + depositWindow, owner);
+
+    const amount = parseUnits("1", await payoutToken.decimals());
+    await payoutToken.approve(tally, amount).then((tx) => tx.wait());
+
+    await expect(tally.deposit(amount)).to.be.revertedWithCustomError(tally, "DepositWindowClosed");
+  });
+
   it("should not allow to add tally results twice", async () => {
     const invalidProof = [
       [0n, 0n, 0n, 0n],
@@ -450,6 +474,9 @@ describe("Tally", () => {
   });
 
   it("should not claim funds for the project if proof generation is failed", async () => {
+    // Move past deposit window to allow claims
+    await timeTravel(duration + depositWindow, owner);
+
     const voteOptionTreeDepth = 3;
     const invalidProof = [
       [0n, 0n, 0n, 0n],
