@@ -76,11 +76,11 @@
       "useQuadraticVoting": false
     },
     "Tally": {
-      "withPause": true,
+      "cooldownTime": 604800,
+      "custodian": "0x0000000000000000000000000000000000000000",
       "maxCap": "10000000000000000000",
       "maxContribution": "5000000000000000000",
-      "payoutToken": "0x0000000000000000000000000000000000000000",
-      "depositWindow": "604800"
+      "payoutToken": "0x0000000000000000000000000000000000000000"
     }
   },
   "scroll_sepolia": {
@@ -159,11 +159,11 @@
       "useQuadraticVoting": false
     },
     "Tally": {
-      "withPause": true,
+      "cooldownTime": 604800,
+      "custodian": "0x0000000000000000000000000000000000000000",
       "maxCap": "10000000000000000000",
       "maxContribution": "5000000000000000000",
-      "payoutToken": "0x0000000000000000000000000000000000000000",
-      "depositWindow": "604800"
+      "payoutToken": "0x0000000000000000000000000000000000000000"
     }
   },
   "optimism": {
@@ -243,11 +243,11 @@
       "useQuadraticVoting": false
     },
     "Tally": {
-      "withPause": true,
+      "cooldownTime": 604800,
+      "custodian": "0x0000000000000000000000000000000000000000",
       "maxCap": "10000000000000000000",
       "maxContribution": "5000000000000000000",
-      "payoutToken": "0x0000000000000000000000000000000000000000",
-      "depositWindow": "604800"
+      "payoutToken": "0x0000000000000000000000000000000000000000"
     }
   },
   "arbitrum_sepolia": {
@@ -327,11 +327,11 @@
       "useQuadraticVoting": false
     },
     "Tally": {
-      "withPause": true,
+      "cooldownTime": 604800,
+      "custodian": "0x0000000000000000000000000000000000000000",
       "maxCap": "10000000000000000000",
       "maxContribution": "5000000000000000000",
-      "payoutToken": "0x0000000000000000000000000000000000000000",
-      "depositWindow": "604800"
+      "payoutToken": "0x0000000000000000000000000000000000000000"
     }
   },
   "localhost": {
@@ -411,11 +411,11 @@
       "useQuadraticVoting": false
     },
     "Tally": {
-      "withPause": true,
+      "cooldownTime": 604800,
+      "custodian": "0x0000000000000000000000000000000000000000",
       "maxCap": "10000000000000000000",
       "maxContribution": "5000000000000000000",
-      "payoutToken": "0x0000000000000000000000000000000000000000",
-      "depositWindow": "604800"
+      "payoutToken": "0x0000000000000000000000000000000000000000"
     }
   },
   "base_sepolia": {
@@ -495,11 +495,11 @@
       "useQuadraticVoting": false
     },
     "Tally": {
-      "withPause": true,
+      "cooldownTime": 604800,
+      "custodian": "0x0000000000000000000000000000000000000000",
       "maxCap": "10000000000000000000",
       "maxContribution": "5000000000000000000",
-      "payoutToken": "0x0000000000000000000000000000000000000000",
-      "depositWindow": "604800"
+      "payoutToken": "0x0000000000000000000000000000000000000000"
     }
   },
   "optimism_sepolia": {
@@ -584,11 +584,11 @@
       "useQuadraticVoting": false
     },
     "Tally": {
-      "withPause": true,
+      "cooldownTime": 604800,
+      "custodian": "0x0000000000000000000000000000000000000000",
       "maxCap": "10000000000000000000",
       "maxContribution": "5000000000000000000",
-      "payoutToken": "0x0000000000000000000000000000000000000000",
-      "depositWindow": "604800"
+      "payoutToken": "0x0000000000000000000000000000000000000000"
     }
   }
 }

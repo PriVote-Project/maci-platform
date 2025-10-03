@@ -141,11 +141,11 @@ deployment.deployTask(EDeploySteps.Poll, "Deploy poll").then((task) =>
     // get the empty ballot root
     const emptyBallotRoot = await pollContract.emptyBallotRoot();
 
+    const cooldownTime =
+      deployment.getDeployConfigField<string | null>(EContracts.Tally, "cooldownTime") ?? ONE_WEEK_IN_SECONDS * 8;
+    const custodian = deployment.getDeployConfigField<string>(EContracts.Tally, "custodian", true);
     const maxContribution = deployment.getDeployConfigField<string>(EContracts.Tally, "maxContribution", true);
     const maxCap = deployment.getDeployConfigField<string>(EContracts.Tally, "maxCap", true);
-    const depositWindow =
-      deployment.getDeployConfigField<string | null>(EContracts.Tally, "depositWindow") ?? ONE_WEEK_IN_SECONDS;
-    const withPause = deployment.getDeployConfigField<boolean | null>(EContracts.Tally, "withPause") ?? true;
     let payoutToken = deployment.getDeployConfigField<string>(EContracts.Tally, "payoutToken", true);
 
     if (hre.network.name === "localhost") {
@@ -171,18 +171,13 @@ deployment.deployTask(EDeploySteps.Poll, "Deploy poll").then((task) =>
 
     await tallyContract
       .init({
+        cooldownTime,
+        custodian,
         maxContribution,
         payoutToken,
         maxCap,
-        depositWindow,
       })
       .then((tx) => tx.wait());
-
-    // Need to pause deposits/withdrawals/claims for now
-    // When feature is ready, this code can be removed
-    if (withPause) {
-      await tallyContract.pause().then((tx) => tx.wait());
-    }
 
     await Promise.all([
       storage.register({
