@@ -29,17 +29,14 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
   /// @notice The poll registry
   IRecipientRegistry public registry;
 
-  /// @notice The max contribution amount
-  uint256 public maxContributionAmount;
-
   /// @notice The max cap
   uint256 public maxCap;
 
   /// @notice The voice credit factor (needed for allocated amount calculation)
   uint256 public voiceCreditFactor;
 
-  /// @notice The cooldown duration for withdrawal extra funds
-  uint256 public cooldown;
+  /// @notice The deposit window duration (in seconds) after poll ends
+  uint256 public depositWindow;
 
   /// @notice The sum of tally result squares
   uint256 public totalVotesSquares;
@@ -62,15 +59,15 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
   event ResultAdded(uint256 indexed index, uint256 indexed result);
 
   /// @notice custom errors
-  error CooldownPeriodNotOver();
   error InvalidBudget();
   error NoProjectHasMoreThanOneVote();
-  error InvalidWithdrawal();
   error AlreadyInitialized();
   error NotInitialized();
   error NotCompletedResults();
   error TooManyResults();
   error AlreadyClaimed();
+  error DepositWindowClosed();
+  error DepositWindowNotClosed();
 
   /// @notice Create a new Tally contract
   /// @param verifierContract The Verifier contract
@@ -88,22 +85,34 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
     Mode pollMode
   ) payable TallyBase(verifierContract, vkRegistryContract, pollContract, mpContract, tallyOwner, pollMode) {}
 
-  /// @notice A modifier that causes the function to revert if the cooldown period is not over
-  modifier afterCooldown() {
-    (uint256 deployTime, uint256 duration) = poll.getDeployTimeAndDuration();
-    uint256 secondsPassed = block.timestamp - deployTime;
-
-    if (secondsPassed <= duration + cooldown) {
-      revert CooldownPeriodNotOver();
+  /// @notice A modifier that causes the function to revert if the tallying is not over
+  modifier afterTallying() {
+    if (!isTallied() || tallyBatchNum == 0) {
+      revert VotesNotTallied();
     }
 
     _;
   }
 
-  /// @notice A modifier that causes the function to revert if the tallying is not over
-  modifier afterTallying() {
-    if (!isTallied() || tallyBatchNum == 0) {
-      revert VotesNotTallied();
+  /// @notice A modifier that causes the function to revert if not within deposit window
+  modifier duringDepositWindow() {
+    (uint256 deployTime, uint256 duration) = poll.getDeployTimeAndDuration();
+    uint256 depositWindowEnd = deployTime + duration + depositWindow;
+
+    if (block.timestamp > depositWindowEnd) {
+      revert DepositWindowClosed();
+    }
+
+    _;
+  }
+
+  /// @notice A modifier that causes the function to revert if deposit window is not closed
+  modifier afterDepositWindow() {
+    (uint256 deployTime, uint256 duration) = poll.getDeployTimeAndDuration();
+    uint256 depositWindowEnd = deployTime + duration + depositWindow;
+
+    if (block.timestamp <= depositWindowEnd) {
+      revert DepositWindowNotClosed();
     }
 
     _;
@@ -126,11 +135,10 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
     }
 
     initialized = true;
-    cooldown = params.cooldownTime;
     registry = IPoll(address(poll)).getRegistry();
     token = IERC20(params.payoutToken);
-    maxContributionAmount = params.maxContribution;
     maxCap = params.maxCap;
+    depositWindow = params.depositWindow;
     voiceCreditFactor = params.maxContribution / MAX_VOICE_CREDITS;
     voiceCreditFactor = voiceCreditFactor > 0 ? voiceCreditFactor : 1;
   }
@@ -146,7 +154,7 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
   }
 
   /// @inheritdoc IPayoutStrategy
-  function deposit(uint256 amount) public isInitialized whenNotPaused afterTallying {
+  function deposit(uint256 amount) public isInitialized whenNotPaused duringDepositWindow {
     emit Deposited(msg.sender, amount);
 
     token.safeTransferFrom(msg.sender, address(this), amount);
@@ -200,7 +208,7 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
   }
 
   /// @inheritdoc IPayoutStrategy
-  function claim(IPayoutStrategy.Claim calldata params) public override isInitialized whenNotPaused afterTallying {
+  function claim(IPayoutStrategy.Claim calldata params) public override isInitialized whenNotPaused afterTallying afterDepositWindow {
     if (alpha == 0) {
       alpha = calculateAlpha(totalAmount());
     }
