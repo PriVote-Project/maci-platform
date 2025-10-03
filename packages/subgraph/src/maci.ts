@@ -5,7 +5,6 @@ import { DeployPoll as DeployPollEvent, SignUp as SignUpEvent, MACI as MaciContr
 import { Poll } from "../generated/schema";
 import { Poll as PollTemplate, Tally as TallyTemplate } from "../generated/templates";
 import { Poll as PollContract } from "../generated/templates/Poll/Poll";
-import { Tally as TallyContract } from "../generated/templates/Tally/Tally";
 
 import { ONE_BIG_INT, MESSAGE_TREE_ARITY } from "./utils/constants";
 import { createOrLoadMACI, createOrLoadUser, createOrLoadAccount, createOrLoadTally } from "./utils/entity";
@@ -49,11 +48,7 @@ export function handleDeployPoll(event: DeployPollEvent): void {
   // address of the new poll contract
   PollTemplate.create(Address.fromBytes(poll.id));
 
-  // Read depositWindow from the Tally contract
-  const tallyContract = TallyContract.bind(contracts.tally);
-  const depositWindow = tallyContract.depositWindow();
-
-  createOrLoadTally(contracts.tally, poll.id, depositWindow);
+  createOrLoadTally(contracts.tally, poll.id);
 
   // Start indexing the tally
   TallyTemplate.create(Address.fromBytes(contracts.tally));

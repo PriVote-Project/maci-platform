@@ -46,10 +46,12 @@ describe("Tally", () => {
   let verifier: MockVerifier;
   let vkRegistry: VkRegistry;
   let owner: Signer;
+  let custodian: Signer;
   let user: Signer;
   let project: Signer;
 
   let ownerAddress: string;
+  let custodianAddress: string;
   let userAddress: string;
   let projectAddress: string;
 
@@ -57,7 +59,7 @@ describe("Tally", () => {
 
   const metadataUrl = encodeBytes32String("url");
   const duration = 100;
-  const depositWindow = 1_000;
+  const cooldownTime = 100;
   const keypair = new Keypair();
 
   const emptyClaimParams = {
@@ -73,9 +75,10 @@ describe("Tally", () => {
   };
 
   before(async () => {
-    [owner, user, project] = await getSigners();
-    [ownerAddress, userAddress, projectAddress] = await Promise.all([
+    [owner, custodian, user, project] = await getSigners();
+    [ownerAddress, custodianAddress, userAddress, projectAddress] = await Promise.all([
       owner.getAddress(),
+      custodian.getAddress(),
       user.getAddress(),
       project.getAddress(),
     ]);
@@ -154,10 +157,11 @@ describe("Tally", () => {
 
     const receipt = await tallyContract
       .init({
+        cooldownTime,
+        custodian: custodianAddress,
         maxContribution: 1,
         maxCap: 1,
         payoutToken,
-        depositWindow,
       })
       .then((tx) => tx.wait());
 
@@ -167,6 +171,7 @@ describe("Tally", () => {
 
   it("should not allow to deposit/claim/addTallyResults before initialization", async () => {
     await expect(tally.deposit(1n)).to.be.revertedWithCustomError(tally, "NotInitialized");
+    await expect(tally.withdraw()).to.be.revertedWithCustomError(tally, "NotInitialized");
     await expect(tally.claim(emptyClaimParams)).to.be.revertedWithCustomError(tally, "NotInitialized");
     await expect(
       tally.addTallyResults({
@@ -186,10 +191,11 @@ describe("Tally", () => {
   it("should not allow non-owner to initialize tally", async () => {
     await expect(
       tally.connect(user).init({
+        cooldownTime,
+        custodian: custodianAddress,
         maxContribution: parseUnits("5", await payoutToken.decimals()),
         maxCap: parseUnits("10", await payoutToken.decimals()),
         payoutToken,
-        depositWindow,
       }),
     ).to.be.revertedWithCustomError(tally, "OwnableUnauthorizedAccount");
   });
@@ -197,10 +203,11 @@ describe("Tally", () => {
   it("should initialize tally properly", async () => {
     const receipt = await tally
       .init({
+        cooldownTime,
+        custodian: custodianAddress,
         maxContribution: parseUnits("5", await payoutToken.decimals()),
         maxCap: parseUnits("10", await payoutToken.decimals()),
         payoutToken,
-        depositWindow,
       })
       .then((tx) => tx.wait());
 
@@ -210,30 +217,21 @@ describe("Tally", () => {
   it("should not allow to initialize tally twice", async () => {
     await expect(
       tally.init({
+        cooldownTime,
+        custodian: custodianAddress,
         maxContribution: parseUnits("5", await payoutToken.decimals()),
         maxCap: parseUnits("10", await payoutToken.decimals()),
         payoutToken,
-        depositWindow,
       }),
     ).to.be.revertedWithCustomError(tally, "AlreadyInitialized");
   });
 
-  it("should not allow non-owner to pause/unpause", async () => {
-    await expect(tally.connect(user).pause()).to.be.revertedWithCustomError(tally, "OwnableUnauthorizedAccount");
-
-    await expect(tally.connect(user).unpause()).to.be.revertedWithCustomError(tally, "OwnableUnauthorizedAccount");
+  it("should not withdraw to custodian if cooldown period is not over", async () => {
+    await expect(tally.withdraw()).to.be.revertedWithCustomError(tally, "CooldownPeriodNotOver");
   });
 
-  it("should not allow to call functions if contract is paused", async () => {
-    try {
-      await tally.pause().then((tx) => tx.wait());
-
-      await expect(tally.deposit(1n)).to.be.revertedWithCustomError(tally, "EnforcedPause");
-
-      await expect(tally.claim(emptyClaimParams)).to.be.revertedWithCustomError(tally, "EnforcedPause");
-    } finally {
-      await tally.unpause().then((tx) => tx.wait());
-    }
+  it("should not allow non-owner to withdraw funds", async () => {
+    await expect(tally.connect(user).withdraw()).to.be.revertedWithCustomError(tally, "OwnableUnauthorizedAccount");
   });
 
   it("should not allow non-owner to add tally results", async () => {
@@ -295,6 +293,29 @@ describe("Tally", () => {
     await expect(tally.getAllocatedAmounts([])).to.be.revertedWithCustomError(tally, "VotesNotTallied");
     await expect(tally.getAllocatedAmount(0, 0)).to.be.revertedWithCustomError(tally, "VotesNotTallied");
     await expect(tally.calculateAlpha(0)).to.be.revertedWithCustomError(tally, "VotesNotTallied");
+  });
+
+  it("should deposit funds properly", async () => {
+    const [decimals, initialBalance] = await Promise.all([payoutToken.decimals(), payoutToken.balanceOf(owner)]);
+    const ownerAmount = parseUnits(TOTAL_SPENT_VOICE_CREDITS.spent, decimals);
+    const userAmount = parseUnits("2", decimals);
+
+    await payoutToken.approve(user, userAmount).then((tx) => tx.wait());
+    await payoutToken.transfer(user, userAmount);
+
+    await payoutToken.approve(tally, ownerAmount).then((tx) => tx.wait());
+    await expect(tally.deposit(ownerAmount)).to.emit(tally, "Deposited").withArgs(ownerAddress, ownerAmount);
+
+    await payoutToken
+      .connect(user)
+      .approve(tally, userAmount)
+      .then((tx) => tx.wait());
+    await expect(tally.connect(user).deposit(userAmount)).to.emit(tally, "Deposited").withArgs(userAddress, userAmount);
+
+    const [tokenBalance, totalAmount] = await Promise.all([payoutToken.balanceOf(tally), tally.totalAmount()]);
+
+    expect(totalAmount).to.equal(tokenBalance);
+    expect(initialBalance - tokenBalance).to.equal(initialBalance - ownerAmount - userAmount);
   });
 
   it("should add tally results properly", async () => {
@@ -392,59 +413,31 @@ describe("Tally", () => {
       .withArgs(0, tallyResults[0]);
   });
 
-  it("should deposit funds properly", async () => {
-    const [decimals, initialBalance] = await Promise.all([payoutToken.decimals(), payoutToken.balanceOf(owner)]);
-    const ownerAmount = parseUnits(TOTAL_SPENT_VOICE_CREDITS.spent, decimals);
-    const userAmount = parseUnits("2", decimals);
-
-    await payoutToken.approve(user, userAmount).then((tx) => tx.wait());
-    await payoutToken.transfer(user, userAmount);
-
-    await payoutToken.approve(tally, ownerAmount).then((tx) => tx.wait());
-    await expect(tally.deposit(ownerAmount)).to.emit(tally, "Deposited").withArgs(ownerAddress, ownerAmount);
-
-    await payoutToken
-      .connect(user)
-      .approve(tally, userAmount)
-      .then((tx) => tx.wait());
-    await expect(tally.connect(user).deposit(userAmount)).to.emit(tally, "Deposited").withArgs(userAddress, userAmount);
-
-    const [tokenBalance, totalAmount] = await Promise.all([payoutToken.balanceOf(tally), tally.totalAmount()]);
-
-    expect(totalAmount).to.equal(tokenBalance);
-    expect(initialBalance - tokenBalance).to.equal(initialBalance - ownerAmount - userAmount);
-  });
-
-  it("should not allow claims during deposit window", async () => {
-    // Tallying is complete but deposit window hasn't closed yet
-    // Replicate the same setup as successful claim test
-    const tallyResults = TALLY_RESULTS.tally.map((x) => BigInt(x));
-    const tallyResultProofs = TALLY_RESULTS.tally.map((_, index) =>
-      genTreeProof(index, tallyResults, Number(treeDepths.voteOptionTreeDepth)),
-    );
-
-    const params = {
-      index: 0,
-      voiceCreditsPerOption: PER_VO_SPENT_VOICE_CREDITS.tally[0],
-      tallyResultProof: tallyResultProofs[0],
-      tallyResultSalt: TALLY_RESULTS.salt,
-      voteOptionTreeDepth: treeDepths.voteOptionTreeDepth,
-      spentVoiceCreditsHash: TOTAL_SPENT_VOICE_CREDITS.commitment,
-      perVOSpentVoiceCreditsHash: PER_VO_SPENT_VOICE_CREDITS.commitment,
-    };
-
-    // Should fail because deposit window hasn't closed yet
-    await expect(tally.claim(params)).to.be.revertedWithCustomError(tally, "DepositWindowNotClosed");
-  });
-
-  it("should not allow deposits after deposit window closes", async () => {
-    // Move time past deposit window end
-    await timeTravel(duration + depositWindow, owner);
-
+  it("should not allow deposits after tallying", async () => {
     const amount = parseUnits("1", await payoutToken.decimals());
     await payoutToken.approve(tally, amount).then((tx) => tx.wait());
 
-    await expect(tally.deposit(amount)).to.be.revertedWithCustomError(tally, "DepositWindowClosed");
+    await expect(tally.deposit(amount)).to.be.revertedWithCustomError(tally, "VotesAlreadyTallied");
+  });
+
+  it("should not withdraw to custodian if cooldown period is equal to timestamp", async () => {
+    const [deployTime] = await poll.getDeployTimeAndDuration();
+    const blockTimestamp = (await owner.provider!.getBlock("latest"))!.timestamp;
+
+    const secondsSinceDeploy = blockTimestamp - Number(deployTime);
+    const totalTime = Number(duration) + cooldownTime;
+
+    // -1 is needed because get latest block is one second behind block when withdraw is called
+    const remainingCooldown = totalTime - secondsSinceDeploy - 1;
+
+    await timeTravel(remainingCooldown, owner);
+
+    await expect(tally.withdraw()).to.be.revertedWithCustomError(tally, "CooldownPeriodNotOver");
+
+    // Check seconds passed is equal to totalTime
+    const blockTimestamp2 = (await owner.provider!.getBlock("latest"))!.timestamp;
+    const secondsSinceDeploy2 = blockTimestamp2 - Number(deployTime);
+    expect(secondsSinceDeploy2).to.be.equal(totalTime);
   });
 
   it("should not allow to add tally results twice", async () => {
@@ -474,9 +467,6 @@ describe("Tally", () => {
   });
 
   it("should not claim funds for the project if proof generation is failed", async () => {
-    // Move past deposit window to allow claims
-    await timeTravel(duration + depositWindow, owner);
-
     const voteOptionTreeDepth = 3;
     const invalidProof = [
       [0n, 0n, 0n, 0n],
@@ -591,5 +581,29 @@ describe("Tally", () => {
       // eslint-disable-next-line no-await-in-loop
       await expect(tally.claim(params)).to.be.revertedWithCustomError(tally, "AlreadyClaimed");
     }
+  });
+
+  it("should withdraw to custodian after cooldownTime properly", async () => {
+    await timeTravel(1, owner);
+
+    const [contractBalance, initialCustodianBalance, totalAmount] = await Promise.all([
+      payoutToken.balanceOf(tally),
+      payoutToken.balanceOf(custodian),
+      tally.totalAmount(),
+    ]);
+
+    const tx = await tally.withdraw();
+    await tx.wait();
+
+    const [balance, custodianBalance, totalExtraFunds] = await Promise.all([
+      payoutToken.balanceOf(tally),
+      payoutToken.balanceOf(custodian),
+      tally.totalAmount(),
+    ]);
+
+    expect(balance).to.equal(0n);
+    expect(totalExtraFunds).to.equal(0n);
+    expect(initialCustodianBalance + totalAmount).to.equal(custodianBalance);
+    expect(contractBalance).to.equal(totalAmount);
   });
 });

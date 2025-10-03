@@ -35,8 +35,11 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
   /// @notice The voice credit factor (needed for allocated amount calculation)
   uint256 public voiceCreditFactor;
 
-  /// @notice The deposit window duration (in seconds) after poll ends
-  uint256 public depositWindow;
+  /// @notice The cooldown duration for withdrawal extra funds
+  uint256 public cooldown;
+
+  /// @notice The custodian address who should receive leftover funds if tallying and cooldown period are over
+  address public custodian;
 
   /// @notice The sum of tally result squares
   uint256 public totalVotesSquares;
@@ -59,6 +62,7 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
   event ResultAdded(uint256 indexed index, uint256 indexed result);
 
   /// @notice custom errors
+  error CooldownPeriodNotOver();
   error InvalidBudget();
   error NoProjectHasMoreThanOneVote();
   error AlreadyInitialized();
@@ -66,8 +70,7 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
   error NotCompletedResults();
   error TooManyResults();
   error AlreadyClaimed();
-  error DepositWindowClosed();
-  error DepositWindowNotClosed();
+  error VotesAlreadyTallied();
 
   /// @notice Create a new Tally contract
   /// @param verifierContract The Verifier contract
@@ -87,32 +90,29 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
 
   /// @notice A modifier that causes the function to revert if the tallying is not over
   modifier afterTallying() {
-    if (!isTallied() || tallyBatchNum == 0) {
+    if (isTallyingOngoing()) {
       revert VotesNotTallied();
     }
 
     _;
   }
 
-  /// @notice A modifier that causes the function to revert if not within deposit window
-  modifier duringDepositWindow() {
-    (uint256 deployTime, uint256 duration) = poll.getDeployTimeAndDuration();
-    uint256 depositWindowEnd = deployTime + duration + depositWindow;
-
-    if (block.timestamp > depositWindowEnd) {
-      revert DepositWindowClosed();
+  /// @notice A modifier that causes the function to revert if the tallying is over
+  modifier beforeTallying() {
+    if (!isTallyingOngoing()) {
+      revert VotesAlreadyTallied();
     }
 
     _;
   }
 
-  /// @notice A modifier that causes the function to revert if deposit window is not closed
-  modifier afterDepositWindow() {
+  /// @notice A modifier that causes the function to revert if the cooldown period is not over
+  modifier afterCooldown() {
     (uint256 deployTime, uint256 duration) = poll.getDeployTimeAndDuration();
-    uint256 depositWindowEnd = deployTime + duration + depositWindow;
+    uint256 secondsPassed = block.timestamp - deployTime;
 
-    if (block.timestamp <= depositWindowEnd) {
-      revert DepositWindowNotClosed();
+    if (secondsPassed <= duration + cooldown) {
+      revert CooldownPeriodNotOver();
     }
 
     _;
@@ -138,26 +138,24 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
     registry = IPoll(address(poll)).getRegistry();
     token = IERC20(params.payoutToken);
     maxCap = params.maxCap;
-    depositWindow = params.depositWindow;
+    cooldown = params.cooldownTime;
+    custodian = params.custodian;
     voiceCreditFactor = params.maxContribution / MAX_VOICE_CREDITS;
     voiceCreditFactor = voiceCreditFactor > 0 ? voiceCreditFactor : 1;
   }
 
-  /// @notice Pause contract calls (deposit, claim, withdraw)
-  function pause() public onlyOwner {
-    _pause();
-  }
-
-  /// @notice Unpause contract calls (deposit, claim, withdraw)
-  function unpause() public onlyOwner {
-    _unpause();
-  }
-
   /// @inheritdoc IPayoutStrategy
-  function deposit(uint256 amount) public isInitialized whenNotPaused duringDepositWindow {
+  function deposit(uint256 amount) public isInitialized beforeTallying {
     emit Deposited(msg.sender, amount);
 
     token.safeTransferFrom(msg.sender, address(this), amount);
+  }
+
+  /// @inheritdoc IPayoutStrategy
+  function withdraw() public override isInitialized onlyOwner afterCooldown {
+    uint256 totalFunds = token.balanceOf(address(this));
+
+    token.safeTransfer(custodian, totalFunds);
   }
 
   /// @inheritdoc IPayoutStrategy
@@ -208,7 +206,7 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
   }
 
   /// @inheritdoc IPayoutStrategy
-  function claim(IPayoutStrategy.Claim calldata params) public override isInitialized whenNotPaused afterTallying afterDepositWindow {
+  function claim(IPayoutStrategy.Claim calldata params) public override isInitialized afterTallying {
     if (alpha == 0) {
       alpha = calculateAlpha(totalAmount());
     }
@@ -299,5 +297,11 @@ contract Tally is TallyBase, IPayoutStrategy, Pausable {
     }
 
     return ((budget - contributions) * ALPHA_PRECISION) / (voiceCreditFactor * (totalVotesSquares - totalSpent));
+  }
+
+  /// @notice Check if all ballots are tallied
+  /// @return bool whether all ballots are tallied and tally batch number is not 0
+  function isTallyingOngoing() internal view returns (bool) {
+    return !isTallied() || tallyBatchNum == 0;
   }
 }

@@ -4,7 +4,7 @@ import { test, describe, afterEach, clearStore, assert, beforeAll } from "matchs
 
 import { Account, MACI, Poll, User } from "../../generated/schema";
 import { handleSignUp, handleDeployPoll } from "../../src/maci";
-import { DEFAULT_POLL_ADDRESS, mockMaciContract, mockPollContract, mockTallyContract } from "../common";
+import { DEFAULT_POLL_ADDRESS, mockMaciContract, mockPollContract } from "../common";
 
 import { createSignUpEvent, createDeployPollEvent } from "./utils";
 
@@ -14,7 +14,6 @@ describe("MACI", () => {
   beforeAll(() => {
     mockMaciContract();
     mockPollContract();
-    mockTallyContract();
   });
 
   afterEach(() => {
