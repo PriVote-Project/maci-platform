@@ -14,6 +14,7 @@ import type { IRecipient } from "~/utils/types";
 
 import { useProjectMetadata } from "../hooks/useProjects";
 
+import { ImpactCategories } from "./ImpactCategories";
 import { ProjectContacts } from "./ProjectContacts";
 import { ProjectDescriptionSection } from "./ProjectDescriptionSection";
 
@@ -47,13 +48,23 @@ const ProjectDetails = ({ pollId, project, action = undefined }: IProjectDetails
         </div>
 
         <div className="flex flex-col gap-[30px]">
-          <div className="flex flex-col items-center justify-between px-2 sm:flex-row">
-            <Heading as="h3" size="3xl">
-              {metadata.data?.name}
-            </Heading>
+          <div className="flex flex-col gap-4 px-2">
+            <div className="flex flex-col items-center justify-between sm:flex-row">
+              <Heading as="h3" size="3xl">
+                {metadata.data?.name}
+              </Heading>
 
-            {roundState === ERoundState.VOTING && (
-              <VotingWidget pollId={pollId} projectId={project.id} projectIndex={Number.parseInt(project.index, 10)} />
+              {roundState === ERoundState.VOTING && (
+                <VotingWidget
+                  pollId={pollId}
+                  projectId={project.id}
+                  projectIndex={Number.parseInt(project.index, 10)}
+                />
+              )}
+            </div>
+
+            {metadata.data?.impactCategory && metadata.data.impactCategory.length > 0 && (
+              <ImpactCategories tags={metadata.data.impactCategory} />
             )}
           </div>
 

@@ -162,6 +162,14 @@ export async function fetchApprovedProjectsWithMetadata(
         payout: request.payout,
         initialized: request.initialized,
         index: request.index,
+        // Populate commonly used fields to avoid extra metadata fetches
+        bannerImageUrl: metadata.bannerImageUrl,
+        profileImageUrl: metadata.profileImageUrl,
+        name: metadata.name,
+        bio: metadata.bio,
+        shortBio: metadata.shortBio,
+        // Required for filtering functionality
+        impactCategory: metadata.impactCategory,
       };
     }),
   );

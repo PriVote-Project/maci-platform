@@ -20,6 +20,7 @@ import { useResults } from "~/hooks/useResults";
 import { useRoundState } from "~/utils/state";
 import { ERoundState, IRecipient } from "~/utils/types";
 
+import { ImpactCategoryFilter } from "../../projects/components/ImpactCategoryFilter";
 import { ProjectItem, ProjectItemAwarded } from "../../projects/components/ProjectItem";
 import { useSearchProjects } from "../../projects/hooks/useProjects";
 import { EProjectState } from "../../projects/types";
@@ -31,6 +32,7 @@ export interface IProjectsProps {
 export const Projects = ({ pollId = "" }: IProjectsProps): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState("");
   const deferredSearchTerm = useDeferredValue(searchTerm);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
   const roundState = useRoundState({ pollId });
 
@@ -106,6 +108,36 @@ export const Projects = ({ pollId = "" }: IProjectsProps): JSX.Element => {
     return EProjectState.DEFAULT;
   };
 
+  const handleCategoryClick = useCallback((category: string) => {
+    setSelectedCategories((prev) => {
+      if (prev.includes(category)) {
+        return prev.filter((c) => c !== category);
+      }
+      return [...prev, category];
+    });
+  }, []);
+
+  const shouldShowProject = useCallback(
+    (project: IRecipient) => {
+      // If no categories are selected, show all projects
+      if (selectedCategories.length === 0) {
+        return true;
+      }
+
+      // Get impact categories from the project
+      const { impactCategory } = project;
+
+      // If project has no impact categories, don't show it when filtering
+      if (!impactCategory || impactCategory.length === 0) {
+        return false;
+      }
+
+      // Show project if it has any of the selected categories
+      return selectedCategories.some((selectedCat) => impactCategory.includes(selectedCat));
+    },
+    [selectedCategories],
+  );
+
   return (
     <div>
       {roundState === ERoundState.APPLICATION && (
@@ -142,6 +174,8 @@ export const Projects = ({ pollId = "" }: IProjectsProps): JSX.Element => {
         </div>
       </div>
 
+      <ImpactCategoryFilter selectedCategories={selectedCategories} onCategoryClick={handleCategoryClick} />
+
       {roundState === ERoundState.APPLICATION && address && (
         <div className="mb-4 rounded-md border border-black p-4 dark:border-white">
           <div className="flex justify-between">
@@ -176,21 +210,29 @@ export const Projects = ({ pollId = "" }: IProjectsProps): JSX.Element => {
 
       <InfiniteLoading
         {...randomizedProjects}
-        renderItem={(item: IRecipient, { isLoading }) => (
-          <div key={item.id} className={clsx("relative", { "animate-pulse": isLoading })}>
-            {!results.isLoading && roundState === ERoundState.RESULTS ? (
-              <ProjectItemAwarded amount={results.data?.projects[item.id]?.votes} />
-            ) : null}
+        renderItem={(item: IRecipient, { isLoading }) => {
+          if (!shouldShowProject(item)) {
+            return null;
+          }
 
-            <ProjectItem
-              action={handleAction(Number.parseInt(item.index, 10), item.id)}
-              isLoading={projects.isLoading}
-              pollId={pollId}
-              recipient={item}
-              state={defineState(Number.parseInt(item.index, 10))}
-            />
-          </div>
-        )}
+          return (
+            <div key={item.id} className={clsx("relative", { "animate-pulse": isLoading })}>
+              {!results.isLoading && roundState === ERoundState.RESULTS ? (
+                <ProjectItemAwarded amount={results.data?.projects[item.id]?.votes} />
+              ) : null}
+
+              <ProjectItem
+                action={handleAction(Number.parseInt(item.index, 10), item.id)}
+                isLoading={projects.isLoading}
+                pollId={pollId}
+                recipient={item}
+                selectedCategories={selectedCategories}
+                state={defineState(Number.parseInt(item.index, 10))}
+                onCategoryClick={handleCategoryClick}
+              />
+            </div>
+          );
+        }}
       />
     </div>
   );

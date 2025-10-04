@@ -28,6 +28,8 @@ export interface IProjectItemContentProps {
   shortBio?: string;
   impactCategory?: string[];
   actionButton?: ReactNode;
+  onCategoryClick?: (category: string) => void;
+  selectedCategories?: string[];
 }
 
 export const ProjectItemContent = ({
@@ -37,6 +39,8 @@ export const ProjectItemContent = ({
   shortBio = "",
   impactCategory = undefined,
   actionButton = undefined,
+  onCategoryClick = undefined,
+  selectedCategories = [],
 }: IProjectItemContentProps): JSX.Element => (
   <article className="group w-full rounded-[12px] border border-[var(--glass-stroke)] bg-white backdrop-blur-md dark:bg-[var(--glass-bg-08)]">
     <div className="opacity-70 transition-opacity duration-200 group-hover:opacity-100">
@@ -52,7 +56,11 @@ export const ProjectItemContent = ({
         <span className="line-clamp-2 h-10 font-sans text-sm text-gray-400">{removeMarkdown(shortBio || "")}</span>
       </div>
 
-      <ImpactCategories tags={impactCategory} />
+      <ImpactCategories
+        selectedCategories={selectedCategories}
+        tags={impactCategory}
+        onCategoryClick={onCategoryClick}
+      />
 
       {actionButton}
     </div>
@@ -66,6 +74,8 @@ export interface IProjectItemProps {
   state?: EProjectState;
   registryAddress?: string;
   action?: (e: Event) => void;
+  onCategoryClick?: (category: string) => void;
+  selectedCategories?: string[];
 }
 
 export const ProjectItem = ({
@@ -75,6 +85,8 @@ export const ProjectItem = ({
   state = undefined,
   registryAddress = zeroAddress,
   action = undefined,
+  onCategoryClick = undefined,
+  selectedCategories = [],
 }: IProjectItemProps): JSX.Element => {
   const metadata = useProjectMetadata(recipient.metadataUrl);
   const request = useRequestByProjectId(recipient.id, registryAddress);
@@ -134,7 +146,9 @@ export const ProjectItem = ({
           impactCategory={impactCategory}
           name={name}
           profileImageUrl={profileImageUrl}
+          selectedCategories={selectedCategories}
           shortBio={shortBio}
+          onCategoryClick={onCategoryClick}
         />
       </Link>
     </div>
