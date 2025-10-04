@@ -128,6 +128,13 @@ export const impactCategories = {
   END_USER_EXPERIENCE_AND_ADOPTION: { label: "End user UX" },
 } as const;
 
+// export const impactCategories = {
+//   RESEARCH: { label: "Research" },
+//   DAPPS: { label: "DApps" },
+//   INFRASTRUCTURE: { label: "Infrastructure" },
+//   EDUCATION: { label: "Education" },
+// } as const;
+
 export const prefixes = {
   GITHUB_PREFIX: "https://github.com/",
   TWITTER_PREFIX: "https://x.com/",
