@@ -9,7 +9,77 @@ export const FAQList = (): JSX.Element => (
     <FAQItem
       description={
         <div className="flex flex-col gap-4">
-          <p>Minimal Anti-Collusion Infrastructure (MACI) is a private, on-chain, voting system.</p>
+          <p>
+            <a
+              className="text-blue-600 underline dark:text-blue-400"
+              href="https://grants.gitcoin.co/"
+              rel="noreferrer"
+              target="_blank"
+            >
+              Gitcoin Governance Round number 24
+            </a>{" "}
+            is an opportunity for the community to contribute to different projects and initiatives in the ecosystem.
+            The rounds are categorized into different topics (e.g. Privacy) and projects can apply to specific rounds
+            depending on the eligibility.
+          </p>
+
+          <p>
+            <a
+              className="text-blue-600 underline dark:text-blue-400"
+              href="https://gov.gitcoin.co/t/the-case-for-privacy-gg24-maci-allo-capital/22491/10"
+              rel="noreferrer"
+              target="_blank"
+            >
+              The GG24 Privacy domain
+            </a>{" "}
+            will cover projects related to privacy in terms of research, dApps, infrastructure and education. All
+            projects, initiatives and individuals working on privacy related topics are welcome to apply.
+          </p>
+        </div>
+      }
+      title="What is GG24 and the privacy domain?"
+    />
+
+    <FAQItem
+      description={
+        <div className="flex flex-col gap-4">
+          <p>
+            <a
+              className="text-blue-600 underline dark:text-blue-400"
+              href="https://gov.gitcoin.co/t/gg24-domains-and-allocations/24382"
+              rel="noreferrer"
+              target="_blank"
+            >
+              There are 6 separate domains for GG24
+            </a>
+            , the privacy domain is just one of them. If your project integrates privacy, you are in the right place.
+            Projects that do not meet the criteria for the privacy domain can explore applying to other domains for
+            funding. The privacy domain is the only domain that will be using MACI as a voting protocol.
+          </p>
+
+          <p>
+            One project can apply to multiple rounds within GG24. The project needs to fill up the submission form in
+            each specific round.
+          </p>
+        </div>
+      }
+      title="What is the difference between the GG24 privacy domain and other domains for GG24?"
+    />
+
+    <FAQItem
+      description={
+        <div className="flex flex-col gap-4">
+          <p>
+            <a
+              className="text-blue-600 underline dark:text-blue-400"
+              href="https://maci.pse.dev/"
+              rel="noreferrer"
+              target="_blank"
+            >
+              Minimal Anti-Collusion Infrastructure (MACI)
+            </a>{" "}
+            is a private, on-chain, voting system.
+          </p>
 
           <p>
             MACI is an open-source cryptographic protocol designed to facilitate secure, anonymous voting systems while
@@ -157,6 +227,24 @@ export const FAQList = (): JSX.Element => (
       title="Where can I contact round operators?"
     />
 
-    <FAQItem description="Join our Discord channel to learn more!" title="Do you have any other questions?" />
+    <FAQItem
+      description={
+        <div className="flex flex-col gap-4">
+          <p>
+            Check out our&nbsp;
+            <a
+              className="text-blue-600 underline dark:text-blue-400"
+              href="https://pse-team.notion.site/gg24-privacy-round"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              Notion page
+            </a>
+            &nbsp;for more detailed information about the round.
+          </p>
+        </div>
+      }
+      title="Do you have any other questions?"
+    />
   </div>
 );
