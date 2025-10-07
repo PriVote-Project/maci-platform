@@ -19,6 +19,11 @@ export const useRoundState = ({ pollId }: IUseRoundState): ERoundState => {
     return ERoundState.DEFAULT;
   }
 
+  // Check if the round hasn't started yet
+  if (isAfter(round.startsAt, now)) {
+    return ERoundState.DEFAULT;
+  }
+
   if (isAfter(round.registrationEndsAt, now)) {
     return ERoundState.APPLICATION;
   }

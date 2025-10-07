@@ -25,6 +25,7 @@ module.exports = createEnv({
       "scrollSepolia",
       "optimismSepolia",
       "arbitrum",
+      "arbitrumSepolia",
       "linea",
       "sepolia",
       "base",

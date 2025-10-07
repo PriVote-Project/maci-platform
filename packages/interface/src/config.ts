@@ -64,6 +64,8 @@ export const getRPCURL = (): string | undefined => {
   switch (process.env.NEXT_PUBLIC_CHAIN_NAME) {
     case "optimismSepolia":
       return `https://opt-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID!}`;
+    case "arbitrumSepolia":
+      return `https://arb-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID!}`;
     default:
       return undefined;
   }
@@ -118,22 +120,22 @@ export const zupass = {
   eventName: process.env.NEXT_PUBLIC_ZUPASS_EVENT_NAME!,
 } as const;
 
-export const impactCategories = {
-  ETHEREUM_INFRASTRUCTURE: { label: "Ethereum Infrastructure" },
-  OPEN_SOURCE: { label: "Web3 Open Source Software" },
-  COMMUNITY_EDUCATION: { label: "Web3 Community & Education" },
-  COLLECTIVE_GOVERNANCE: { label: "Collective Governance" },
-  OP_STACK: { label: "OP Stack" },
-  DEVELOPER_ECOSYSTEM: { label: "Developer Ecosystem" },
-  END_USER_EXPERIENCE_AND_ADOPTION: { label: "End user UX" },
-} as const;
-
 // export const impactCategories = {
-//   RESEARCH: { label: "Research" },
-//   DAPPS: { label: "DApps" },
-//   INFRASTRUCTURE: { label: "Infrastructure" },
-//   EDUCATION: { label: "Education" },
+//   ETHEREUM_INFRASTRUCTURE: { label: "Ethereum Infrastructure" },
+//   OPEN_SOURCE: { label: "Web3 Open Source Software" },
+//   COMMUNITY_EDUCATION: { label: "Web3 Community & Education" },
+//   COLLECTIVE_GOVERNANCE: { label: "Collective Governance" },
+//   OP_STACK: { label: "OP Stack" },
+//   DEVELOPER_ECOSYSTEM: { label: "Developer Ecosystem" },
+//   END_USER_EXPERIENCE_AND_ADOPTION: { label: "End user UX" },
 // } as const;
+
+export const impactCategories = {
+  RESEARCH: { label: "Research" },
+  DAPPS: { label: "DApps" },
+  INFRASTRUCTURE: { label: "Infrastructure" },
+  EDUCATION: { label: "Education" },
+} as const;
 
 export const prefixes = {
   GITHUB_PREFIX: "https://github.com/",

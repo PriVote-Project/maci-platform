@@ -28,29 +28,39 @@ export const SingleRoundHome = ({ round }: ISingleRoundHomeProps): JSX.Element =
 
       <p className="text-gray-400">{round.description}</p>
 
-      <div className="flex flex-row flex-wrap items-center justify-center gap-3">
-        <Button as={Link} href={`/rounds/${round.pollId}`} size="auto" variant="primary">
-          {roundState === ERoundState.APPLICATION ? "Add Project" : "View Projects"}
-        </Button>
-
-        {roundState === ERoundState.RESULTS && (
-          <Button as={Link} href={`/rounds/${round.pollId}/result`} size="auto" variant="primary">
-            View Results
+      {roundState !== ERoundState.DEFAULT && (
+        <div className="flex flex-row flex-wrap items-center justify-center gap-3">
+          <Button as={Link} href={`/rounds/${round.pollId}`} size="auto" variant="primary">
+            {roundState === ERoundState.APPLICATION ? "Add Project" : "View Projects"}
           </Button>
-        )}
 
-        {roundState === ERoundState.RESULTS && <DepositButton tallyAddress={round.tallyAddress} />}
+          {roundState === ERoundState.RESULTS && (
+            <Button as={Link} href={`/rounds/${round.pollId}/result`} size="auto" variant="primary">
+              View Results
+            </Button>
+          )}
 
-        {isConnected && isEligibleToVote && !isRegistered && <JoinButton />}
-      </div>
+          {(roundState === ERoundState.APPLICATION ||
+            roundState === ERoundState.VOTING ||
+            roundState === ERoundState.RESULTS) && <DepositButton tallyAddress={round.tallyAddress} />}
 
-      {isConnected && !isEligibleToVote && (
+          {isConnected && isEligibleToVote && !isRegistered && <JoinButton />}
+        </div>
+      )}
+
+      {roundState !== ERoundState.DEFAULT && isConnected && !isEligibleToVote && (
         <div className="mt-2 flex items-center justify-center">
           <JoinButton />
         </div>
       )}
 
-      {!isConnected && !isMobile && <p className="text-gray-400">Connect your wallet to get started.</p>}
+      {roundState === ERoundState.DEFAULT && (
+        <p className="text-gray-400">Round has not started yet. Please check back later.</p>
+      )}
+
+      {roundState !== ERoundState.DEFAULT && !isConnected && !isMobile && (
+        <p className="text-gray-400">Connect your wallet to get started.</p>
+      )}
 
       <Info showAppState pollId={round.pollId} showBallot={false} showRoundInfo={false} size="default" />
     </div>

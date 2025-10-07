@@ -45,7 +45,11 @@ const Footer = (): JSX.Element => (
           <FaXTwitter size={20} />
         </FooterNavLink>
 
-        <FooterNavLink ariaLabel="github" href="https://github.com/privoteweb3/maci-platform" showExternalIcon={false}>
+        <FooterNavLink
+          ariaLabel="github"
+          href="https://github.com/privote-project/maci-platform"
+          showExternalIcon={false}
+        >
           <FaGithub size={20} />
         </FooterNavLink>
 
@@ -59,7 +63,7 @@ const Footer = (): JSX.Element => (
 
         <FooterNavLink href="https://maci.pse.dev/docs/introduction">Documentation</FooterNavLink>
 
-        <FooterNavLink href="https://maci.pse.dev">About MACI PLATFORM</FooterNavLink>
+        <FooterNavLink href="https://privote.live">About Privote</FooterNavLink>
 
         <Logo />
       </div>
