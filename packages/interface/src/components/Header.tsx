@@ -23,7 +23,6 @@ import { cn } from "~/utils/classNames";
 import { useRoundState } from "~/utils/state";
 import { ERoundState } from "~/utils/types";
 
-import ConnectButton from "./ConnectButton";
 import { HelpButton } from "./HelpButton";
 import { IconButton } from "./ui/Button";
 import { Logo } from "./ui/Logo";
@@ -216,7 +215,7 @@ const Header = ({ navLinks, pollId = "" }: IHeaderProps) => {
             onClick={handleChangeTheme}
           />
 
-          <ConnectButton showMobile={false} />
+          {/* <ConnectButton showMobile={false} /> */}
         </div>
 
         <MobileMenu isOpen={isOpen} navLinks={navLinks} pollId={pollId} setOpen={setOpen} />

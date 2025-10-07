@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 import Image from "next/image";
-import { FaGithub, FaDiscord } from "react-icons/fa";
+import { FaGithub, FaDiscord, FaTelegram } from "react-icons/fa";
 import { FaXTwitter } from "react-icons/fa6";
 
 import { AppContainer } from "~/layouts/AppContainer";
@@ -55,6 +55,10 @@ const Footer = (): JSX.Element => (
 
         <FooterNavLink ariaLabel="discord" href="https://discord.com/invite/sF5CT5rzrR" showExternalIcon={false}>
           <FaDiscord size={23} />
+        </FooterNavLink>
+
+        <FooterNavLink ariaLabel="telegram" href="https://t.me/+MBIz8ZBIllExZDQ1" showExternalIcon={false}>
+          <FaTelegram size={22} />
         </FooterNavLink>
       </div>
 
