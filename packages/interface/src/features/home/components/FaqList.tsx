@@ -68,10 +68,30 @@ export const FAQList = (): JSX.Element => (
       description={
         <div className="flex flex-col gap-4">
           <p>
+            There will be two selection processes in this round overall. The first one determines if a project qualifies
+            for the Privacy round. This is completed by the MACI team as Gitcoin round operators. The main goal is to
+            filter malicious or non-related applications.
+          </p>
+
+          <p>
+            The second selection process is the voting process where voters vote for the projects. Anyone can donate
+            matching funds during the round to be added to the matching pool. This process involves the community, and
+            we encourage projects to invite community members to participate to grow their funding results, which depend
+            on community donations and Gitcoin funds.
+          </p>
+        </div>
+      }
+      title="How does the selection process work for the Privacy round of GG24? Who determines what applicants will get funded?"
+    />
+
+    <FAQItem
+      description={
+        <div className="flex flex-col gap-4">
+          <p>
             The round funds and community donations will be sent to this specific on-chain address. Arbitrum is a L2
             built on top of Ethereum with full EVM support. Therefore your Ethereum wallet would work in Arbitrum with
             no additional changes. We recommend projects with more than one stakeholder to use a multi-signature wallet
-            address. YOU CAN&apos;T CHANGE YOUR SUBMITTED WALLET AFTER PROJECT SUBMISSION IN PORTAL.
+            address. YOU CAN&apos;T CHANGE YOUR SUBMITTED WALLET AFTER PROJECT SUBMISSION IN THE PORTAL.
           </p>
 
           <p>
@@ -105,8 +125,8 @@ export const FAQList = (): JSX.Element => (
         <div className="flex flex-col gap-4">
           <p>
             Of course! After your application has been accepted you can invite friends, family and collaborators to
-            participate in the voting process of the round. The more people supporting your project, the larger the
-            funds to be received after the voting.
+            participate in the round. The more people supporting your project, the larger the funds to be received after
+            the voting.
           </p>
 
           <p>
@@ -126,11 +146,16 @@ export const FAQList = (): JSX.Element => (
     />
 
     <FAQItem
-      description="No, we expect one application per project in order to make it easier for voters to differentiate the various projects and initiatives. If your project is involved in more than one category please select the most relevant categories (you can select multiple). If you have any questions, reach out to us for clarification."
-      title="Can the same individual or project apply in more than one of the four categories within the Privacy round?"
+      description={
+        <>
+          Write to us at&nbsp;
+          <a className="text-blue-600 underline dark:text-blue-400" href="mailto:web3privacynow@protonmail.com">
+            web3privacynow@protonmail.com
+          </a>
+        </>
+      }
+      title="Where can I contact round operators?"
     />
-
-    <FAQItem description="Write us web3privacynow 'at' protonmail.com" title="Where can I contact round operators?" />
 
     <FAQItem description="Join our Discord channel to learn more!" title="Do you have any other questions?" />
   </div>
