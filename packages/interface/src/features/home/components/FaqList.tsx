@@ -94,6 +94,31 @@ export const FAQList = (): JSX.Element => (
       description={
         <div className="flex flex-col gap-4">
           <p>
+            Privote brings a simple and intuitive user experience (UX) to the powerful privacy of the MACI protocol. We
+            focus on removing Web3 complexity, allowing anyone to create or vote in secure, anonymous polls in just a
+            few clicks. Our mission is to radically improve the UX of on-chain governance.
+          </p>
+
+          <p>
+            Find out more at:&nbsp;
+            <a
+              className="text-blue-600 underline dark:text-blue-400"
+              href="https://privote.live"
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              https://privote.live
+            </a>
+          </p>
+        </div>
+      }
+      title="What is Privote?"
+    />
+
+    <FAQItem
+      description={
+        <div className="flex flex-col gap-4">
+          <p>
             Prepare all your project evidence (documents, website, research, slides, etc) and submit your application
             through the form in&nbsp;
             <a

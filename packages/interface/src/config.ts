@@ -1,7 +1,7 @@
 import * as wagmiChains from "wagmi/chains";
 
 export const metadata = {
-  title: "MACI PLATFORM",
+  title: "GG24 Privacy Round",
   description: "Open-source Retro Public Goods Funding platform with MACI for private on chain voting/",
   url: "https://maci-platform.vercel.app",
   image: "/api/og",
