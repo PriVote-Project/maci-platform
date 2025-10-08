@@ -10,6 +10,8 @@ import {
   Home,
   Shield,
   Users,
+  HelpCircle,
+  BookOpen,
 } from "lucide-react";
 import dynamic from "next/dynamic";
 import Link from "next/link";
@@ -23,7 +25,6 @@ import { cn } from "~/utils/classNames";
 import { useRoundState } from "~/utils/state";
 import { ERoundState } from "~/utils/types";
 
-import { HelpButton } from "./HelpButton";
 import { IconButton } from "./ui/Button";
 import { Logo } from "./ui/Logo";
 
@@ -62,6 +63,10 @@ const NavIcon = ({ link }: { link: { label: string; href: string } }): JSX.Eleme
     IconComp = Users;
   } else if (link.label === "coordinator") {
     IconComp = Shield;
+  } else if (link.label === "faq") {
+    IconComp = HelpCircle;
+  } else if (link.label === "glossary") {
+    IconComp = BookOpen;
   } else {
     IconComp = Home;
   }
@@ -123,6 +128,32 @@ const MobileMenu = ({ isOpen = false, navLinks, pollId, setOpen }: IMobileMenuPr
           )}
         </Link>
       ))}
+
+      <Link
+        className={cn(
+          "flex items-center gap-2 p-4 text-2xl font-medium uppercase tracking-[0.6px] text-black transition-all duration-200 ease-linear hover:text-[#c45ec6] dark:text-white",
+        )}
+        href="/#Glossary"
+        onClick={() => {
+          setOpen(false);
+        }}
+      >
+        <BookOpen className="h-[21px] w-[21px]" />
+        Glossary
+      </Link>
+
+      <Link
+        className={cn(
+          "flex items-center gap-2 p-4 text-2xl font-medium uppercase tracking-[0.6px] text-black transition-all duration-200 ease-linear hover:text-[#c45ec6] dark:text-white",
+        )}
+        href="/#FAQ"
+        onClick={() => {
+          setOpen(false);
+        }}
+      >
+        <HelpCircle className="h-[21px] w-[21px]" />
+        FAQ
+      </Link>
     </div>
   );
 };
@@ -201,13 +232,23 @@ const Header = ({ navLinks, pollId = "" }: IHeaderProps) => {
               </NavLink>
             );
           })}
+
+          <NavLink href="/#Glossary" isActive={asPath === "/#Glossary"}>
+            <BookOpen className="h-[21px] w-[21px] shrink-0" />
+
+            <span className="font-sans text-base font-medium leading-5 tracking-[0.6px]">Glossary</span>
+          </NavLink>
+
+          <NavLink href="/#FAQ" isActive={asPath === "/#FAQ"}>
+            <HelpCircle className="h-[21px] w-[21px] shrink-0" />
+
+            <span className="font-sans text-base font-medium leading-5 tracking-[0.6px]">FAQ</span>
+          </NavLink>
         </div>
 
         <div className="flex-1 md:ml-8" />
 
         <div className="flex items-center gap-2">
-          <HelpButton />
-
           <IconButton
             className="w-[50px] text-gray-600"
             icon={theme === "light" ? SunIcon : MoonIcon}
