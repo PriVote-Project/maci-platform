@@ -122,6 +122,22 @@ export const zupass = {
   eventName: process.env.NEXT_PUBLIC_ZUPASS_EVENT_NAME!,
 } as const;
 
+// Gitcoin Passport Decoder contract addresses for each chain
+const gitcoinPassportDecoderAddresses = {
+  arbitrum: "0x2050256A91cbABD7C42465aA0d5325115C1dEB43",
+  optimism: "0x5558D441779Eca04A329BcD6b47830D2C6607769",
+  base: "0xaa24a127d10C68C8F9Ac06199AA606953cD82eE7",
+  optimismSepolia: "0xe53C60F8069C2f0c3a84F9B3DB5cf56f3100ba56",
+} as const;
+
+export const gitcoinPassport = {
+  decoderAddress:
+    process.env.NEXT_PUBLIC_GITCOIN_PASSPORT_DECODER_ADDRESS ??
+    gitcoinPassportDecoderAddresses[process.env.NEXT_PUBLIC_CHAIN_NAME as keyof typeof gitcoinPassportDecoderAddresses],
+  // Minimum passing score (score/100 must be >= this value)
+  passingScore: Number(process.env.NEXT_PUBLIC_GITCOIN_PASSPORT_PASSING_SCORE ?? 2000),
+};
+
 // export const impactCategories = {
 //   ETHEREUM_INFRASTRUCTURE: { label: "Ethereum Infrastructure" },
 //   OPEN_SOURCE: { label: "Web3 Open Source Software" },
@@ -142,5 +158,5 @@ export const impactCategories = {
 export const prefixes = {
   GITHUB_PREFIX: "https://github.com/",
   TWITTER_PREFIX: "https://x.com/",
-  ETHER_PREFIX: "https://etherscan.io/address/",
+  ETHER_PREFIX: "https://arbiscan.io/address/",
 };

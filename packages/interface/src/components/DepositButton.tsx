@@ -5,6 +5,7 @@ import { useAccount } from "wagmi";
 import { Button } from "~/components/ui/Button";
 import { Dialog } from "~/components/ui/Dialog";
 import { Input, InputAddon, InputWrapper } from "~/components/ui/Input";
+import { config } from "~/config";
 import { useEthersSigner } from "~/hooks/useEthersSigner";
 import { useTokenMeta } from "~/hooks/useTokenMeta";
 
@@ -26,6 +27,11 @@ export const DepositButton = ({ tallyAddress }: IDepositButtonProps): JSX.Elemen
   const { address, isConnected } = useAccount();
   const signer = useEthersSigner();
   const tokenMeta = useTokenMeta(tallyAddress);
+
+  const chainName = useMemo(() => {
+    const { name } = config.network;
+    return name.slice(0, 3).toUpperCase();
+  }, []);
 
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -149,19 +155,19 @@ export const DepositButton = ({ tallyAddress }: IDepositButtonProps): JSX.Elemen
           setIsOpen(true);
         }}
       >
-        Deposit
+        Donate
       </Button>
 
       <Dialog
         description={
           tokenAddress && tokenAddress !== ZeroAddress
-            ? `Enter amount of ${tokenSymbol || "tokens"} to deposit.`
+            ? `Enter amount of ${tokenSymbol || "tokens"} to donate.`
             : "Fetching payout token information..."
         }
         isLoading={isLoading}
         isOpen={isOpen}
         size="sm"
-        title="Deposit to Tally"
+        title="Donate to Round"
         onOpenChange={setIsOpen}
       >
         <div className="flex w-full flex-col gap-3">
@@ -180,6 +186,12 @@ export const DepositButton = ({ tallyAddress }: IDepositButtonProps): JSX.Elemen
 
             <InputAddon>{tokenSymbol || "TOKEN"}</InputAddon>
           </InputWrapper>
+
+          {chainName && (
+            <p className="text-xs text-gray-400">
+              <span>Network: {chainName}</span>
+            </p>
+          )}
 
           {tokenAddress && (
             <p className="text-xs text-gray-400">
@@ -213,9 +225,25 @@ export const DepositButton = ({ tallyAddress }: IDepositButtonProps): JSX.Elemen
 
           {error && <p className="text-xs text-red-500">{error}</p>}
 
-          <div className="mt-2 flex w-full flex-row items-center justify-center gap-2">
-            <Button size="auto" variant={canSubmit ? "primary" : "secondary"} onClick={handleDeposit}>
-              Approve & Deposit
+          <div className="mt-2 flex w-full flex-col gap-2">
+            <Button
+              disabled={isLoading || !canSubmit}
+              size="auto"
+              variant={canSubmit && !isLoading ? "primary" : "secondary"}
+              onClick={handleDeposit}
+            >
+              {isLoading ? "Processing..." : "Approve & Deposit"}
+            </Button>
+
+            <Button
+              as="a"
+              href="https://app.uniswap.org/"
+              rel="noopener noreferrer"
+              size="auto"
+              target="_blank"
+              variant="outline"
+            >
+              Need to swap? Use Uniswap
             </Button>
           </div>
         </div>
