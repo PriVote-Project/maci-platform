@@ -11,6 +11,7 @@ import { ThemeProvider, useTheme } from "next-themes";
 import { useEffect, useMemo, useState, type PropsWithChildren } from "react";
 import { http, WagmiProvider } from "wagmi";
 
+import { NetworkCheck } from "~/components/NetworkCheck";
 import { Toaster } from "~/components/Toaster";
 import * as appConfig from "~/config";
 import { BallotProvider } from "~/contexts/Ballot";
@@ -157,6 +158,8 @@ export const Providers = ({ children }: PropsWithChildren): JSX.Element => {
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
           <RainbowKitThemeProvider>
+            <NetworkCheck />
+
             <RoundProvider>
               <MaciProvider>
                 <BallotProvider>{children}</BallotProvider>

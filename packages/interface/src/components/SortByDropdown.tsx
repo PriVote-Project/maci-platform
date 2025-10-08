@@ -7,7 +7,7 @@ import { type SortType, sortLabels } from "~/features/filter/hooks/useFilter";
 import { IconButton } from "./ui/Button";
 
 interface ISortByDropdownProps {
-  value: SortType;
+  value: SortType | "";
   onChange: (value: string) => void;
   options?: SortType[];
 }
@@ -42,7 +42,7 @@ export const SortByDropdown = ({ value, onChange, options = [] }: ISortByDropdow
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild className="rounded-md border-gray-200 text-gray-600 dark:border-gray-800">
         <IconButton aria-label="Sort by" className="my-0 w-48" icon={ArrowUpDown} variant="outline">
-          Sort by: {sortLabels[value]}
+          Sort by{value ? `: ${sortLabels[value]}` : ""}
         </IconButton>
       </DropdownMenu.Trigger>
 

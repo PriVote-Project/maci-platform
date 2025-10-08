@@ -42,7 +42,7 @@ export const SingleRoundHome = ({ round }: ISingleRoundHomeProps): JSX.Element =
 
           {(roundState === ERoundState.APPLICATION ||
             roundState === ERoundState.VOTING ||
-            roundState === ERoundState.RESULTS) && <DepositButton tallyAddress={round.tallyAddress} />}
+            roundState === ERoundState.TALLYING) && <DepositButton tallyAddress={round.tallyAddress} />}
 
           {isConnected && isEligibleToVote && !isRegistered && <JoinButton />}
         </div>
