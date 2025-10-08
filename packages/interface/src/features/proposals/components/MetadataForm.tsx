@@ -106,7 +106,13 @@ export const MetadataForm = ({ pollId }: IMetadataFormProps): JSX.Element => {
               <Input placeholder="https://" />
             </FormControl>
 
-            <FormControl required className="flex-1" label="Payout address" name="payoutAddress">
+            <FormControl
+              required
+              className="flex-1"
+              hint="Should be in the Arbitrum L2 network"
+              label="Payout address"
+              name="payoutAddress"
+            >
               <Input placeholder="0x..." />
             </FormControl>
           </div>
