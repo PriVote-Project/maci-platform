@@ -172,7 +172,10 @@ export const Projects = ({ pollId = "" }: IProjectsProps): JSX.Element => {
 
         <div className="flex flex-col gap-2 sm:flex-row sm:items-start">
           <div className="flex flex-row items-center gap-2">
-            {round?.tallyAddress && <DepositButton tallyAddress={round.tallyAddress} />}
+            {round?.tallyAddress &&
+              (roundState === ERoundState.APPLICATION ||
+                roundState === ERoundState.VOTING ||
+                roundState === ERoundState.TALLYING) && <DepositButton tallyAddress={round.tallyAddress} />}
           </div>
 
           <SortFilter onSearchChange={setSearchTerm} />
