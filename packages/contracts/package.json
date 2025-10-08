@@ -47,6 +47,8 @@
     "verify:optimism-sepolia": "pnpm run verify --network optimism_sepolia",
     "deploy:arbitrum-sepolia": "pnpm run deploy --network arbitrum_sepolia",
     "deploy-poll:arbitrum-sepolia": "pnpm run deploy-poll --network arbitrum_sepolia",
+    "deploy:arbitrum": "pnpm run deploy --network arbitrum",
+    "deploy-poll:arbitrum": "pnpm run deploy-poll --network arbitrum",
     "merge": "hardhat merge",
     "merge:localhost": "pnpm run merge",
     "merge:optimism-sepolia": "pnpm run merge --network optimism_sepolia",

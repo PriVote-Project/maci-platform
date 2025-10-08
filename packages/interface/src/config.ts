@@ -66,6 +66,8 @@ export const getRPCURL = (): string | undefined => {
       return `https://opt-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID!}`;
     case "arbitrumSepolia":
       return `https://arb-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID!}`;
+    case "arbitrum":
+      return `https://arb-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID!}`;
     default:
       return undefined;
   }
