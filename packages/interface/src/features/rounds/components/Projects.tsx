@@ -5,6 +5,7 @@ import { FiAlertCircle } from "react-icons/fi";
 import { Hex, zeroAddress } from "viem";
 import { useAccount } from "wagmi";
 
+import DepositButton from "~/components/DepositButton";
 import { InfiniteLoading } from "~/components/InfiniteLoading";
 import { SortFilter } from "~/components/SortFilter";
 import { Button } from "~/components/ui/Button";
@@ -164,12 +165,16 @@ export const Projects = ({ pollId = "" }: IProjectsProps): JSX.Element => {
         />
       )}
 
-      <div className="mb-4 flex flex-col justify-between sm:flex-row">
+      <div className="mb-4 flex flex-col justify-between gap-3 sm:flex-row">
         <Heading as="h3" size="3xl">
           Projects
         </Heading>
 
-        <div>
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-start">
+          <div className="flex flex-row items-center gap-2">
+            {round?.tallyAddress && <DepositButton tallyAddress={round.tallyAddress} />}
+          </div>
+
           <SortFilter onSearchChange={setSearchTerm} />
         </div>
       </div>

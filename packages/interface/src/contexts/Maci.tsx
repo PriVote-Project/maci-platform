@@ -96,6 +96,14 @@ export const MaciProvider: React.FC<MaciProviderProps> = ({ children }: MaciProv
     return attestation?.id;
   }, [attestations]);
 
+  // fetch Gitcoin Passport eligibility (only if gatekeeper is GitcoinPassport)
+  const gitcoinPassportEligibility = api.voters.gitcoinPassportEligibility.useQuery(
+    {
+      address: address ?? "",
+    },
+    { enabled: gatekeeperTrait === GatekeeperTrait.GitcoinPassport && Boolean(address) },
+  );
+
   // fetch setup sgData for MACI signup
   // the signup gatekeeper data will change based on the gatekeeper in use
   // for EAS it's the attestationId
@@ -121,6 +129,16 @@ export const MaciProvider: React.FC<MaciProviderProps> = ({ children }: MaciProv
         break;
       case GatekeeperTrait.EAS:
         setSgData(attestationId);
+        setIsLoading(false);
+        break;
+      case GatekeeperTrait.GitcoinPassport:
+        // For Gitcoin Passport, we check eligibility via on-chain score
+        // The contract will verify the score, so we just need to pass a dummy value if eligible
+        if (gitcoinPassportEligibility.data === true) {
+          setSgData("0x0000000000000000000000000000000000000000000000000000000000000000");
+        } else {
+          setSgData(undefined);
+        }
         setIsLoading(false);
         break;
       case GatekeeperTrait.Hats:
@@ -186,7 +204,16 @@ export const MaciProvider: React.FC<MaciProviderProps> = ({ children }: MaciProv
       default:
         break;
     }
-  }, [gatekeeperTrait, attestationId, semaphoreIdentity, signer, zupassProof]);
+  }, [
+    gatekeeperTrait,
+    attestationId,
+    semaphoreIdentity,
+    signer,
+    zupassProof,
+    gitcoinPassportEligibility.data,
+    address,
+    treeData,
+  ]);
 
   // a user is eligible to vote if they pass certain conditions
   // with gatekeepers like EAS it is possible to determine whether you are allowed
