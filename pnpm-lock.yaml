@@ -10,7 +10,7 @@ importers:
     devDependencies:
       '@commitlint/cli':
         specifier: ^19.3.0
-        version: 19.4.0(@types/node@22.13.4)(typescript@5.7.2)
+        version: 19.4.0(@types/node@22.18.7)(typescript@5.7.2)
       '@commitlint/config-conventional':
         specifier: ^19.4.1
         version: 19.4.1
@@ -25,7 +25,7 @@ importers:
         version: 8.0.0
       cz-conventional-changelog:
         specifier: ^3.3.0
-        version: 3.3.0(@types/node@22.13.4)(typescript@5.7.2)
+        version: 3.3.0(@types/node@22.18.7)(typescript@5.7.2)
       eslint:
         specifier: ^8.57.0
         version: 8.57.0
@@ -85,7 +85,7 @@ importers:
         version: 7.4.3
       ts-node:
         specifier: ^10.9.1
-        version: 10.9.2(@types/node@22.13.4)(typescript@5.7.2)
+        version: 10.9.2(@types/node@22.18.7)(typescript@5.7.2)
       typescript:
         specifier: ^5.7.2
         version: 5.7.2
@@ -185,7 +185,7 @@ importers:
         version: 1.50.1
       '@synthetixio/synpress':
         specifier: ^4.0.3
-        version: 4.0.3(@depay/solana-web3.js@1.27.0)(@depay/web3-blockchains@9.7.1)(@playwright/test@1.50.1)(bufferutil@4.0.8)(ethers@6.13.5(bufferutil@4.0.8)(utf-8-validate@5.0.10))(playwright-core@1.50.1)(postcss@8.5.6)(ts-node@10.9.2(@types/node@22.9.0)(typescript@5.7.2))(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
+        version: 4.0.3(@depay/solana-web3.js@1.27.0)(@depay/web3-blockchains@9.7.1)(@playwright/test@1.50.1)(bufferutil@4.0.8)(ethers@6.15.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(playwright-core@1.50.1)(postcss@8.5.6)(ts-node@10.9.2(@types/node@22.9.0)(typescript@5.7.2))(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
       dotenv:
         specifier: ^16.4.7
         version: 16.4.7
@@ -268,6 +268,9 @@ importers:
       '@trpc/server':
         specifier: 11.0.0-rc.608
         version: 11.0.0-rc.608
+      '@vercel/analytics':
+        specifier: ^1.5.0
+        version: 1.5.0(next@14.2.32(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@18.3.1(react@18.2.0))(react@18.2.0))(react@18.2.0)
       '@vercel/blob':
         specifier: ^0.27.1
         version: 0.27.1
@@ -4435,14 +4438,8 @@ packages:
   '@types/node@20.14.14':
     resolution: {integrity: sha512-d64f00982fS9YoOgJkAMolK7MN8Iq3TDdVjchbYHdEmjth/DHowx82GnoA+tVUAN+7vxfYUgAzi+JXbKNd2SDQ==}
 
-  '@types/node@20.19.18':
-    resolution: {integrity: sha512-KeYVbfnbsBCyKG8e3gmUqAfyZNcoj/qpEbHRkQkfZdKOBrU7QQ+BsTdfqLSWX9/m1ytYreMhpKvp+EZi3UFYAg==}
-
   '@types/node@22.12.0':
     resolution: {integrity: sha512-Fll2FZ1riMjNmlmJOdAyY5pUbkftXslB5DgEzlIuNaiWhXd00FhWxVC/r4yV/4wBb9JfImTu+jiSvXTkJ7F/gA==}
-
-  '@types/node@22.13.4':
-    resolution: {integrity: sha512-ywP2X0DYtX3y08eFVx5fNIw7/uIv8hYUKgXoK8oayJlLnKcRfEYCxWMVE1XagUdVtCJlZT1AU4LXEABW+L1Peg==}
 
   '@types/node@22.18.7':
     resolution: {integrity: sha512-3E97nlWEVp2V6J7aMkR8eOnw/w0pArPwf/5/W0865f+xzBoGL/ZuHkTAKAGN7cOWNwd+sG+hZOqj+fjzeHS75g==}
@@ -4681,6 +4678,32 @@ packages:
     resolution: {integrity: sha512-N/RGKwGAAidBupZ436RpuweRQHEFGU+mvAqBo8PRMAjJEmHoPDttV8RObaMLrJHWLqvX+XUMinHUnD0hFRQISw==}
     peerDependencies:
       '@vanilla-extract/css': ^1.0.0
+
+  '@vercel/analytics@1.5.0':
+    resolution: {integrity: sha512-MYsBzfPki4gthY5HnYN7jgInhAZ7Ac1cYDoRWFomwGHWEX7odTEzbtg9kf/QSo7XEsEAqlQugA6gJ2WS2DEa3g==}
+    peerDependencies:
+      '@remix-run/react': ^2
+      '@sveltejs/kit': ^1 || ^2
+      next: '>= 13'
+      react: ^18 || ^19 || ^19.0.0-rc
+      svelte: '>= 4'
+      vue: ^3
+      vue-router: ^4
+    peerDependenciesMeta:
+      '@remix-run/react':
+        optional: true
+      '@sveltejs/kit':
+        optional: true
+      next:
+        optional: true
+      react:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
+      vue-router:
+        optional: true
 
   '@vercel/blob@0.27.1':
     resolution: {integrity: sha512-X5EG9W1cZW+Nbt/XdrJJSl5DzCXXn1JRP5nfFwkpFD03nB6uh6BldwX4syElHcciM4Pih8CS7Ri1mtLCJvxSHA==}
@@ -10732,7 +10755,7 @@ packages:
   puppeteer@13.7.0:
     resolution: {integrity: sha512-U1uufzBjz3+PkpCxFrWzh4OrMIdIb2ztzCu0YEPfRHjHswcSwHZswnK+WdsOQJsRV8WeTg3jLhJR4D867+fjsA==}
     engines: {node: '>=10.18.1'}
-    deprecated: < 24.10.2 is no longer supported
+    deprecated: < 24.15.0 is no longer supported
 
   pvtsutils@1.3.5:
     resolution: {integrity: sha512-ARvb14YB9Nm2Xi6nBq1ZX6dAM0FsJnuk+31aUp4TrcZEdKUlSqOqsxJHUPJDNE3qiIp+iUPEIeR6Je/tgV7zsA==}
@@ -14268,11 +14291,11 @@ snapshots:
     dependencies:
       commander: 12.1.0
 
-  '@commitlint/cli@19.4.0(@types/node@22.13.4)(typescript@5.7.2)':
+  '@commitlint/cli@19.4.0(@types/node@22.18.7)(typescript@5.7.2)':
     dependencies:
       '@commitlint/format': 19.3.0
       '@commitlint/lint': 19.2.2
-      '@commitlint/load': 19.4.0(@types/node@22.13.4)(typescript@5.7.2)
+      '@commitlint/load': 19.4.0(@types/node@22.18.7)(typescript@5.7.2)
       '@commitlint/read': 19.4.0
       '@commitlint/types': 19.0.3
       execa: 8.0.1
@@ -14319,7 +14342,7 @@ snapshots:
       '@commitlint/rules': 19.0.3
       '@commitlint/types': 19.0.3
 
-  '@commitlint/load@19.4.0(@types/node@22.13.4)(typescript@5.7.2)':
+  '@commitlint/load@19.4.0(@types/node@22.18.7)(typescript@5.7.2)':
     dependencies:
       '@commitlint/config-validator': 19.0.3
       '@commitlint/execute-rule': 19.0.0
@@ -14327,7 +14350,7 @@ snapshots:
       '@commitlint/types': 19.0.3
       chalk: 5.3.0
       cosmiconfig: 9.0.0(typescript@5.7.2)
-      cosmiconfig-typescript-loader: 5.0.0(@types/node@22.13.4)(cosmiconfig@9.0.0(typescript@5.7.2))(typescript@5.7.2)
+      cosmiconfig-typescript-loader: 5.0.0(@types/node@22.18.7)(cosmiconfig@9.0.0(typescript@5.7.2))(typescript@5.7.2)
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       lodash.uniq: 4.5.0
@@ -14389,11 +14412,11 @@ snapshots:
 
   '@depay/web3-blockchains@9.7.1': {}
 
-  '@depay/web3-client@10.18.6(@depay/solana-web3.js@1.27.0)(@depay/web3-blockchains@9.7.1)(ethers@6.13.5(bufferutil@4.0.8)(utf-8-validate@5.0.10))':
+  '@depay/web3-client@10.18.6(@depay/solana-web3.js@1.27.0)(@depay/web3-blockchains@9.7.1)(ethers@6.15.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))':
     dependencies:
       '@depay/solana-web3.js': 1.27.0
       '@depay/web3-blockchains': 9.7.1
-      ethers: 6.13.5(bufferutil@4.0.8)(utf-8-validate@5.0.10)
+      ethers: 6.15.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
 
   '@depay/web3-mock-evm@14.19.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)':
     dependencies:
@@ -15411,14 +15434,14 @@ snapshots:
     dependencies:
       '@jest/fake-timers': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 20.19.18
+      '@types/node': 22.18.7
       jest-mock: 29.7.0
 
   '@jest/fake-timers@29.7.0':
     dependencies:
       '@jest/types': 29.6.3
       '@sinonjs/fake-timers': 10.3.0
-      '@types/node': 20.19.18
+      '@types/node': 22.18.7
       jest-message-util: 29.7.0
       jest-mock: 29.7.0
       jest-util: 29.7.0
@@ -15431,7 +15454,7 @@ snapshots:
     dependencies:
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 20.19.18
+      '@types/node': 22.18.7
       '@types/yargs': 15.0.19
       chalk: 4.1.2
 
@@ -15440,7 +15463,7 @@ snapshots:
       '@jest/schemas': 29.6.3
       '@types/istanbul-lib-coverage': 2.0.6
       '@types/istanbul-reports': 3.0.4
-      '@types/node': 20.19.18
+      '@types/node': 22.18.7
       '@types/yargs': 17.0.33
       chalk: 4.1.2
 
@@ -15604,7 +15627,7 @@ snapshots:
   '@metamask/json-rpc-engine@8.0.2':
     dependencies:
       '@metamask/rpc-errors': 6.3.1
-      '@metamask/safe-event-emitter': 3.1.1
+      '@metamask/safe-event-emitter': 3.1.2
       '@metamask/utils': 8.5.0
     transitivePeerDependencies:
       - supports-color
@@ -15612,7 +15635,7 @@ snapshots:
   '@metamask/json-rpc-middleware-stream@7.0.2':
     dependencies:
       '@metamask/json-rpc-engine': 8.0.2
-      '@metamask/safe-event-emitter': 3.1.1
+      '@metamask/safe-event-emitter': 3.1.2
       '@metamask/utils': 8.5.0
       readable-stream: 3.6.2
     transitivePeerDependencies:
@@ -18143,9 +18166,9 @@ snapshots:
       '@swc/counter': 0.1.3
       tslib: 2.8.1
 
-  '@synthetixio/ethereum-wallet-mock@0.0.4(@depay/solana-web3.js@1.27.0)(@depay/web3-blockchains@9.7.1)(@playwright/test@1.50.1)(bufferutil@4.0.8)(ethers@6.13.5(bufferutil@4.0.8)(utf-8-validate@5.0.10))(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)':
+  '@synthetixio/ethereum-wallet-mock@0.0.4(@depay/solana-web3.js@1.27.0)(@depay/web3-blockchains@9.7.1)(@playwright/test@1.50.1)(bufferutil@4.0.8)(ethers@6.15.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)':
     dependencies:
-      '@depay/web3-client': 10.18.6(@depay/solana-web3.js@1.27.0)(@depay/web3-blockchains@9.7.1)(ethers@6.13.5(bufferutil@4.0.8)(utf-8-validate@5.0.10))
+      '@depay/web3-client': 10.18.6(@depay/solana-web3.js@1.27.0)(@depay/web3-blockchains@9.7.1)(ethers@6.15.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))
       '@depay/web3-mock': 14.17.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@depay/web3-mock-evm': 14.19.1(bufferutil@4.0.8)(utf-8-validate@5.0.10)
       '@playwright/test': 1.50.1
@@ -18209,10 +18232,10 @@ snapshots:
 
   '@synthetixio/synpress-tsconfig@0.0.4': {}
 
-  '@synthetixio/synpress@4.0.3(@depay/solana-web3.js@1.27.0)(@depay/web3-blockchains@9.7.1)(@playwright/test@1.50.1)(bufferutil@4.0.8)(ethers@6.13.5(bufferutil@4.0.8)(utf-8-validate@5.0.10))(playwright-core@1.50.1)(postcss@8.5.6)(ts-node@10.9.2(@types/node@22.9.0)(typescript@5.7.2))(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)':
+  '@synthetixio/synpress@4.0.3(@depay/solana-web3.js@1.27.0)(@depay/web3-blockchains@9.7.1)(@playwright/test@1.50.1)(bufferutil@4.0.8)(ethers@6.15.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(playwright-core@1.50.1)(postcss@8.5.6)(ts-node@10.9.2(@types/node@22.9.0)(typescript@5.7.2))(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)':
     dependencies:
       '@playwright/test': 1.50.1
-      '@synthetixio/ethereum-wallet-mock': 0.0.4(@depay/solana-web3.js@1.27.0)(@depay/web3-blockchains@9.7.1)(@playwright/test@1.50.1)(bufferutil@4.0.8)(ethers@6.13.5(bufferutil@4.0.8)(utf-8-validate@5.0.10))(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
+      '@synthetixio/ethereum-wallet-mock': 0.0.4(@depay/solana-web3.js@1.27.0)(@depay/web3-blockchains@9.7.1)(@playwright/test@1.50.1)(bufferutil@4.0.8)(ethers@6.15.0(bufferutil@4.0.8)(utf-8-validate@5.0.10))(typescript@5.7.2)(utf-8-validate@5.0.10)(zod@3.24.1)
       '@synthetixio/synpress-cache': 0.0.4(playwright-core@1.50.1)(postcss@8.5.6)(ts-node@10.9.2(@types/node@22.9.0)(typescript@5.7.2))(typescript@5.7.2)
       '@synthetixio/synpress-core': 0.0.4(@playwright/test@1.50.1)
       '@synthetixio/synpress-metamask': 0.0.4(@playwright/test@1.50.1)(bufferutil@4.0.8)(playwright-core@1.50.1)(postcss@8.5.6)(ts-node@10.9.2(@types/node@22.9.0)(typescript@5.7.2))(typescript@5.7.2)(utf-8-validate@5.0.10)
@@ -18552,7 +18575,7 @@ snapshots:
 
   '@types/node-forge@1.3.14':
     dependencies:
-      '@types/node': 20.19.18
+      '@types/node': 22.18.7
 
   '@types/node@10.17.60': {}
 
@@ -18568,15 +18591,7 @@ snapshots:
     dependencies:
       undici-types: 5.26.5
 
-  '@types/node@20.19.18':
-    dependencies:
-      undici-types: 6.21.0
-
   '@types/node@22.12.0':
-    dependencies:
-      undici-types: 6.20.0
-
-  '@types/node@22.13.4':
     dependencies:
       undici-types: 6.20.0
 
@@ -18901,6 +18916,11 @@ snapshots:
   '@vanilla-extract/sprinkles@1.6.1(@vanilla-extract/css@1.14.0)':
     dependencies:
       '@vanilla-extract/css': 1.14.0
+
+  '@vercel/analytics@1.5.0(next@14.2.32(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@18.3.1(react@18.2.0))(react@18.2.0))(react@18.2.0)':
+    optionalDependencies:
+      next: 14.2.32(@babel/core@7.26.0)(@opentelemetry/api@1.9.0)(@playwright/test@1.50.1)(react-dom@18.3.1(react@18.2.0))(react@18.2.0)
+      react: 18.2.0
 
   '@vercel/blob@0.27.1':
     dependencies:
@@ -19774,7 +19794,7 @@ snapshots:
 
   axe-core@4.10.2: {}
 
-  axios-debug-log@1.0.0(axios@1.7.3(debug@4.3.6)):
+  axios-debug-log@1.0.0(axios@1.7.3):
     dependencies:
       '@types/debug': 4.1.12
       axios: 1.7.3(debug@4.3.6)
@@ -19805,6 +19825,14 @@ snapshots:
       - debug
 
   axios@1.6.7:
+    dependencies:
+      follow-redirects: 1.15.6(debug@4.3.4)
+      form-data: 4.0.0
+      proxy-from-env: 1.1.0
+    transitivePeerDependencies:
+      - debug
+
+  axios@1.7.3:
     dependencies:
       follow-redirects: 1.15.6(debug@4.3.4)
       form-data: 4.0.0
@@ -20326,7 +20354,7 @@ snapshots:
 
   chrome-launcher@0.15.2:
     dependencies:
-      '@types/node': 20.19.18
+      '@types/node': 22.18.7
       escape-string-regexp: 4.0.0
       is-wsl: 2.2.0
       lighthouse-logger: 1.4.2
@@ -20563,10 +20591,10 @@ snapshots:
 
   commander@9.5.0: {}
 
-  commitizen@4.3.0(@types/node@22.13.4)(typescript@5.7.2):
+  commitizen@4.3.0(@types/node@22.18.7)(typescript@5.7.2):
     dependencies:
       cachedir: 2.3.0
-      cz-conventional-changelog: 3.3.0(@types/node@22.13.4)(typescript@5.7.2)
+      cz-conventional-changelog: 3.3.0(@types/node@22.18.7)(typescript@5.7.2)
       dedent: 0.7.0
       detect-indent: 6.1.0
       find-node-modules: 2.1.3
@@ -20765,9 +20793,9 @@ snapshots:
 
   core-util-is@1.0.3: {}
 
-  cosmiconfig-typescript-loader@5.0.0(@types/node@22.13.4)(cosmiconfig@9.0.0(typescript@5.7.2))(typescript@5.7.2):
+  cosmiconfig-typescript-loader@5.0.0(@types/node@22.18.7)(cosmiconfig@9.0.0(typescript@5.7.2))(typescript@5.7.2):
     dependencies:
-      '@types/node': 22.13.4
+      '@types/node': 22.18.7
       cosmiconfig: 9.0.0(typescript@5.7.2)
       jiti: 1.21.6
       typescript: 5.7.2
@@ -20891,16 +20919,16 @@ snapshots:
 
   cycle@1.0.3: {}
 
-  cz-conventional-changelog@3.3.0(@types/node@22.13.4)(typescript@5.7.2):
+  cz-conventional-changelog@3.3.0(@types/node@22.18.7)(typescript@5.7.2):
     dependencies:
       chalk: 2.4.2
-      commitizen: 4.3.0(@types/node@22.13.4)(typescript@5.7.2)
+      commitizen: 4.3.0(@types/node@22.18.7)(typescript@5.7.2)
       conventional-commit-types: 3.0.0
       lodash.map: 4.6.0
       longest: 2.0.1
       word-wrap: 1.2.5
     optionalDependencies:
-      '@commitlint/load': 19.4.0(@types/node@22.13.4)(typescript@5.7.2)
+      '@commitlint/load': 19.4.0(@types/node@22.18.7)(typescript@5.7.2)
     transitivePeerDependencies:
       - '@types/node'
       - typescript
@@ -21345,7 +21373,7 @@ snapshots:
 
   elliptic@6.5.4:
     dependencies:
-      bn.js: 4.12.0
+      bn.js: 4.12.2
       brorand: 1.1.0
       hash.js: 1.1.7
       hmac-drbg: 1.0.1
@@ -22289,7 +22317,7 @@ snapshots:
   ethereumjs-util@7.1.5:
     dependencies:
       '@types/bn.js': 5.1.5
-      bn.js: 5.2.1
+      bn.js: 5.2.2
       create-hash: 1.2.0
       ethereum-cryptography: 0.1.3
       rlp: 2.2.7
@@ -24364,7 +24392,7 @@ snapshots:
       '@jest/environment': 29.7.0
       '@jest/fake-timers': 29.7.0
       '@jest/types': 29.6.3
-      '@types/node': 20.19.18
+      '@types/node': 22.18.7
       jest-mock: 29.7.0
       jest-util: 29.7.0
 
@@ -24385,13 +24413,13 @@ snapshots:
   jest-mock@29.7.0:
     dependencies:
       '@jest/types': 29.6.3
-      '@types/node': 20.19.18
+      '@types/node': 22.18.7
       jest-util: 29.7.0
 
   jest-util@29.7.0:
     dependencies:
       '@jest/types': 29.6.3
-      '@types/node': 20.19.18
+      '@types/node': 22.18.7
       chalk: 4.1.2
       ci-info: 3.9.0
       graceful-fs: 4.2.11
@@ -24408,7 +24436,7 @@ snapshots:
 
   jest-worker@29.7.0:
     dependencies:
-      '@types/node': 20.19.18
+      '@types/node': 22.18.7
       jest-util: 29.7.0
       merge-stream: 2.0.0
       supports-color: 8.1.1
@@ -26217,7 +26245,7 @@ snapshots:
       '@yarnpkg/lockfile': 1.1.0
       '@yarnpkg/parsers': 3.0.0-rc.46
       '@zkochan/js-yaml': 0.0.7
-      axios: 1.7.3(debug@4.3.6)
+      axios: 1.7.3
       chalk: 4.1.2
       cli-cursor: 3.1.0
       cli-spinners: 2.6.1
@@ -28005,7 +28033,7 @@ snapshots:
       '@aduh95/viz.js': 3.7.0
       '@solidity-parser/parser': 0.16.2
       axios: 1.7.3(debug@4.3.6)
-      axios-debug-log: 1.0.0(axios@1.7.3(debug@4.3.6))
+      axios-debug-log: 1.0.0(axios@1.7.3)
       cli-color: 2.0.4
       commander: 11.1.0
       convert-svg-to-png: 0.6.4(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
@@ -28788,14 +28816,14 @@ snapshots:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
 
-  ts-node@10.9.2(@types/node@22.13.4)(typescript@5.7.2):
+  ts-node@10.9.2(@types/node@22.18.7)(typescript@5.7.2):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.11
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 22.13.4
+      '@types/node': 22.18.7
       acorn: 8.12.1
       acorn-walk: 8.3.3
       arg: 4.1.3

@@ -1,4 +1,5 @@
 import "@rainbow-me/rainbowkit/styles.css";
+import { Analytics } from "@vercel/analytics/next";
 
 import { Providers } from "~/providers";
 import "~/styles/global.css";
@@ -19,6 +20,8 @@ const MyApp = ({ Component, pageProps }: AppProps) => (
     <main className={`${fontVariables} min-h-screen font-sans`}>
       <Component {...pageProps} />
     </main>
+
+    <Analytics />
   </Providers>
 );
 
