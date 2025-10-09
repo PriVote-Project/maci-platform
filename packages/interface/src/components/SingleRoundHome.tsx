@@ -1,10 +1,13 @@
 import Link from "next/link";
+import { useRouter } from "next/router";
+import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 
 import DepositButton from "~/components/DepositButton";
 import { Info } from "~/components/Info";
 import { JoinButton } from "~/components/JoinButton";
 import { Button } from "~/components/ui/Button";
+import { Spinner } from "~/components/ui/Spinner";
 import { useMaci } from "~/contexts/Maci";
 import { useIsMobile } from "~/hooks/useIsMobile";
 import { useRoundState } from "~/utils/state";
@@ -15,10 +18,31 @@ interface ISingleRoundHomeProps {
 }
 
 export const SingleRoundHome = ({ round }: ISingleRoundHomeProps): JSX.Element => {
+  const router = useRouter();
+  const [navigatingTo, setNavigatingTo] = useState<string | null>(null);
   const { isConnected } = useAccount();
   const { isRegistered, isEligibleToVote } = useMaci();
   const isMobile = useIsMobile();
   const roundState = useRoundState({ pollId: round.pollId });
+
+  useEffect(() => {
+    const handleStart = (url: string) => {
+      setNavigatingTo(url);
+    };
+    const handleComplete = () => {
+      setNavigatingTo(null);
+    };
+
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleComplete);
+    router.events.on("routeChangeError", handleComplete);
+
+    return () => {
+      router.events.off("routeChangeStart", handleStart);
+      router.events.off("routeChangeComplete", handleComplete);
+      router.events.off("routeChangeError", handleComplete);
+    };
+  }, [router]);
 
   return (
     <div className="flex h-auto w-full flex-col items-center justify-center gap-4 px-2 pb-4 sm:h-[90vh]">
@@ -30,13 +54,45 @@ export const SingleRoundHome = ({ round }: ISingleRoundHomeProps): JSX.Element =
 
       {roundState !== ERoundState.DEFAULT && (
         <div className="flex flex-row flex-wrap items-center justify-center gap-3">
-          <Button as={Link} href={`/rounds/${round.pollId}`} size="auto" variant="primary">
-            {roundState === ERoundState.APPLICATION ? "Add Project" : "View Projects"}
+          <Button
+            as={Link}
+            disabled={navigatingTo === `/rounds/${round.pollId}`}
+            href={`/rounds/${round.pollId}`}
+            size="auto"
+            variant="primary"
+          >
+            {(() => {
+              if (navigatingTo === `/rounds/${round.pollId}`) {
+                return (
+                  <>
+                    <Spinner className="mr-2 h-4 w-4" />
+                    Loading...
+                  </>
+                );
+              }
+              if (roundState === ERoundState.APPLICATION) {
+                return "Add Project";
+              }
+              return "View Projects";
+            })()}
           </Button>
 
           {roundState === ERoundState.RESULTS && (
-            <Button as={Link} href={`/rounds/${round.pollId}/result`} size="auto" variant="primary">
-              View Results
+            <Button
+              as={Link}
+              disabled={navigatingTo === `/rounds/${round.pollId}/result`}
+              href={`/rounds/${round.pollId}/result`}
+              size="auto"
+              variant="primary"
+            >
+              {navigatingTo === `/rounds/${round.pollId}/result` ? (
+                <>
+                  <Spinner className="mr-2 h-4 w-4" />
+                  Loading...
+                </>
+              ) : (
+                "View Results"
+              )}
             </Button>
           )}
 

@@ -1,6 +1,7 @@
 import clsx from "clsx";
 import Link from "next/link";
-import { useCallback, useState, useMemo } from "react";
+import { useRouter } from "next/router";
+import { useCallback, useState, useMemo, useEffect } from "react";
 import { useFormContext } from "react-hook-form";
 
 import { Button } from "~/components/ui/Button";
@@ -8,6 +9,7 @@ import { Dialog } from "~/components/ui/Dialog";
 import { Form } from "~/components/ui/Form";
 import { Heading } from "~/components/ui/Heading";
 import { Notice } from "~/components/ui/Notice";
+import { Spinner } from "~/components/ui/Spinner";
 import { useBallot } from "~/contexts/Ballot";
 import { useMaci } from "~/contexts/Maci";
 import { useRound } from "~/contexts/Round";
@@ -71,25 +73,62 @@ interface IEmptyBallotProps {
   pollId: string;
 }
 
-const EmptyBallot = ({ pollId }: IEmptyBallotProps): JSX.Element => (
-  <div className="flex flex-1 items-center justify-center text-center">
-    <div className=" max-w-[360px] space-y-4">
-      <Heading className="text-center" size="lg">
-        Your ballot is empty
-      </Heading>
+const EmptyBallot = ({ pollId }: IEmptyBallotProps): JSX.Element => {
+  const router = useRouter();
+  const [navigatingTo, setNavigatingTo] = useState<string | null>(null);
 
-      <span className="text-center font-sans text-base text-gray-400">
-        There are currently no projects added. Browse through the available projects.
-      </span>
+  useEffect(() => {
+    const handleStart = (url: string) => {
+      setNavigatingTo(url);
+    };
+    const handleComplete = () => {
+      setNavigatingTo(null);
+    };
 
-      <div className="flex items-center justify-center gap-3">
-        <Button as={Link} href={`/rounds/${pollId}`} size="auto" variant="primary">
-          View projects
-        </Button>
+    router.events.on("routeChangeStart", handleStart);
+    router.events.on("routeChangeComplete", handleComplete);
+    router.events.on("routeChangeError", handleComplete);
+
+    return () => {
+      router.events.off("routeChangeStart", handleStart);
+      router.events.off("routeChangeComplete", handleComplete);
+      router.events.off("routeChangeError", handleComplete);
+    };
+  }, [router]);
+
+  return (
+    <div className="flex flex-1 items-center justify-center text-center">
+      <div className=" max-w-[360px] space-y-4">
+        <Heading className="text-center" size="lg">
+          Your ballot is empty
+        </Heading>
+
+        <span className="text-center font-sans text-base text-gray-400">
+          There are currently no projects added. Browse through the available projects.
+        </span>
+
+        <div className="flex items-center justify-center gap-3">
+          <Button
+            as={Link}
+            disabled={navigatingTo === `/rounds/${pollId}`}
+            href={`/rounds/${pollId}`}
+            size="auto"
+            variant="primary"
+          >
+            {navigatingTo === `/rounds/${pollId}` ? (
+              <>
+                <Spinner className="mr-2 h-4 w-4" />
+                Loading...
+              </>
+            ) : (
+              "View projects"
+            )}
+          </Button>
+        </div>
       </div>
     </div>
-  </div>
-);
+  );
+};
 
 interface IBallotAllocationFormProps {
   pollId: string;
