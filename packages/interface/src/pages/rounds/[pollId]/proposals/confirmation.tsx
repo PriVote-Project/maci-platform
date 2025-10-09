@@ -53,7 +53,11 @@ const ConfirmProposalPage = ({ pollId }: { pollId: string }): JSX.Element => {
     return undefined;
   }, [proposal.data, proposal.isLoading, refetchCount, proposal]);
 
-  if (proposal.isLoading || proposal.isFetching) {
+  // Show loading state while fetching or when data is not available yet (and still retrying)
+  const isStillLoading =
+    proposal.isLoading || proposal.isFetching || (project === undefined && refetchCount < maxRefetches);
+
+  if (isStillLoading) {
     return (
       <Layout pollId={pollId}>
         <EmptyState title="Loading your proposal..." />
@@ -61,13 +65,14 @@ const ConfirmProposalPage = ({ pollId }: { pollId: string }): JSX.Element => {
     );
   }
 
+  // If we've exhausted retries and still no data, show error
   if (project === undefined) {
     return (
       <Layout pollId={pollId}>
         <div className="flex w-full justify-center">
           <div className="flex flex-col items-center gap-4 md:max-w-screen-sm lg:max-w-screen-md xl:max-w-screen-lg">
             <Heading as="h2" size="4xl">
-              {refetchCount >= maxRefetches ? "There is no such proposal for this round!" : "Loading your proposal..."}
+              There is no such proposal for this round!
             </Heading>
           </div>
         </div>
