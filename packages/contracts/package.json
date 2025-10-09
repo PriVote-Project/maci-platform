@@ -45,6 +45,7 @@
     "deploy-poll:optimism-sepolia": "pnpm run deploy-poll --network optimism_sepolia",
     "initPoll:optimism-sepolia": "pnpm run initPoll --network optimism_sepolia",
     "verify:optimism-sepolia": "pnpm run verify --network optimism_sepolia",
+    "verify:arbitrum": "pnpm run verify --network arbitrum",
     "deploy:arbitrum-sepolia": "pnpm run deploy --network arbitrum_sepolia",
     "deploy-poll:arbitrum-sepolia": "pnpm run deploy-poll --network arbitrum_sepolia",
     "deploy:arbitrum": "pnpm run deploy --network arbitrum",
