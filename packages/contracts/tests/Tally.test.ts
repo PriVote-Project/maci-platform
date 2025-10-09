@@ -295,6 +295,10 @@ describe("Tally", () => {
     await expect(tally.calculateAlpha(0)).to.be.revertedWithCustomError(tally, "VotesNotTallied");
   });
 
+  it("should not allow a deposit of 0", async () => {
+    await expect(tally.deposit(0n)).to.revertedWithCustomError(tally, "DepositMustBeGreaterThanZero");
+  });
+
   it("should deposit funds properly", async () => {
     const [decimals, initialBalance] = await Promise.all([payoutToken.decimals(), payoutToken.balanceOf(owner)]);
     const ownerAmount = parseUnits(TOTAL_SPENT_VOICE_CREDITS.spent, decimals);

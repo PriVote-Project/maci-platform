@@ -67,6 +67,7 @@ contract Tally is TallyBase, IPayoutStrategy {
   error AlreadyInitialized();
   error NotInitialized();
   error NotCompletedResults();
+  error DepositMustBeGreaterThanZero();
   error TooManyResults();
   error AlreadyClaimed();
   error VotesAlreadyTallied();
@@ -145,6 +146,9 @@ contract Tally is TallyBase, IPayoutStrategy {
 
   /// @inheritdoc IPayoutStrategy
   function deposit(uint256 amount) public isInitialized beforeTallying {
+    if (amount == 0) {
+      revert DepositMustBeGreaterThanZero();
+    }
     emit Deposited(msg.sender, amount);
 
     token.safeTransferFrom(msg.sender, address(this), amount);
