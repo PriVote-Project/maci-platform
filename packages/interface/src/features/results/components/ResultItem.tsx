@@ -79,7 +79,7 @@ export const ResultItem = ({ pollId, rank, project, tallyAddress }: IResultItemP
                 <path d="M3.553 9.776l6.053 2.595a1 1 0 00.788 0l6.053-2.595A1 1 0 0117 10.723v3.557a1 1 0 01-.606.923l-6 2.571a1 1 0 01-.788 0l-6-2.571A1 1 0 013 14.28v-3.557a1 1 0 01.553-.947z" />
               </svg>
 
-              <span>Claimed</span>
+              <span>Received</span>
 
               <span className="tabular-nums">{claimedFormatted}</span>
 
