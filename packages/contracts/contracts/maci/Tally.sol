@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
-import { Pausable } from "@openzeppelin/contracts/utils/Pausable.sol";
 import { IERC20 } from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 import { SafeERC20 } from "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
 import { Tally as TallyBase } from "maci-contracts/contracts/Tally.sol";
@@ -14,7 +13,7 @@ import { IRecipientRegistry } from "../interfaces/IRecipientRegistry.sol";
 /// @title Tally - poll tally and payout strategy
 /// @notice The Tally contract is used during votes tallying and by users to verify the tally results.
 /// @notice Allows users to deposit and claim rewards for recipients
-contract Tally is TallyBase, IPayoutStrategy, Pausable {
+contract Tally is TallyBase, IPayoutStrategy {
   using SafeERC20 for IERC20;
 
   /// @notice The max voice credits (MACI allows 2 ** 32 voice credits max)
