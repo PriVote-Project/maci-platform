@@ -274,7 +274,8 @@ export const MetadataForm = ({ pollId }: IMetadataFormProps): JSX.Element => {
         <div className="mt-10">
           <MetadataButtons
             isPending={create.isPending}
-            isUploading={create.isPending}
+            isSubmitting={create.isSubmitting}
+            isUploading={create.isUploading}
             step={step}
             onBackStep={handleBackStep}
             onNextStep={handleNextStep}

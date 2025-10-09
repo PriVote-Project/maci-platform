@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { FiAlertCircle } from "react-icons/fi";
 import { zeroAddress } from "viem";
 import { useAccount } from "wagmi";
@@ -21,6 +21,8 @@ export interface IProjectDetailsProps {
 }
 
 const ProjectDetailsPage = ({ projectId = "", pollId }: IProjectDetailsProps): JSX.Element => {
+  const [isStatusBarDismissed, setIsStatusBarDismissed] = useState(false);
+
   const { getRoundByPollId } = useRound();
 
   const round = useMemo(() => getRoundByPollId(pollId), [pollId, getRoundByPollId]);
@@ -47,7 +49,7 @@ const ProjectDetailsPage = ({ projectId = "", pollId }: IProjectDetailsProps): J
         />
       )}
 
-      {isDeleted && (
+      {!isStatusBarDismissed && isDeleted && (
         <StatusBar
           content={
             <div className="flex items-center gap-2">
@@ -59,6 +61,9 @@ const ProjectDetailsPage = ({ projectId = "", pollId }: IProjectDetailsProps): J
             </div>
           }
           status="declined"
+          onClose={() => {
+            setIsStatusBarDismissed(true);
+          }}
         />
       )}
 

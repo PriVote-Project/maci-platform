@@ -67,7 +67,10 @@ export const BallotConfirmation = ({ pollId }: IBallotConfirmationProps): JSX.El
 
   const sum = useMemo(() => formatNumber(sumBallot(ballot.votes)), [ballot, sumBallot]);
 
-  const shareText = useMemo(() => `I+successfully+submit+my+vote+in+${round?.roundId}+round.`, [round]);
+  const shareText = useMemo(
+    () => `I+successfully+submit+my+vote+in+${round?.roundId}+round+through+@privoteweb3.`,
+    [round],
+  );
 
   return (
     <div className="flex w-full justify-center">

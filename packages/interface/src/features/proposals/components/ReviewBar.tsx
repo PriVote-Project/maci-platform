@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { useMemo, useCallback, useEffect } from "react";
+import { useMemo, useCallback, useEffect, useState } from "react";
 import { FiAlertCircle } from "react-icons/fi";
 import { zeroAddress } from "viem";
 import { useAccount } from "wagmi";
@@ -23,6 +23,10 @@ interface IReviewBarProps {
 }
 
 export const ReviewBar = ({ pollId, projectId, edition = undefined }: IReviewBarProps): JSX.Element => {
+  const [isApprovedBarDismissed, setIsApprovedBarDismissed] = useState(false);
+  const [isPendingBarDismissed, setIsPendingBarDismissed] = useState(false);
+  const [isReviewBarDismissed, setIsReviewBarDismissed] = useState(false);
+
   const { getRoundByPollId } = useRound();
 
   const round = useMemo(() => getRoundByPollId(pollId), [pollId, getRoundByPollId]);
@@ -82,11 +86,27 @@ export const ReviewBar = ({ pollId, projectId, edition = undefined }: IReviewBar
 
   return (
     <div className="mb-4 w-full">
-      {isApproved && <StatusBar content="The project proposal has been approved." status="approved" />}
+      {!isApprovedBarDismissed && isApproved && (
+        <StatusBar
+          content="The project proposal has been approved."
+          status="approved"
+          onClose={() => {
+            setIsApprovedBarDismissed(true);
+          }}
+        />
+      )}
 
-      {!isApproved && isAdmin && <StatusBar content="This project proposal is pending approval." status="pending" />}
+      {!isPendingBarDismissed && !isApproved && isAdmin && (
+        <StatusBar
+          content="This project proposal is pending approval."
+          status="pending"
+          onClose={() => {
+            setIsPendingBarDismissed(true);
+          }}
+        />
+      )}
 
-      {!isApproved && !isAdmin && (
+      {!isReviewBarDismissed && !isApproved && !isAdmin && (
         <StatusBar
           content={
             <div className="flex items-center gap-2">
@@ -98,6 +118,9 @@ export const ReviewBar = ({ pollId, projectId, edition = undefined }: IReviewBar
             </div>
           }
           status="default"
+          onClose={() => {
+            setIsReviewBarDismissed(true);
+          }}
         />
       )}
 

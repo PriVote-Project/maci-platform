@@ -44,13 +44,21 @@ export const DepositButton = ({ tallyAddress }: IDepositButtonProps): JSX.Elemen
   const [allowance, setAllowance] = useState<string>("0");
 
   const [amount, setAmount] = useState<string>("");
+  const [validationError, setValidationError] = useState<string | undefined>();
 
   const canSubmit = useMemo(() => {
     if (!amount || Number.isNaN(Number(amount))) {
       return false;
     }
-    return Number(amount) > 0;
-  }, [amount]);
+    if (Number(amount) <= 0) {
+      return false;
+    }
+    // Check if amount exceeds balance
+    if (Number(amount) > Number(balance)) {
+      return false;
+    }
+    return true;
+  }, [amount, balance]);
 
   const refreshTokenData = useCallback(async () => {
     if (!signer || !address || !tallyAddress) {
@@ -180,7 +188,23 @@ export const DepositButton = ({ tallyAddress }: IDepositButtonProps): JSX.Elemen
               type="number"
               value={amount}
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setAmount(e.target.value);
+                const { value } = e.target;
+                setAmount(value);
+
+                // Validate amount
+                if (value && !Number.isNaN(Number(value))) {
+                  if (Number(value) > Number(balance)) {
+                    setValidationError("Amount exceeds balance");
+                  } else if (Number(value) <= 0) {
+                    setValidationError("Amount must be greater than 0");
+                  } else {
+                    setValidationError(undefined);
+                  }
+                } else if (value) {
+                  setValidationError("Please enter a valid number");
+                } else {
+                  setValidationError(undefined);
+                }
               }}
             />
 
@@ -220,6 +244,12 @@ export const DepositButton = ({ tallyAddress }: IDepositButtonProps): JSX.Elemen
               <span> </span>
 
               <span>{tokenSymbol}</span>
+            </p>
+          )}
+
+          {validationError && (
+            <p className="text-xs font-medium" style={{ color: "#dc2626" }}>
+              {validationError}
             </p>
           )}
 

@@ -119,19 +119,24 @@ export const getNetworkRpcUrls = (): Record<ESupportedChains, string> => {
   };
 };
 
-export const getEtherscanApiKeys = (): Record<ESupportedChains, string | undefined> => ({
-  [ESupportedChains.Sepolia]: process.env.ETH_ETHERSCAN_API_KEY,
-  [ESupportedChains.Optimism]: process.env.OPTIMISM_ETHERSCAN_API_KEY,
-  [ESupportedChains.OptimismSepolia]: process.env.OPTIMISM_ETHERSCAN_API_KEY,
-  [ESupportedChains.Scroll]: process.env.SCROLL_ETHERSCAN_API_KEY,
-  [ESupportedChains.ScrollSepolia]: process.env.SCROLL_ETHERSCAN_API_KEY,
-  [ESupportedChains.Arbitrum]: process.env.ARB_ETHERSCAN_API_KEY,
-  [ESupportedChains.ArbitrumSepolia]: process.env.ARB_ETHERSCAN_API_KEY,
-  [ESupportedChains.Base]: process.env.BASE_ETHERSCAN_API_KEY,
-  [ESupportedChains.BaseSepolia]: process.env.BASE_ETHERSCAN_API_KEY,
-  [ESupportedChains.Coverage]: undefined,
-  [ESupportedChains.Hardhat]: undefined,
-});
+export const getEtherscanApiKeys = (): Record<ESupportedChains, string | undefined> => {
+  // Etherscan V2 API uses a single API key for all chains
+  const apiKey = process.env.ETHERSCAN_API_KEY;
+
+  return {
+    [ESupportedChains.Sepolia]: apiKey,
+    [ESupportedChains.Optimism]: apiKey,
+    [ESupportedChains.OptimismSepolia]: apiKey,
+    [ESupportedChains.Scroll]: apiKey,
+    [ESupportedChains.ScrollSepolia]: apiKey,
+    [ESupportedChains.Arbitrum]: apiKey,
+    [ESupportedChains.ArbitrumSepolia]: apiKey,
+    [ESupportedChains.Base]: apiKey,
+    [ESupportedChains.BaseSepolia]: apiKey,
+    [ESupportedChains.Coverage]: undefined,
+    [ESupportedChains.Hardhat]: undefined,
+  };
+};
 
 export const ONE_WEEK_IN_SECONDS = 604800;
 

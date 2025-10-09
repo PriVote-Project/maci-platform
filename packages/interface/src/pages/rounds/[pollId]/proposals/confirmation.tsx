@@ -1,5 +1,5 @@
 import { useSearchParams } from "next/navigation";
-import { useMemo } from "react";
+import { useMemo, useEffect, useState } from "react";
 import { FiAlertCircle } from "react-icons/fi";
 import { zeroAddress } from "viem";
 
@@ -34,8 +34,31 @@ const ConfirmProposalPage = ({ pollId }: { pollId: string }): JSX.Element => {
 
   const project = useMemo(() => proposal.data, [proposal]);
 
-  if (proposal.isLoading) {
-    return <EmptyState title="Loading your proposal..." />;
+  // Auto-refetch every 3 seconds if data is not available yet (for up to 30 seconds)
+  const [refetchCount, setRefetchCount] = useState(0);
+  const maxRefetches = 10; // 10 * 3 seconds = 30 seconds max
+
+  useEffect(() => {
+    if (!proposal.data && !proposal.isLoading && refetchCount < maxRefetches) {
+      const timer = setTimeout(() => {
+        proposal.refetch();
+        setRefetchCount((prev) => prev + 1);
+      }, 3000);
+
+      return () => {
+        clearTimeout(timer);
+      };
+    }
+
+    return undefined;
+  }, [proposal.data, proposal.isLoading, refetchCount, proposal]);
+
+  if (proposal.isLoading || proposal.isFetching) {
+    return (
+      <Layout pollId={pollId}>
+        <EmptyState title="Loading your proposal..." />
+      </Layout>
+    );
   }
 
   if (project === undefined) {
@@ -44,7 +67,7 @@ const ConfirmProposalPage = ({ pollId }: { pollId: string }): JSX.Element => {
         <div className="flex w-full justify-center">
           <div className="flex flex-col items-center gap-4 md:max-w-screen-sm lg:max-w-screen-md xl:max-w-screen-lg">
             <Heading as="h2" size="4xl">
-              There is no such proposal for this round!
+              {refetchCount >= maxRefetches ? "There is no such proposal for this round!" : "Loading your proposal..."}
             </Heading>
           </div>
         </div>
