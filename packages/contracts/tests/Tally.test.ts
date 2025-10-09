@@ -160,7 +160,7 @@ describe("Tally", () => {
         cooldownTime,
         custodian: custodianAddress,
         maxContribution: 1,
-        maxCap: 1,
+        maxCap: 100000,
         payoutToken,
       })
       .then((tx) => tx.wait());
@@ -194,7 +194,7 @@ describe("Tally", () => {
         cooldownTime,
         custodian: custodianAddress,
         maxContribution: parseUnits("5", await payoutToken.decimals()),
-        maxCap: parseUnits("10", await payoutToken.decimals()),
+        maxCap: parseUnits("100000", await payoutToken.decimals()),
         payoutToken,
       }),
     ).to.be.revertedWithCustomError(tally, "OwnableUnauthorizedAccount");
@@ -206,7 +206,7 @@ describe("Tally", () => {
         cooldownTime,
         custodian: custodianAddress,
         maxContribution: parseUnits("5", await payoutToken.decimals()),
-        maxCap: parseUnits("10", await payoutToken.decimals()),
+        maxCap: parseUnits("100000", await payoutToken.decimals()),
         payoutToken,
       })
       .then((tx) => tx.wait());
@@ -220,7 +220,7 @@ describe("Tally", () => {
         cooldownTime,
         custodian: custodianAddress,
         maxContribution: parseUnits("5", await payoutToken.decimals()),
-        maxCap: parseUnits("10", await payoutToken.decimals()),
+        maxCap: parseUnits("100000", await payoutToken.decimals()),
         payoutToken,
       }),
     ).to.be.revertedWithCustomError(tally, "AlreadyInitialized");
@@ -493,26 +493,48 @@ describe("Tally", () => {
     }
   });
 
+  it("should calculate alpha if not already set", async () => {
+    const alphaBefore = await tally.alpha();
+    const voiceCreditsPerOptions = PER_VO_SPENT_VOICE_CREDITS.tally.map((x) => BigInt(x));
+
+    // calculate alpha manually based on Tally.sol
+    const totalSpent = await tally.totalSpent();
+    const voiceCreditFactor = await tally.voiceCreditFactor();
+    const totalAmount = await tally.totalAmount();
+    const ALPHA_PRECISION = 10n ** 18n;
+    const totalVotesSquares = await tally.totalVotesSquares();
+    const contributions = totalSpent * voiceCreditFactor;
+    const expectedAlpha =
+      ((totalAmount - contributions) * ALPHA_PRECISION) / (voiceCreditFactor * (totalVotesSquares - totalSpent));
+
+    await tally.getAllocatedAmounts(voiceCreditsPerOptions);
+    const alphaAfter = await tally.alpha();
+
+    expect(alphaBefore).to.equal(0n);
+    expect(alphaAfter).to.equal(expectedAlpha);
+  });
+
   it("should calculate rewards per project", async () => {
     const voiceCreditsPerOptions = PER_VO_SPENT_VOICE_CREDITS.tally.map((x) => BigInt(x));
 
     const expectedRewards = [
-      430000000000n,
-      7295000000000n,
-      15195000000000n,
-      2935000000000n,
-      680000000000n,
-      2455000000000n,
-      3135000000000n,
-      395000000000n,
-      8220000000000n,
-      14580000000000n,
-      3605000000000n,
-      3030000000000n,
+      9012413244165830783n,
+      1552310421321149129846n,
+      3456104942999765660263n,
+      606317844329397788254n,
+      83908671708440493505n,
+      114053640482546893023n,
+      339053188661031771904n,
+      32631150239393525252n,
+      1763946736951215707909n,
+      3425959975385659260745n,
+      544474046722880535633n,
+      465226967954353402878n,
       0n,
     ];
 
-    const amounts = await tally.getAllocatedAmounts(voiceCreditsPerOptions);
+    await tally.getAllocatedAmounts(voiceCreditsPerOptions);
+    const amounts = await tally.getAllocatedAmounts.staticCall(voiceCreditsPerOptions);
 
     for (let index = 0; index < amounts.length; index += 1) {
       // eslint-disable-next-line no-await-in-loop

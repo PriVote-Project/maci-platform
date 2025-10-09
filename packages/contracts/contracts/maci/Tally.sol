@@ -244,7 +244,11 @@ contract Tally is TallyBase, IPayoutStrategy {
   /// @param voiceCreditsPerOptions The voice credit options received for recipient
   function getAllocatedAmounts(
     uint256[] calldata voiceCreditsPerOptions
-  ) public view afterTallying returns (uint256[] memory amounts) {
+  ) public afterTallying returns (uint256[] memory amounts) {
+    if (alpha == 0) {
+      alpha = calculateAlpha(totalAmount());
+    }
+
     uint256 length = voiceCreditsPerOptions.length;
     amounts = new uint256[](length);
 
