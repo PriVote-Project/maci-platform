@@ -34,6 +34,7 @@ export const Projects = ({ pollId = "" }: IProjectsProps): JSX.Element => {
   const [searchTerm, setSearchTerm] = useState("");
   const deferredSearchTerm = useDeferredValue(searchTerm);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [isStatusBarDismissed, setIsStatusBarDismissed] = useState(false);
 
   const roundState = useRoundState({ pollId });
 
@@ -141,7 +142,7 @@ export const Projects = ({ pollId = "" }: IProjectsProps): JSX.Element => {
 
   return (
     <div>
-      {roundState === ERoundState.APPLICATION && (
+      {!isStatusBarDismissed && roundState === ERoundState.APPLICATION && (
         <StatusBar
           content={
             <div className="flex items-center gap-2">
@@ -150,10 +151,13 @@ export const Projects = ({ pollId = "" }: IProjectsProps): JSX.Element => {
             </div>
           }
           status="default"
+          onClose={() => {
+            setIsStatusBarDismissed(true);
+          }}
         />
       )}
 
-      {(roundState === ERoundState.TALLYING || roundState === ERoundState.RESULTS) && (
+      {!isStatusBarDismissed && (roundState === ERoundState.TALLYING || roundState === ERoundState.RESULTS) && (
         <StatusBar
           content={
             <div className="flex items-center gap-2">
@@ -162,6 +166,9 @@ export const Projects = ({ pollId = "" }: IProjectsProps): JSX.Element => {
             </div>
           }
           status="default"
+          onClose={() => {
+            setIsStatusBarDismissed(true);
+          }}
         />
       )}
 

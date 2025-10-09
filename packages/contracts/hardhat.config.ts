@@ -140,23 +140,21 @@ const config: HardhatUserConfig = {
     disambiguatePaths: false,
   },
   etherscan: {
-    apiKey: {
-      [ESupportedChains.Sepolia]: ETHERSCAN_API_KEYS[ESupportedChains.Sepolia]!,
-      [ESupportedChains.Optimism]: ETHERSCAN_API_KEYS[ESupportedChains.Optimism]!,
-      [ESupportedChains.OptimismSepolia]: ETHERSCAN_API_KEYS[ESupportedChains.OptimismSepolia]!,
-      [ESupportedChains.Scroll]: ETHERSCAN_API_KEYS[ESupportedChains.Scroll]!,
-      [ESupportedChains.ScrollSepolia]: ETHERSCAN_API_KEYS[ESupportedChains.ScrollSepolia]!,
-      [ESupportedChains.Arbitrum]: ETHERSCAN_API_KEYS[ESupportedChains.Arbitrum]!,
-      [ESupportedChains.ArbitrumSepolia]: ETHERSCAN_API_KEYS[ESupportedChains.ArbitrumSepolia]!,
-      [ESupportedChains.Base]: ETHERSCAN_API_KEYS[ESupportedChains.Base]!,
-      [ESupportedChains.BaseSepolia]: ETHERSCAN_API_KEYS[ESupportedChains.BaseSepolia]!,
-    },
+    apiKey: ETHERSCAN_API_KEYS[ESupportedChains.Sepolia]!,
     customChains: [
+      {
+        network: ESupportedChains.Sepolia,
+        chainId: EChainId.Sepolia,
+        urls: {
+          apiURL: `https://api.etherscan.io/v2/api?chainid=${EChainId.Sepolia}`,
+          browserURL: "https://sepolia.etherscan.io",
+        },
+      },
       {
         network: ESupportedChains.Optimism,
         chainId: EChainId.Optimism,
         urls: {
-          apiURL: "https://api-optimistic.etherscan.io/api",
+          apiURL: `https://api.etherscan.io/v2/api?chainid=${EChainId.Optimism}`,
           browserURL: "https://optimistic.etherscan.io",
         },
       },
@@ -164,7 +162,7 @@ const config: HardhatUserConfig = {
         network: ESupportedChains.OptimismSepolia,
         chainId: EChainId.OptimismSepolia,
         urls: {
-          apiURL: "https://api-sepolia-optimistic.etherscan.io/api",
+          apiURL: `https://api.etherscan.io/v2/api?chainid=${EChainId.OptimismSepolia}`,
           browserURL: "https://sepolia-optimistic.etherscan.io",
         },
       },
@@ -172,7 +170,7 @@ const config: HardhatUserConfig = {
         network: ESupportedChains.Scroll,
         chainId: EChainId.Scroll,
         urls: {
-          apiURL: "https://api.scrollscan.com/api",
+          apiURL: `https://api.etherscan.io/v2/api?chainid=${EChainId.Scroll}`,
           browserURL: "https://scrollscan.com/",
         },
       },
@@ -180,7 +178,7 @@ const config: HardhatUserConfig = {
         network: ESupportedChains.ScrollSepolia,
         chainId: EChainId.ScrollSepolia,
         urls: {
-          apiURL: "https://api-sepolia.scrollscan.com/api",
+          apiURL: `https://api.etherscan.io/v2/api?chainid=${EChainId.ScrollSepolia}`,
           browserURL: "https://sepolia.scrollscan.com/",
         },
       },
@@ -188,7 +186,7 @@ const config: HardhatUserConfig = {
         network: ESupportedChains.Arbitrum,
         chainId: EChainId.Arbitrum,
         urls: {
-          apiURL: "https://api.arbiscan.io/api",
+          apiURL: `https://api.etherscan.io/v2/api?chainid=${EChainId.Arbitrum}`,
           browserURL: "https://arbiscan.io/",
         },
       },
@@ -196,7 +194,7 @@ const config: HardhatUserConfig = {
         network: ESupportedChains.ArbitrumSepolia,
         chainId: EChainId.ArbitrumSepolia,
         urls: {
-          apiURL: "https://api-sepolia.arbiscan.io/api",
+          apiURL: `https://api.etherscan.io/v2/api?chainid=${EChainId.ArbitrumSepolia}`,
           browserURL: "https://sepolia.arbiscan.io/",
         },
       },
@@ -204,7 +202,7 @@ const config: HardhatUserConfig = {
         network: ESupportedChains.Base,
         chainId: EChainId.Base,
         urls: {
-          apiURL: "https://api.basescan.org/api",
+          apiURL: `https://api.etherscan.io/v2/api?chainid=${EChainId.Base}`,
           browserURL: "https://basescan.org/",
         },
       },
@@ -212,7 +210,7 @@ const config: HardhatUserConfig = {
         network: ESupportedChains.BaseSepolia,
         chainId: EChainId.BaseSepolia,
         urls: {
-          apiURL: "https://api-sepolia.basescan.org/api",
+          apiURL: `https://api.etherscan.io/v2/api?chainid=${EChainId.BaseSepolia}`,
           browserURL: "https://sepolia.basescan.org/",
         },
       },

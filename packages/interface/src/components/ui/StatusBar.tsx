@@ -1,3 +1,4 @@
+import { X } from "lucide-react";
 import { ReactNode } from "react";
 import { tv } from "tailwind-variants";
 
@@ -25,8 +26,28 @@ const StatusBarContainer = createComponent(
 interface IStatusBarProps {
   status: string;
   content: ReactNode;
+  onClose?: () => void;
 }
 
-export const StatusBar = ({ status, content }: IStatusBarProps): JSX.Element => (
-  <StatusBarContainer status={status}>{content}</StatusBarContainer>
+export const StatusBar = ({ status, content, onClose = undefined }: IStatusBarProps): JSX.Element => (
+  <StatusBarContainer status={status}>
+    <div className="flex w-full items-center justify-center">
+      <div className="flex-1" />
+
+      <div className="flex-shrink-0">{content}</div>
+
+      <div className="flex flex-1 justify-end">
+        {onClose && (
+          <button
+            aria-label="Close status bar"
+            className="ml-4 rounded-full p-1 transition-colors hover:bg-white/20"
+            type="button"
+            onClick={onClose}
+          >
+            <X className="h-5 w-5" />
+          </button>
+        )}
+      </div>
+    </div>
+  </StatusBarContainer>
 );

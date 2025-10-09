@@ -4,7 +4,7 @@ import { EthAddressSchema } from "~/features/voters/types";
 import { reverseKeys } from "~/utils/reverseKeys";
 
 export const contributionTypes = {
-  CONTRACT_ADDRESS: "Contract address",
+  CONTRACT_ADDRESS: "Verified Contract link",
   GITHUB_REPO: "Github repo",
   OTHER: "Other",
 } as const;

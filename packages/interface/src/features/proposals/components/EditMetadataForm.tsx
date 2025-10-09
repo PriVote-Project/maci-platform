@@ -272,7 +272,8 @@ export const EditMetadataForm = ({ pollId, project }: IEditMetadataFormProps): J
 
         <MetadataButtons
           isPending={create.isPending}
-          isUploading={create.isPending}
+          isSubmitting={create.isSubmitting}
+          isUploading={create.isUploading}
           step={step}
           onBackStep={handleBackStep}
           onNextStep={handleNextStep}

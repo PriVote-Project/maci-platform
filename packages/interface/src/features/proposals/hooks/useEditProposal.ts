@@ -16,6 +16,8 @@ export type TUseEditProposalReturn = Omit<UseMutationResult<bigint, Error | Tran
   error: Error | TransactionError | null;
   isPending: boolean;
   isSuccess: boolean;
+  isUploading: boolean;
+  isSubmitting: boolean;
 };
 
 /**
@@ -113,5 +115,7 @@ export function useEditProposal(options: {
     error: submitProposal.error ?? upload.error ?? mutation.error,
     isPending: submitProposal.isPending || upload.isPending,
     isSuccess: submitProposal.isSuccess && upload.isSuccess,
+    isUploading: upload.isPending,
+    isSubmitting: submitProposal.isPending,
   };
 }

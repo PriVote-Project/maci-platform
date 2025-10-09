@@ -19,6 +19,7 @@ export enum EMetadataStep {
 interface IMetadataButtonsProps {
   step: EMetadataStep;
   isUploading: boolean;
+  isSubmitting: boolean;
   isPending: boolean;
   onNextStep: () => void;
   onBackStep: () => void;
@@ -27,6 +28,7 @@ interface IMetadataButtonsProps {
 export const MetadataButtons = ({
   step,
   isUploading,
+  isSubmitting,
   isPending,
   onNextStep,
   onBackStep,
@@ -163,7 +165,15 @@ export const MetadataButtons = ({
           type="submit"
           variant="primary"
         >
-          {isUploading ? "Uploading metadata" : "Submit"}
+          {(() => {
+            if (isUploading) {
+              return "Uploading metadata";
+            }
+            if (isSubmitting) {
+              return "Submitting...";
+            }
+            return "Submit";
+          })()}
         </IconButton>
       )}
     </div>
