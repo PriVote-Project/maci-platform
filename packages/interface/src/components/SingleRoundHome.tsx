@@ -44,15 +44,20 @@ export const SingleRoundHome = ({ round }: ISingleRoundHomeProps): JSX.Element =
             roundState === ERoundState.VOTING ||
             roundState === ERoundState.TALLYING) && <DepositButton tallyAddress={round.tallyAddress} />}
 
-          {isConnected && isEligibleToVote && !isRegistered && <JoinButton />}
+          {isConnected &&
+            isEligibleToVote &&
+            !isRegistered &&
+            (roundState === ERoundState.APPLICATION || roundState === ERoundState.VOTING) && <JoinButton />}
         </div>
       )}
 
-      {roundState !== ERoundState.DEFAULT && isConnected && !isEligibleToVote && (
-        <div className="mt-2 flex items-center justify-center">
-          <JoinButton />
-        </div>
-      )}
+      {(roundState === ERoundState.APPLICATION || roundState === ERoundState.VOTING) &&
+        isConnected &&
+        !isEligibleToVote && (
+          <div className="mt-2 flex items-center justify-center">
+            <JoinButton />
+          </div>
+        )}
 
       {roundState === ERoundState.DEFAULT && (
         <p className="text-gray-400">Round has not started yet. Please check back later.</p>
