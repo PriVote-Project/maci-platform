@@ -16,7 +16,8 @@ import { IRecipientRegistry } from "../interfaces/IRecipientRegistry.sol";
 contract Tally is TallyBase, IPayoutStrategy {
   using SafeERC20 for IERC20;
 
-  /// @notice The max voice credits (MACI allows 2 ** 32 voice credits max)
+  /// @notice The max voice credits
+  /// @dev MACI allows 2 ** 32 voice credits max, but we only need 10 ** 9 here
   uint256 private constant MAX_VOICE_CREDITS = 10 ** 9;
 
   /// @notice The alpha precision (needed for allocated amount calculation)
