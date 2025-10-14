@@ -1,5 +1,4 @@
 .env
-deployed-contracts.json
 cache
 artifacts
 typechain-types

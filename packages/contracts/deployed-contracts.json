@@ -1,0 +1,215 @@
+{
+  "arbitrum": {
+    "instance": {
+      "0x9e039bF42e93B83Faecb8AAbeAAe64CB3D79Bcf0": {
+        "id": "ConstantInitialVoiceCreditProxy",
+        "deploymentTxHash": "0x5f7d8f6b0ab65b3fc77f510c28df36a507998e0bdab03cdb9b1e155252c02509",
+        "verify": {
+          "args": "[\"99\"]"
+        }
+      },
+      "0x7523B6D6816AC02B839887ac40a0C14475999cC3": {
+        "id": "GitcoinPassportGatekeeper",
+        "deploymentTxHash": "0x8b025bb63feaa35b8f7fa0677200554800f2ca9258e2cfb27f8154a377b61d4a",
+        "verify": {
+          "args": "[\"0x2050256A91cbABD7C42465aA0d5325115C1dEB43\",2000]"
+        }
+      },
+      "0x4Eb3fA39FCE31ef5BfD6A34FDf2FD2A0904C91D1": {
+        "id": "Verifier",
+        "deploymentTxHash": "0x058fa8334e53b6450611a931c68ca12ccb5ebb8a0efb17de573f9c0b3adc19d0",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xA71CF105e0C3D249f1071e28faE78F12D9dB6D1f": {
+        "id": "PoseidonT3",
+        "deploymentTxHash": "0xe5d8a1d96c7eb9e70e51b607b11c4f1e3625cdf69df0dc0b4b77d08eea5591f6",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xD6B92B685B25868e121D9882e529D5EC9c28Bcb7": {
+        "id": "PoseidonT4",
+        "deploymentTxHash": "0x04a9c332391c5fb23740447bb6581cd5b17acd405fa98defc05ffdb3c52c7da2",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x2d9b65ADc9e51BDFd053BB7884B9Daa51E850f9E": {
+        "id": "PoseidonT5",
+        "deploymentTxHash": "0x32e9b0c0fadc7c4cef74b5f2d7042af3d1df65dc53858bfea10c4f82b6211dd9",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x81c9Ea0aF28c29f24925a35CecDc3eACdd7568ec": {
+        "id": "PoseidonT6",
+        "deploymentTxHash": "0x44c1181c22c59604b3ce56ab8c02aa30e502c4c5f3ef49c34744cc5c01f9c5f7",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x2007184b643d17C67e6452641337F4072B7c3Aa0": {
+        "id": "PollFactory",
+        "deploymentTxHash": "0x249cb1ecef8c3a83ace2605f1a75c6a65ae02ddc741419137055fdc6c0fff97a",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xc644c4516cdF69853C78DfA9e2CF260124e360C4": {
+        "id": "MessageProcessorFactory",
+        "deploymentTxHash": "0xa8eb609661503df604371d918aa5b866299a50cd9eec7b4622d28c81535971b0",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0x320527BdA99BfD20b61c98F4e7ff19dE430393C0": {
+        "id": "TallyFactory",
+        "deploymentTxHash": "0x01499e6bd6b930f964b4b86532b9ce70b68f4d23b647411cdb285909cf900b7e",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xd47e20dA45A80BF9977120f8F25724e134FcE3f3": {
+        "id": "MACI",
+        "deploymentTxHash": "0x0839f341637b2003c879efbf930ae6f8d21c5cf0d5f3fb2f047c69d00d7a1d73",
+        "verify": {
+          "args": "[\"0x2007184b643d17C67e6452641337F4072B7c3Aa0\",\"0xc644c4516cdF69853C78DfA9e2CF260124e360C4\",\"0x320527BdA99BfD20b61c98F4e7ff19dE430393C0\",\"0x7523B6D6816AC02B839887ac40a0C14475999cC3\",\"0x9e039bF42e93B83Faecb8AAbeAAe64CB3D79Bcf0\",14,[\"10308863629788455260704114511206948419734522911868369522065170317043305183826\",\"15638739021185187188102975938431888963456846511635661527443326021687795891950\",\"2881453089660950474651054122995901965405144719081991993059633221387893015995\",\"12493973375564475576522276362572267105610392684775593820450263906986447069771\",\"681764572878032401682084991233323592871239508639381808618717128728252960349\"]]"
+        }
+      },
+      "0x4EC5770Ee516a9683706F40df69Ec21F30f4EbBC": {
+        "id": "VkRegistry",
+        "deploymentTxHash": "0x031d982272980d4e37909de9197d1338844bfe311fc8279306959782ef715a60",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xD0a2BB874B8D4D7C3533AeCA43300f8AebD821fA": {
+        "id": "RegistryManager",
+        "deploymentTxHash": "0xb43d2558c573e04cc24a60d2ce9d172eaddaa795a3e7accdee5cfb0cfafd316c",
+        "verify": {
+          "args": "[]"
+        }
+      },
+      "0xfb1961F0c1a5751f8a405E8ba04A3944F2362690": {
+        "id": "Poll",
+        "verify": {
+          "name": "contracts/maci/Poll.sol:Poll",
+          "args": "[691200,{\"intStateTreeDepth\":5,\"messageTreeSubDepth\":2,\"messageTreeDepth\":9,\"voteOptionTreeDepth\":3},{\"x\":\"14707892399223873396542996782512480017269580834008615892473004169515626990320\",\"y\":\"12632389806199546355511393614102383355947229603216369839009574828820808350457\"},[\"0xd47e20dA45A80BF9977120f8F25724e134FcE3f3\",\"0xFD886bD9c99B3e63d71DB62D990D4640B017F1b3\"],\"2881453089660950474651054122995901965405144719081991993059633221387893015995\"]"
+        }
+      },
+      "0xF13833531B5018C1Cb93C01100b6A9BEd1c12De8": {
+        "id": "SimpleRegistry",
+        "deploymentTxHash": "0xc5e93f1a947121dda16e680d5e16fdc6013b77162054f858b0ecdf7e23c97b76",
+        "verify": {
+          "args": "[125,\"https://gdii6oo9wznbltmn.public.blob.vercel-storage.com/Gitcoin%20-%20Privacy.json\",\"0xD0a2BB874B8D4D7C3533AeCA43300f8AebD821fA\"]"
+        }
+      },
+      "0x945E8CF5061b5f8d1951fBF20F98Ad7C10ae3742": {
+        "id": "MessageProcessor",
+        "verify": {
+          "args": "[\"0x4Eb3fA39FCE31ef5BfD6A34FDf2FD2A0904C91D1\",\"0x4EC5770Ee516a9683706F40df69Ec21F30f4EbBC\",\"0xfb1961F0c1a5751f8a405E8ba04A3944F2362690\",\"0xde3600E143065D8921Ff71945DCdcf86ddf3F0CF\",0]"
+        }
+      },
+      "0x64e959EC9f5089c30b26BeA383ef05b6e3824E13": {
+        "id": "Tally",
+        "verify": {
+          "name": "contracts/maci/Tally.sol:Tally",
+          "args": "[\"0x4Eb3fA39FCE31ef5BfD6A34FDf2FD2A0904C91D1\",\"0x4EC5770Ee516a9683706F40df69Ec21F30f4EbBC\",\"0xfb1961F0c1a5751f8a405E8ba04A3944F2362690\",\"0x945E8CF5061b5f8d1951fBF20F98Ad7C10ae3742\",\"0xde3600E143065D8921Ff71945DCdcf86ddf3F0CF\",0]"
+        }
+      },
+      "0xFD886bD9c99B3e63d71DB62D990D4640B017F1b3": {
+        "id": "AccQueueQuinaryMaci",
+        "verify": {
+          "name": "maci-contracts/contracts/trees/AccQueueQuinaryMaci.sol:AccQueueQuinaryMaci",
+          "args": "[2]"
+        }
+      }
+    },
+    "named": {
+      "ConstantInitialVoiceCreditProxy": {
+        "address": "0x9e039bF42e93B83Faecb8AAbeAAe64CB3D79Bcf0",
+        "count": 1
+      },
+      "GitcoinPassportGatekeeper": {
+        "address": "0x7523B6D6816AC02B839887ac40a0C14475999cC3",
+        "count": 1
+      },
+      "Verifier": {
+        "address": "0x4Eb3fA39FCE31ef5BfD6A34FDf2FD2A0904C91D1",
+        "count": 1
+      },
+      "PoseidonT3": {
+        "address": "0xA71CF105e0C3D249f1071e28faE78F12D9dB6D1f",
+        "count": 1
+      },
+      "PoseidonT4": {
+        "address": "0xD6B92B685B25868e121D9882e529D5EC9c28Bcb7",
+        "count": 1
+      },
+      "PoseidonT5": {
+        "address": "0x2d9b65ADc9e51BDFd053BB7884B9Daa51E850f9E",
+        "count": 1
+      },
+      "PoseidonT6": {
+        "address": "0x81c9Ea0aF28c29f24925a35CecDc3eACdd7568ec",
+        "count": 1
+      },
+      "PollFactory": {
+        "address": "0x2007184b643d17C67e6452641337F4072B7c3Aa0",
+        "count": 1
+      },
+      "MessageProcessorFactory": {
+        "address": "0xc644c4516cdF69853C78DfA9e2CF260124e360C4",
+        "count": 1
+      },
+      "TallyFactory": {
+        "address": "0x320527BdA99BfD20b61c98F4e7ff19dE430393C0",
+        "count": 1
+      },
+      "MACI": {
+        "address": "0xd47e20dA45A80BF9977120f8F25724e134FcE3f3",
+        "count": 1
+      },
+      "VkRegistry": {
+        "address": "0x4EC5770Ee516a9683706F40df69Ec21F30f4EbBC",
+        "count": 1
+      },
+      "RegistryManager": {
+        "address": "0xD0a2BB874B8D4D7C3533AeCA43300f8AebD821fA",
+        "count": 1
+      },
+      "Poll": {
+        "poll-0": {
+          "address": "0xfb1961F0c1a5751f8a405E8ba04A3944F2362690",
+          "count": 1
+        }
+      },
+      "SimpleRegistry": {
+        "poll-0": {
+          "address": "0xF13833531B5018C1Cb93C01100b6A9BEd1c12De8",
+          "count": 1
+        }
+      },
+      "MessageProcessor": {
+        "poll-0": {
+          "address": "0x945E8CF5061b5f8d1951fBF20F98Ad7C10ae3742",
+          "count": 1
+        }
+      },
+      "Tally": {
+        "poll-0": {
+          "address": "0x64e959EC9f5089c30b26BeA383ef05b6e3824E13",
+          "count": 1
+        }
+      },
+      "AccQueueQuinaryMaci": {
+        "poll-0": {
+          "address": "0xFD886bD9c99B3e63d71DB62D990D4640B017F1b3",
+          "count": 1
+        }
+      }
+    }
+  }
+}
