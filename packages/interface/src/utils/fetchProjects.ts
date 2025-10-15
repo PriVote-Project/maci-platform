@@ -3,6 +3,7 @@ import { Metadata } from "~/features/proposals/types";
 
 import { createCachedFetch } from "./fetch";
 import { fetchMetadata } from "./fetchMetadata";
+import { getGraphAuthHeaders } from "./graphql";
 import { IRecipient } from "./types";
 
 const cachedFetch = createCachedFetch({ ttl: 1000 });
@@ -87,6 +88,7 @@ export async function fetchProjects(registryAddress: string): Promise<IRecipient
       query: Projects,
       variables: { registryAddress },
     }),
+    headers: getGraphAuthHeaders(),
   }).then((resp: GraphQLResponse) => resp.data?.recipients);
 
   const recipients = response?.map((request) => ({
@@ -113,6 +115,7 @@ export async function fetchApprovedProjects(registryAddress: string): Promise<IR
       query: ApprovedProjects,
       variables: { registryAddress },
     }),
+    headers: getGraphAuthHeaders(),
   }).then((resp: GraphQLResponse) => resp.data?.recipients);
 
   const recipients = response?.map((request) => ({
@@ -142,6 +145,7 @@ export async function fetchApprovedProjectsWithMetadata(
       query: ApprovedProjects,
       variables: { registryAddress },
     }),
+    headers: getGraphAuthHeaders(),
   }).then((resp: GraphQLResponse) => resp.data?.recipients);
 
   if (!response) {
@@ -188,6 +192,7 @@ export async function fetchProjectsByAddress(registryAddress: string, address: s
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...getGraphAuthHeaders(),
     },
     body: JSON.stringify({
       query: ProjectsByAddress,
@@ -215,6 +220,7 @@ export async function fetchApprovedProjectByIndex(registryAddress: string, index
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...getGraphAuthHeaders(),
     },
     body: JSON.stringify({
       query: ApprovedProjectByIndex,

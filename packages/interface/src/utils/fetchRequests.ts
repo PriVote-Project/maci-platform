@@ -2,6 +2,8 @@ import { config } from "~/config";
 
 import type { IRequest } from "./types";
 
+import { getGraphAuthHeaders } from "./graphql";
+
 export interface GraphQLResponse {
   data?: {
     requests: IRequest[];
@@ -168,6 +170,7 @@ export async function fetchRequestByProjectId(projectId: string, registryAddress
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...getGraphAuthHeaders(),
     },
     body: JSON.stringify({
       query: RequestByProjectId,
@@ -194,6 +197,7 @@ export async function fetchPendingRequests(registryAddress: string): Promise<IRe
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...getGraphAuthHeaders(),
     },
     body: JSON.stringify({
       query: PendingRequests,
@@ -221,6 +225,7 @@ export async function fetchRejectedRequests(registryAddress: string): Promise<IR
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...getGraphAuthHeaders(),
     },
     body: JSON.stringify({
       query: RejectedRequests,
@@ -248,6 +253,7 @@ export async function fetchApprovedRequests(registryAddress: string): Promise<IR
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...getGraphAuthHeaders(),
     },
     body: JSON.stringify({
       query: ApprovedRequests,
@@ -275,6 +281,7 @@ export async function fetchAllAddRequests(registryAddress: string): Promise<IReq
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...getGraphAuthHeaders(),
     },
     body: JSON.stringify({
       query: AddRequests,
@@ -303,6 +310,7 @@ export async function fetchRequestByIndex(registryAddress: string, index: string
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...getGraphAuthHeaders(),
     },
     body: JSON.stringify({
       query: RequestByIndex,
@@ -334,6 +342,7 @@ export async function fetchChangeRequestByRecipientIndex(
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      ...getGraphAuthHeaders(),
     },
     body: JSON.stringify({
       query: ChangeRequestByRecipientIndex,

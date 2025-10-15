@@ -1,6 +1,7 @@
 import { config } from "~/config";
 
 import { createCachedFetch } from "./fetch";
+import { getGraphAuthHeaders } from "./graphql";
 
 const cachedFetch = createCachedFetch({ ttl: 1000 * 60 * 10 });
 
@@ -45,5 +46,6 @@ export async function fetchUser(publicKey: [bigint, bigint]): Promise<User | und
     body: JSON.stringify({
       query: UserQuery.replace("id: $id", `id: "${publicKey[0]} ${publicKey[1]}"`),
     }),
+    headers: getGraphAuthHeaders(),
   }).then((response: GraphQLResponse) => response.data?.user);
 }

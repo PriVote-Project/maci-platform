@@ -3,6 +3,7 @@ import { config } from "~/config";
 import type { IPollData, Poll } from "./types";
 
 import { createCachedFetch } from "./fetch";
+import { getGraphAuthHeaders } from "./graphql";
 
 const cachedFetch = createCachedFetch({ ttl: 1000 * 60 * 10 });
 
@@ -68,6 +69,7 @@ export async function fetchPolls(): Promise<IPollData[] | undefined> {
     body: JSON.stringify({
       query: PollQuery,
     }),
+    headers: getGraphAuthHeaders(),
   }).then((response: GraphQLResponse) => response.data?.polls);
 
   // cast this to a IPollData object array so that we can deal with one object only in MACIContext

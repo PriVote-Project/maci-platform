@@ -3,6 +3,7 @@ import { config } from "~/config";
 import type { Tally } from "./types";
 
 import { createCachedFetch } from "./fetch";
+import { getGraphAuthHeaders } from "./graphql";
 
 const cachedFetch = createCachedFetch({ ttl: 1000 * 60 * 10 });
 
@@ -64,6 +65,7 @@ export async function fetchTally(id: string): Promise<Tally | undefined> {
     body: JSON.stringify({
       query: tallyQuery.replace("id: $id", `id: "${id}"`),
     }),
+    headers: getGraphAuthHeaders(),
   })
     .then((response: GraphQLResponse) => response.data?.tally)
     .catch(() => undefined);
@@ -80,6 +82,7 @@ export async function fetchTallies(): Promise<Tally[] | undefined> {
     body: JSON.stringify({
       query: talliesQuery,
     }),
+    headers: getGraphAuthHeaders(),
   })
     .then((r) => r.data.tallies)
     .catch(() => []);
@@ -103,6 +106,7 @@ export async function fetchTallyFunds(id: string): Promise<{ deposited: string; 
     body: JSON.stringify({
       query: tallyFundsQuery.replace("id: $id", `id: "${id}"`),
     }),
+    headers: getGraphAuthHeaders(),
   })
     .then((raw) => {
       const response = raw as FundsResp;
@@ -142,6 +146,7 @@ export async function fetchTallyClaims(id: string): Promise<Record<string, strin
       query: claimsByTallyQuery,
       variables: { tally: id.toLowerCase() },
     }),
+    headers: getGraphAuthHeaders(),
   })
     .then((raw) => {
       const response = raw as ClaimsResp;
