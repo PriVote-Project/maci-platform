@@ -1,4 +1,5 @@
 import { Contract, ZeroAddress, formatUnits, parseUnits } from "ethers";
+import { CheckCircle } from "lucide-react";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { useAccount } from "wagmi";
 
@@ -36,6 +37,8 @@ export const DepositButton = ({ tallyAddress }: IDepositButtonProps): JSX.Elemen
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [depositedAmount, setDepositedAmount] = useState<string>("");
 
   const [tokenAddress, setTokenAddress] = useState<string>(ZeroAddress);
   const [tokenSymbol, setTokenSymbol] = useState<string>("");
@@ -133,10 +136,18 @@ export const DepositButton = ({ tallyAddress }: IDepositButtonProps): JSX.Elemen
       const tx = await (tally.deposit as (amount: bigint) => Promise<{ wait: () => Promise<unknown> }>)(amountWei);
       await tx.wait();
 
-      // refresh balances and close
+      // refresh balances and show success
       await refreshTokenData();
-      setIsOpen(false);
-      setAmount("");
+      setDepositedAmount(amount);
+      setIsSuccess(true);
+
+      // Auto-close after 3 seconds
+      setTimeout(() => {
+        setIsOpen(false);
+        setAmount("");
+        setIsSuccess(false);
+        setDepositedAmount("");
+      }, 3000);
     } catch (e: unknown) {
       if ((e as { code?: string }).code === "ACTION_REJECTED") {
         setError("Transaction rejected");
@@ -252,6 +263,24 @@ export const DepositButton = ({ tallyAddress }: IDepositButtonProps): JSX.Elemen
             <p className="text-xs font-medium" style={{ color: "#dc2626" }}>
               {validationError}
             </p>
+          )}
+
+          {isSuccess && (
+            <div className="rounded-lg bg-green-50 p-4 text-center">
+              <div className="mb-2 flex justify-center">
+                <CheckCircle className="h-8 w-8" style={{ color: "#16a34a" }} />
+              </div>
+
+              <p className="text-sm font-semibold text-green-800">
+                <span>Successfully deposited </span>
+
+                <span>{depositedAmount}</span>
+
+                <span> </span>
+
+                <span>{tokenSymbol}</span>
+              </p>
+            </div>
           )}
 
           {error && <p className="text-xs text-red-500">{error}</p>}
