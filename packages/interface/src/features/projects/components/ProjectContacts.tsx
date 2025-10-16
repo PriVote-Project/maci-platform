@@ -4,6 +4,7 @@ import { RiGlobalLine } from "react-icons/ri";
 
 import { Link } from "~/components/ui/Link";
 import { prefixes } from "~/config";
+import { extractHandle } from "~/utils/extractHandle";
 
 interface IProjectContactsProps {
   author?: string;
@@ -17,58 +18,64 @@ export const ProjectContacts = ({
   website = undefined,
   github = undefined,
   twitter = undefined,
-}: IProjectContactsProps): JSX.Element => (
-  <div className="grid w-full grid-cols-1 gap-4 border-y border-gray-200 px-2 py-4 font-sans font-medium text-[var(--brand-500)] xl:grid-cols-2">
-    {author && (
-      <div className="w-full">
-        <Link
-          className="w-fit duration-200 hover:text-[var(--brand-700)]"
-          href={`${prefixes.ETHER_PREFIX}${author}`}
-          target="_blank"
-        >
-          <FaEthereum />
+}: IProjectContactsProps): JSX.Element => {
+  // Extract handles from potential URLs
+  const twitterHandle = twitter ? extractHandle(twitter, "twitter") : undefined;
+  const githubHandle = github ? extractHandle(github, "github") : undefined;
 
-          {`${author.slice(0, 8)}...${author.slice(-8)}`}
-        </Link>
-      </div>
-    )}
+  return (
+    <div className="grid w-full grid-cols-1 gap-4 border-y border-gray-200 px-2 py-4 font-sans font-medium text-[var(--brand-500)] xl:grid-cols-2">
+      {author && (
+        <div className="w-full">
+          <Link
+            className="w-fit duration-200 hover:text-[var(--brand-700)]"
+            href={`${prefixes.ETHER_PREFIX}${author}`}
+            target="_blank"
+          >
+            <FaEthereum />
 
-    {twitter && (
-      <div className="w-full">
-        <Link
-          className="w-fit duration-200 hover:text-[var(--brand-700)]"
-          href={`${prefixes.TWITTER_PREFIX}${twitter}`}
-          target="_blank"
-        >
-          <FaXTwitter />
+            {`${author.slice(0, 8)}...${author.slice(-8)}`}
+          </Link>
+        </div>
+      )}
 
-          {twitter}
-        </Link>
-      </div>
-    )}
+      {twitterHandle && (
+        <div className="w-full">
+          <Link
+            className="w-fit duration-200 hover:text-[var(--brand-700)]"
+            href={`${prefixes.TWITTER_PREFIX}${twitterHandle}`}
+            target="_blank"
+          >
+            <FaXTwitter />
 
-    {website && (
-      <div className="w-full">
-        <Link className="w-fit duration-200 hover:text-[var(--brand-700)]" href={website} target="_blank">
-          <RiGlobalLine />
+            {twitterHandle}
+          </Link>
+        </div>
+      )}
 
-          {website}
-        </Link>
-      </div>
-    )}
+      {website && (
+        <div className="w-full">
+          <Link className="w-fit duration-200 hover:text-[var(--brand-700)]" href={website} target="_blank">
+            <RiGlobalLine />
 
-    {github && (
-      <div className="w-full">
-        <Link
-          className="w-fit duration-200 hover:text-[var(--brand-700)]"
-          href={`${prefixes.GITHUB_PREFIX}${github}`}
-          target="_blank"
-        >
-          <FaGithub />
+            {website}
+          </Link>
+        </div>
+      )}
 
-          {github}
-        </Link>
-      </div>
-    )}
-  </div>
-);
+      {githubHandle && (
+        <div className="w-full">
+          <Link
+            className="w-fit duration-200 hover:text-[var(--brand-700)]"
+            href={`${prefixes.GITHUB_PREFIX}${githubHandle}`}
+            target="_blank"
+          >
+            <FaGithub />
+
+            {githubHandle}
+          </Link>
+        </div>
+      )}
+    </div>
+  );
+};

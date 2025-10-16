@@ -145,9 +145,10 @@ export const Projects = ({ pollId = "" }: IProjectsProps): JSX.Element => {
       {!isStatusBarDismissed && roundState === ERoundState.APPLICATION && (
         <StatusBar
           content={
-            <div className="flex items-center gap-2">
-              <FiAlertCircle className="h-4 w-4" />
-              Voting is disabled until the Application period ends.
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <FiAlertCircle className="h-4 w-4 flex-shrink-0" />
+
+              <span>Voting is disabled until the Application period ends.</span>
             </div>
           }
           status="default"
@@ -160,9 +161,10 @@ export const Projects = ({ pollId = "" }: IProjectsProps): JSX.Element => {
       {!isStatusBarDismissed && (roundState === ERoundState.TALLYING || roundState === ERoundState.RESULTS) && (
         <StatusBar
           content={
-            <div className="flex items-center gap-2">
-              <FiAlertCircle className="h-4 w-4" />
-              The voting period has ended.
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <FiAlertCircle className="h-4 w-4 flex-shrink-0" />
+
+              <span>The voting period has ended.</span>
             </div>
           }
           status="default"
@@ -177,15 +179,19 @@ export const Projects = ({ pollId = "" }: IProjectsProps): JSX.Element => {
           Projects
         </Heading>
 
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-start">
-          <div className="flex flex-row items-center gap-2">
-            {round?.tallyAddress &&
-              (roundState === ERoundState.APPLICATION ||
-                roundState === ERoundState.VOTING ||
-                roundState === ERoundState.TALLYING) && <DepositButton tallyAddress={round.tallyAddress} />}
-          </div>
+        <div className="flex w-full flex-col gap-2 sm:w-auto sm:flex-row sm:items-start">
+          {round?.tallyAddress &&
+            (roundState === ERoundState.APPLICATION ||
+              roundState === ERoundState.VOTING ||
+              roundState === ERoundState.TALLYING) && (
+              <div className="w-full sm:w-auto">
+                <DepositButton tallyAddress={round.tallyAddress} />
+              </div>
+            )}
 
-          <SortFilter onSearchChange={setSearchTerm} />
+          <div className="w-full sm:w-auto">
+            <SortFilter onSearchChange={setSearchTerm} />
+          </div>
         </div>
       </div>
 

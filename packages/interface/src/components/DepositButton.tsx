@@ -157,6 +157,7 @@ export const DepositButton = ({ tallyAddress }: IDepositButtonProps): JSX.Elemen
   return (
     <>
       <Button
+        className="w-full sm:w-auto"
         size="auto"
         variant="primary"
         onClick={() => {

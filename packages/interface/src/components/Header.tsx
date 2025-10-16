@@ -84,9 +84,12 @@ const MobileMenu = ({ isOpen = false, navLinks, pollId, setOpen }: IMobileMenuPr
 
   return (
     <div
-      className={cn("fixed left-0 top-16 z-10 h-full w-full bg-white transition-transform duration-150", {
-        "-translate-x-full": !isOpen,
-      })}
+      className={cn(
+        "fixed left-0 top-16 z-50 w-full bg-white shadow-lg transition-transform duration-150 dark:bg-black",
+        {
+          "-translate-x-full": !isOpen,
+        },
+      )}
     >
       <Link
         key="home"
@@ -170,7 +173,7 @@ const Header = ({ navLinks, pollId = "" }: IHeaderProps) => {
       <AppContainer as="div" className="container relative mx-auto flex items-center px-2">
         <div className="mr-4 flex items-center md:mr-16">
           <IconButton
-            className="mr-1 text-gray-600 md:hidden"
+            className="mr-1 text-gray-600 md:hidden dark:text-gray-300"
             icon={isOpen ? X : Menu}
             variant="ghost"
             onClick={() => {
@@ -210,7 +213,7 @@ const Header = ({ navLinks, pollId = "" }: IHeaderProps) => {
           <HelpButton />
 
           <IconButton
-            className="w-[50px] text-gray-600"
+            className="w-[50px] text-gray-600 dark:text-gray-300"
             icon={theme === "light" ? SunIcon : MoonIcon}
             variant="ghost"
             onClick={handleChangeTheme}

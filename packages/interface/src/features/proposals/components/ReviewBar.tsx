@@ -109,8 +109,8 @@ export const ReviewBar = ({ pollId, projectId, edition = undefined }: IReviewBar
       {!isReviewBarDismissed && !isApproved && !isAdmin && (
         <StatusBar
           content={
-            <div className="flex items-center gap-2">
-              <FiAlertCircle className="h-4 w-4" />
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <FiAlertCircle className="h-4 w-4 flex-shrink-0" />
 
               <span>This project proposal is under review by our team.</span>
 

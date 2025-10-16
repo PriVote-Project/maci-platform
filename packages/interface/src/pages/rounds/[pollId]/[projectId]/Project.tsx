@@ -52,8 +52,8 @@ const ProjectDetailsPage = ({ projectId = "", pollId }: IProjectDetailsProps): J
       {!isStatusBarDismissed && isDeleted && (
         <StatusBar
           content={
-            <div className="flex items-center gap-2">
-              <FiAlertCircle className="h-4 w-4" />
+            <div className="flex flex-wrap items-center justify-center gap-2">
+              <FiAlertCircle className="h-4 w-4 flex-shrink-0" />
 
               <span>This project proposal is outdated.</span>
 

@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 import { useState, useEffect } from "react";
 import { useAccount } from "wagmi";
 
+import ConnectButton from "~/components/ConnectButton";
 import DepositButton from "~/components/DepositButton";
 import { Info } from "~/components/Info";
 import { JoinButton } from "~/components/JoinButton";
@@ -54,6 +55,12 @@ export const SingleRoundHome = ({ round }: ISingleRoundHomeProps): JSX.Element =
 
       {roundState !== ERoundState.DEFAULT && (
         <div className="flex flex-row flex-wrap items-center justify-center gap-3">
+          {isMobile && (
+            <div className="flex w-full justify-center">
+              <ConnectButton showMobile />
+            </div>
+          )}
+
           <Button
             as={Link}
             disabled={navigatingTo === `/rounds/${round.pollId}`}

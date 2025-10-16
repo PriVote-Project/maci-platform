@@ -51,7 +51,7 @@ export const ProjectItemContent = ({
 
     <div className="flex flex-col gap-5 p-4 pt-2">
       <div className="flex flex-col gap-1">
-        <span className="font-sans text-base font-semibold uppercase text-black dark:text-white">{name}</span>
+        <span className="truncate font-sans text-base font-semibold uppercase text-black dark:text-white">{name}</span>
 
         <span className="line-clamp-2 h-10 font-sans text-sm text-gray-400">{removeMarkdown(shortBio || "")}</span>
       </div>
