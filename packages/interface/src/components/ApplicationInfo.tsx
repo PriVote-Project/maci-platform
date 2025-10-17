@@ -7,33 +7,33 @@ import { calculateTimeLeft } from "~/utils/time";
 
 import { TimeSlot } from "./TimeSlot";
 
-interface IVotingInfoProps {
+interface IApplicationInfoProps {
   pollId: string;
 }
 
-export const VotingInfo = ({ pollId }: IVotingInfoProps): JSX.Element => {
+export const ApplicationInfo = ({ pollId }: IApplicationInfoProps): JSX.Element => {
   const { isLoading } = useMaci();
   const { getRoundByPollId } = useRound();
   const [timeLeft, setTimeLeft] = useState<[number, number, number, number]>([0, 0, 0, 0]);
 
-  const votingEndsAt = useMemo(() => {
+  const applicationEndsAt = useMemo(() => {
     const round = getRoundByPollId(pollId);
-    return round?.votingEndsAt ? new Date(round.votingEndsAt) : new Date();
+    return round?.registrationEndsAt ? new Date(round.registrationEndsAt) : new Date();
   }, [getRoundByPollId, pollId]);
 
   useHarmonicIntervalFn(() => {
-    setTimeLeft(calculateTimeLeft(votingEndsAt));
+    setTimeLeft(calculateTimeLeft(applicationEndsAt));
   }, 1000);
 
-  const hasEnded = votingEndsAt.getTime() < Date.now();
+  const hasEnded = applicationEndsAt.getTime() < Date.now();
 
   return (
     <div className="flex w-full flex-col">
-      <h4 className="font-sans text-base font-normal uppercase text-gray-400">Voting Ends</h4>
+      <h4 className="font-sans text-base font-normal uppercase text-gray-400">Application Ends</h4>
 
       {isLoading && <p className="dark:text-white">Loading...</p>}
 
-      {!isLoading && hasEnded && <p className="dark:text-white">Voting has ended</p>}
+      {!isLoading && hasEnded && <p className="dark:text-white">Application period has ended</p>}
 
       {!isLoading && !hasEnded && (
         <div className="flex gap-[14px] dark:text-white">

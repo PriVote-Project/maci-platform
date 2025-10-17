@@ -7,6 +7,7 @@ import { cn } from "~/utils/classNames";
 import { useRoundState } from "~/utils/state";
 import { EInfoCardState, ERoundState } from "~/utils/types";
 
+import { ApplicationInfo } from "./ApplicationInfo";
 import { BallotOverview } from "./BallotOverview";
 import { InfoCard } from "./InfoCard";
 import { RoundInfo } from "./RoundInfo";
@@ -79,6 +80,8 @@ export const Info = ({
         {showRoundInfo && <RoundInfo roundId={round?.roundId ?? ""} />}
 
         {showBallot && <BallotOverview pollId={pollId} title={asPath.includes("ballot") ? "Summary" : undefined} />}
+
+        {showRoundInfo && roundState === ERoundState.APPLICATION && <ApplicationInfo pollId={pollId} />}
 
         {showRoundInfo && roundState === ERoundState.VOTING && <VotingInfo pollId={pollId} />}
 
