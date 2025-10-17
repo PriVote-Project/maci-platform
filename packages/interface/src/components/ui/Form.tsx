@@ -107,8 +107,17 @@ export const FormControl = ({
   } = useFormContext();
 
   // Get error for name - handles field arrays (field.index.prop)
-  const [index] = name.split(".");
-  const error = index && errors[index];
+  const getNestedError = (obj: Record<string, unknown>, path: string): { message?: string } | undefined => {
+    const keys = path.split(".");
+    return keys.reduce<Record<string, unknown> | undefined>((current, key) => {
+      if (current && typeof current === "object" && key in current) {
+        return current[key] as Record<string, unknown>;
+      }
+      return undefined;
+    }, obj) as { message?: string } | undefined;
+  };
+
+  const error = getNestedError(errors as Record<string, unknown>, name);
 
   return (
     <fieldset className={cn("flex flex-col gap-1", className)}>
@@ -130,7 +139,7 @@ export const FormControl = ({
 
       {description && <span className="text-sm font-normal leading-5 text-gray-300">{description}</span>}
 
-      {error && <ErrorMessage>{error.message}</ErrorMessage>}
+      {error?.message && <ErrorMessage>{error.message}</ErrorMessage>}
     </fieldset>
   );
 };
@@ -240,8 +249,39 @@ export const Form = <S extends z.Schema>({
         setErrorMessage(null);
         onSubmit(data, form);
       },
-      () => {
-        setErrorMessage("There are errors in the form. Please go back and check the warnings.");
+      (errors) => {
+        // Collect all error messages from the form
+        const errorMessages: string[] = [];
+
+        // Recursive function to extract all error messages
+        const extractErrors = (obj: Record<string, unknown>, prefix = ""): void => {
+          Object.entries(obj).forEach(([key, value]) => {
+            const fieldPath = prefix ? `${prefix}.${key}` : key;
+
+            if (value && typeof value === "object" && "message" in value && typeof value.message === "string") {
+              errorMessages.push(`${fieldPath}: ${value.message}`);
+            } else if (value && typeof value === "object" && !Array.isArray(value)) {
+              // Recursively check nested objects
+              extractErrors(value as Record<string, unknown>, fieldPath);
+            } else if (Array.isArray(value)) {
+              // Handle array errors
+              value.forEach((item, index) => {
+                if (item && typeof item === "object") {
+                  extractErrors(item as Record<string, unknown>, `${fieldPath}[${index}]`);
+                }
+              });
+            }
+          });
+        };
+
+        extractErrors(errors as Record<string, unknown>);
+
+        const message =
+          errorMessages.length > 0
+            ? `Please fix the following errors:\n${errorMessages.join("\n")}`
+            : "There are errors in the form. Please go back and check the warnings.";
+
+        setErrorMessage(message);
       },
     ),
     [setErrorMessage, onSubmit, form],
@@ -267,7 +307,9 @@ export const Form = <S extends z.Schema>({
       <form onSubmit={onSubmitForm}>
         {children}
 
-        {errorMessage && <ErrorMessage style={{ textAlign: "end" }}>{errorMessage}</ErrorMessage>}
+        {errorMessage && (
+          <ErrorMessage style={{ textAlign: "end", whiteSpace: "pre-line" }}>{errorMessage}</ErrorMessage>
+        )}
       </form>
     </FormProvider>
   );

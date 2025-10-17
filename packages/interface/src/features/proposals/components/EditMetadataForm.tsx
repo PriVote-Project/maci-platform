@@ -200,15 +200,20 @@ export const EditMetadataForm = ({ pollId, project }: IEditMetadataFormProps): J
             name="contributionLinks"
             renderField={(field, i) => (
               <div className="mb-4 flex flex-wrap gap-2">
-                <FormControl required className="min-w-96" name={`contributionLinks.${i}.description`}>
+                <FormControl
+                  required
+                  className="min-w-96"
+                  label="Description"
+                  name={`contributionLinks.${i}.description`}
+                >
                   <Input placeholder="Type the description of your contribution" />
                 </FormControl>
 
-                <FormControl required className="min-w-72" name={`contributionLinks.${i}.url`}>
+                <FormControl required className="min-w-72" label="URL" name={`contributionLinks.${i}.url`}>
                   <Input placeholder="https://" />
                 </FormControl>
 
-                <FormControl required name={`contributionLinks.${i}.type`}>
+                <FormControl required label="Contribution type" name={`contributionLinks.${i}.type`}>
                   <Select>
                     {Object.entries(contributionTypes).map(([value, label]) => (
                       <option key={value} value={value}>
@@ -227,19 +232,24 @@ export const EditMetadataForm = ({ pollId, project }: IEditMetadataFormProps): J
             name="fundingSources"
             renderField={(field, i) => (
               <div className="mb-4 flex flex-wrap gap-2">
-                <FormControl required className="min-w-96" name={`fundingSources.${i}.description`}>
+                <FormControl
+                  required
+                  className="min-w-96"
+                  label="Funding source name"
+                  name={`fundingSources.${i}.description`}
+                >
                   <Input placeholder="Type the name of your funding source" />
                 </FormControl>
 
-                <FormControl required valueAsNumber className="w-32" name={`fundingSources.${i}.amount`}>
+                <FormControl required valueAsNumber className="w-32" label="Amount" name={`fundingSources.${i}.amount`}>
                   <Input placeholder="Amount" type="number" />
                 </FormControl>
 
-                <FormControl required className="w-32" name={`fundingSources.${i}.currency`}>
+                <FormControl required className="w-32" label="Currency" name={`fundingSources.${i}.currency`}>
                   <Input placeholder="e.g. USD" />
                 </FormControl>
 
-                <FormControl required name={`fundingSources.${i}.type`}>
+                <FormControl required label="Funding source type" name={`fundingSources.${i}.type`}>
                   <Select>
                     {Object.entries(fundingSourceTypes).map(([value, label]) => (
                       <option key={value} value={value}>

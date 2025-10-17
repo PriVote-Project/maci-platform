@@ -167,11 +167,16 @@ export const MetadataForm = ({ pollId }: IMetadataFormProps): JSX.Element => {
             name="contributionLinks"
             renderField={(field, i) => (
               <div className={cn("flex flex-wrap gap-[12px]", i > 0 && "border-t border-gray-100 pt-3")}>
-                <FormControl required className="w-full" name={`contributionLinks.${i}.description`}>
+                <FormControl
+                  required
+                  className="w-full"
+                  label="Description"
+                  name={`contributionLinks.${i}.description`}
+                >
                   <Input placeholder="Type the description of your contribution" />
                 </FormControl>
 
-                <FormControl required className="w-full" name={`contributionLinks.${i}.type`}>
+                <FormControl required className="w-full" label="Contribution type" name={`contributionLinks.${i}.type`}>
                   <Controller
                     defaultValue="" // or set a default if needed
                     name={`contributionLinks.${i}.type`}
@@ -197,7 +202,7 @@ export const MetadataForm = ({ pollId }: IMetadataFormProps): JSX.Element => {
                   />
                 </FormControl>
 
-                <FormControl required className="min-w-72" name={`contributionLinks.${i}.url`}>
+                <FormControl required className="min-w-72" label="URL" name={`contributionLinks.${i}.url`}>
                   <Input placeholder="https://" />
                 </FormControl>
               </div>
@@ -211,20 +216,31 @@ export const MetadataForm = ({ pollId }: IMetadataFormProps): JSX.Element => {
             renderField={(_field, i) => (
               <div className="flex flex-wrap gap-2">
                 <div className="grid grid-cols-1 gap-2 lg:grid-cols-4">
-                  <FormControl required className="col-span-1 lg:col-span-2" name={`fundingSources.${i}.description`}>
+                  <FormControl
+                    required
+                    className="col-span-1 lg:col-span-2"
+                    label="Funding source name"
+                    name={`fundingSources.${i}.description`}
+                  >
                     <Input placeholder="Type the name of your funding source" />
                   </FormControl>
 
-                  <FormControl required valueAsNumber className="col-span-1" name={`fundingSources.${i}.amount`}>
+                  <FormControl
+                    required
+                    valueAsNumber
+                    className="col-span-1"
+                    label="Amount"
+                    name={`fundingSources.${i}.amount`}
+                  >
                     <Input placeholder="Amount" type="number" />
                   </FormControl>
 
-                  <FormControl required className="col-span-1" name={`fundingSources.${i}.currency`}>
+                  <FormControl required className="col-span-1" label="Currency" name={`fundingSources.${i}.currency`}>
                     <Input placeholder="e.g. USD" />
                   </FormControl>
                 </div>
 
-                <FormControl required name={`fundingSources.${i}.type`}>
+                <FormControl required label="Funding source type" name={`fundingSources.${i}.type`}>
                   <Controller
                     defaultValue="" // or set a default if needed
                     name={`fundingSources.${i}.type`}
