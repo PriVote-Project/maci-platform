@@ -39,7 +39,15 @@ const ProjectDetails = ({ pollId, project, action = undefined }: IProjectDetails
       <div className="flex flex-col gap-5">
         <div className="flex flex-col">
           <div className="overflow-hidden rounded-3xl">
-            <ProjectBanner url={bannerImageUrl} />
+            {bannerImageUrl ? (
+              <img
+                alt="Project banner"
+                className="max-h-[400px] w-full rounded-3xl object-contain"
+                src={bannerImageUrl}
+              />
+            ) : (
+              <ProjectBanner url={bannerImageUrl} />
+            )}
           </div>
 
           <div className="flex items-end gap-4">
