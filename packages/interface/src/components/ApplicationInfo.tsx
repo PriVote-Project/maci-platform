@@ -1,7 +1,6 @@
 import { useState, useMemo } from "react";
 import { useHarmonicIntervalFn } from "react-use";
 
-import { useMaci } from "~/contexts/Maci";
 import { useRound } from "~/contexts/Round";
 import { calculateTimeLeft } from "~/utils/time";
 
@@ -12,8 +11,7 @@ interface IApplicationInfoProps {
 }
 
 export const ApplicationInfo = ({ pollId }: IApplicationInfoProps): JSX.Element => {
-  const { isLoading } = useMaci();
-  const { getRoundByPollId } = useRound();
+  const { getRoundByPollId, isLoading } = useRound();
   const [timeLeft, setTimeLeft] = useState<[number, number, number, number]>([0, 0, 0, 0]);
 
   const applicationEndsAt = useMemo(() => {
