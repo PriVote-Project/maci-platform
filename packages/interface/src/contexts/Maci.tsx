@@ -271,15 +271,27 @@ export const MaciProvider: React.FC<MaciProviderProps> = ({ children }: MaciProv
   // function to be used to signup to MACI
   const onSignup = useCallback(
     async (onError: () => void) => {
-      if (!signer || !maciPubKey || (gatekeeperTrait && gatekeeperTrait !== GatekeeperTrait.FreeForAll && !sgData)) {
+      if (!signer || (gatekeeperTrait && gatekeeperTrait !== GatekeeperTrait.FreeForAll && !sgData)) {
         return;
       }
 
       setIsLoading(true);
 
       try {
+        // Check if keypair exists, if not generate it
+        let pubKey = maciPubKey;
+        if (!pubKey) {
+          await generateKeypair();
+          // After generating, get the newly created public key from localStorage
+          pubKey = localStorage.getItem("maciPubKey") ?? undefined;
+          if (!pubKey) {
+            throw new Error("Failed to generate keypair");
+          }
+          setMaciPubKey(pubKey);
+        }
+
         const { stateIndex: index, voiceCredits } = await signup({
-          maciPubKey,
+          maciPubKey: pubKey,
           maciAddress: config.maciAddress!,
           sgDataArg: sgData,
           signer,
@@ -297,7 +309,17 @@ export const MaciProvider: React.FC<MaciProviderProps> = ({ children }: MaciProv
         setIsLoading(false);
       }
     },
-    [maciPubKey, signer, setIsRegistered, setStateIndex, setInitialVoiceCredits, setIsLoading, sgData],
+    [
+      maciPubKey,
+      signer,
+      setIsRegistered,
+      setStateIndex,
+      setInitialVoiceCredits,
+      setIsLoading,
+      sgData,
+      generateKeypair,
+      setMaciPubKey,
+    ],
   );
 
   // function to be used to vote on a poll
@@ -318,6 +340,27 @@ export const MaciProvider: React.FC<MaciProviderProps> = ({ children }: MaciProv
         return;
       }
 
+      // Check if keypair exists, if not generate it
+      let pubKey = maciPubKey;
+      let privKey = maciPrivKey;
+      if (!pubKey || !privKey) {
+        try {
+          await generateKeypair();
+          // After generating, get the newly created keys from localStorage
+          pubKey = localStorage.getItem("maciPubKey") ?? undefined;
+          privKey = localStorage.getItem("maciPrivKey") ?? undefined;
+          if (!pubKey || !privKey) {
+            throw new Error("Failed to generate keypair");
+          }
+          setMaciPubKey(pubKey);
+          setMaciPrivKey(privKey);
+        } catch (err) {
+          setError("Failed to generate keypair");
+          await onError("Failed to generate keypair");
+          return;
+        }
+      }
+
       const messages = votes.map(({ newVoteWeight, voteOptionIndex }, index) => ({
         newVoteWeight,
         voteOptionIndex,
@@ -331,8 +374,8 @@ export const MaciProvider: React.FC<MaciProviderProps> = ({ children }: MaciProv
       await publishBatch({
         messages,
         maciAddress: config.maciAddress!,
-        publicKey: maciPubKey!,
-        privateKey: maciPrivKey!,
+        publicKey: pubKey,
+        privateKey: privKey,
         pollId: BigInt(pollId),
         signer,
       })
@@ -353,7 +396,17 @@ export const MaciProvider: React.FC<MaciProviderProps> = ({ children }: MaciProv
           setIsLoading(false);
         });
     },
-    [stateIndex, maciPubKey, maciPrivKey, signer, setIsLoading, setError],
+    [
+      stateIndex,
+      maciPubKey,
+      maciPrivKey,
+      signer,
+      setIsLoading,
+      setError,
+      generateKeypair,
+      setMaciPubKey,
+      setMaciPrivKey,
+    ],
   );
 
   useEffect(() => {
