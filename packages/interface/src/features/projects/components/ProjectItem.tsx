@@ -1,6 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import { FaXTwitter } from "react-icons/fa6";
 import { zeroAddress } from "viem";
+import { useAccount } from "wagmi";
 
 import { Button } from "~/components/ui/Button";
 import { Skeleton } from "~/components/ui/Skeleton";
@@ -28,6 +30,7 @@ export interface IProjectItemContentProps {
   shortBio?: string;
   impactCategory?: string[];
   actionButton?: ReactNode;
+  appealButton?: ReactNode;
   onCategoryClick?: (category: string) => void;
   selectedCategories?: string[];
 }
@@ -39,6 +42,7 @@ export const ProjectItemContent = ({
   shortBio = "",
   impactCategory = undefined,
   actionButton = undefined,
+  appealButton = undefined,
   onCategoryClick = undefined,
   selectedCategories = [],
 }: IProjectItemContentProps): JSX.Element => (
@@ -46,7 +50,15 @@ export const ProjectItemContent = ({
     <div className="opacity-70 transition-opacity duration-200 group-hover:opacity-100">
       <ProjectBanner className="!rounded-b-none" size="sm" url={bannerImageUrl} />
 
-      <ProjectAvatar className="-mt-8 ml-4" rounded="full" url={profileImageUrl} />
+      {appealButton ? (
+        <div className="flex justify-between gap-4 px-4">
+          <ProjectAvatar className="-mt-8" rounded="full" url={profileImageUrl} />
+
+          {appealButton}
+        </div>
+      ) : (
+        <ProjectAvatar className="-mt-8 ml-4" rounded="full" url={profileImageUrl} />
+      )}
     </div>
 
     <div className="flex flex-col gap-5 p-4 pt-2">
@@ -76,6 +88,7 @@ export interface IProjectItemProps {
   action?: (e: Event) => void;
   onCategoryClick?: (category: string) => void;
   selectedCategories?: string[];
+  showAppealButton?: boolean;
 }
 
 export const ProjectItem = ({
@@ -87,9 +100,11 @@ export const ProjectItem = ({
   action = undefined,
   onCategoryClick = undefined,
   selectedCategories = [],
+  showAppealButton = false,
 }: IProjectItemProps): JSX.Element => {
   const metadata = useProjectMetadata(recipient.metadataUrl);
   const request = useRequestByProjectId(recipient.id, registryAddress);
+  const { address } = useAccount();
 
   const roundState = useRoundState({ pollId });
   const bannerImageUrl = recipient.bannerImageUrl ? recipient.bannerImageUrl : metadata.data?.bannerImageUrl;
@@ -103,6 +118,19 @@ export const ProjectItem = ({
   if (!shortBio && bio) {
     shortBio = bio.substring(0, 140);
   }
+
+  // Check if current user is the project owner
+  // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+  const isMyProject = address && recipient.payout ? address.toLowerCase() === recipient.payout.toLowerCase() : false;
+
+  const handleAppeal = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const tweetText = `Voting for the @gitcoin GG24 Privacy Round is LIVE on @privoteweb3!\nHelp us move privacy forward. A vote for ${name ?? "my project"} is a vote for a more secure, user-centric Internet.\nAny human with a @HumnPassport can vote. Your support is crucial.\nVote here: gitcoin.privote.live`;
+    const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(tweetText)}`;
+    window.open(twitterUrl, "_blank", "noopener,noreferrer");
+  };
 
   if (isLoading) {
     return (
@@ -141,6 +169,19 @@ export const ProjectItem = ({
                 </Skeleton>
               </div>
             )
+          }
+          appealButton={
+            showAppealButton && isMyProject ? (
+              <Button
+                className="mt-3 flex shrink-0 items-center gap-1"
+                size="sm"
+                variant="primary"
+                onClick={handleAppeal}
+              >
+                <FaXTwitter size={14} />
+                Appeal
+              </Button>
+            ) : undefined
           }
           bannerImageUrl={bannerImageUrl}
           impactCategory={impactCategory}

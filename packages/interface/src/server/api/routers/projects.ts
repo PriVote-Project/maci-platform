@@ -8,6 +8,7 @@ import {
   fetchProjects,
   fetchProjectsByAddress,
   fetchApprovedProjectByIndex,
+  fetchProjectById,
 } from "~/utils/fetchProjects";
 import { getProjectCount } from "~/utils/registry";
 
@@ -29,8 +30,21 @@ export const projectsRouter = createTRPCRouter({
         throw new TRPCError({ code: "NOT_FOUND" });
       }
 
+      // First, try to find the project in the cached data
       const projects = await fetchProjects(registryAddress);
-      return projects.find((project) => ids.includes(project.id));
+      let project = projects.find((p) => ids.includes(p.id));
+
+      // If not found in cache, make a direct subgraph call for the first ID
+      if (!project && ids[0]) {
+        const directFetch = await fetchProjectById(ids[0]);
+        project = directFetch ?? undefined;
+      }
+
+      if (!project) {
+        throw new TRPCError({ code: "NOT_FOUND", message: "Project not found" });
+      }
+
+      return project;
     }),
 
   getWithMetadataById: publicProcedure

@@ -215,6 +215,7 @@ export const Projects = ({ pollId = "" }: IProjectsProps): JSX.Element => {
               myProjectsData.map((project) => (
                 <ProjectItem
                   key={project.id}
+                  showAppealButton
                   isLoading={false}
                   pollId={pollId}
                   recipient={project}

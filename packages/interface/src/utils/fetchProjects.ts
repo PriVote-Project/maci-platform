@@ -76,6 +76,23 @@ const ApprovedProjectByIndex = `
   }
 `;
 
+// Query to fetch a single project by ID
+const ProjectById = `
+  query ProjectById($id: String!) {
+    recipients(where: { id: $id }) {
+      id
+      payout
+      metadataUrl
+      index
+      initialized
+      deleted
+      registry {
+        id
+      }
+    }
+  }
+`;
+
 /**
  * Fetch all projects
  *
@@ -235,4 +252,44 @@ export async function fetchApprovedProjectByIndex(registryAddress: string, index
   }
 
   return result.data.recipients;
+}
+
+/**
+ * Fetch a single project by ID directly from subgraph (no cache)
+ * @param projectId
+ * @returns the project or null if not found
+ */
+export async function fetchProjectById(projectId: string): Promise<IRecipient | null> {
+  const response = await fetch(config.maciSubgraphUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...getGraphAuthHeaders(),
+    },
+    body: JSON.stringify({
+      query: ProjectById,
+      variables: { id: projectId },
+    }),
+  });
+
+  const result = (await response.json()) as GraphQLResponse;
+
+  if (!result.data || result.data.recipients.length === 0) {
+    return null;
+  }
+
+  const project = result.data.recipients[0];
+
+  if (!project) {
+    return null;
+  }
+
+  return {
+    id: project.id,
+    metadataUrl: project.metadataUrl,
+    payout: project.payout,
+    initialized: project.initialized,
+    index: project.index,
+    deleted: project.deleted,
+  };
 }

@@ -57,18 +57,22 @@ const ProjectDetails = ({ pollId, project, action = undefined }: IProjectDetails
 
         <div className="flex flex-col gap-[30px]">
           <div className="flex flex-col gap-4 px-2">
-            <div className="flex flex-col items-center justify-between sm:flex-row">
+            <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
               <Heading as="h3" size="3xl">
                 {metadata.data?.name}
               </Heading>
 
-              {roundState === ERoundState.VOTING && (
-                <VotingWidget
-                  pollId={pollId}
-                  projectId={project.id}
-                  projectIndex={Number.parseInt(project.index, 10)}
-                />
-              )}
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                {action}
+
+                {roundState === ERoundState.VOTING && (
+                  <VotingWidget
+                    pollId={pollId}
+                    projectId={project.id}
+                    projectIndex={Number.parseInt(project.index, 10)}
+                  />
+                )}
+              </div>
             </div>
 
             {metadata.data?.impactCategory && metadata.data.impactCategory.length > 0 && (
@@ -95,8 +99,6 @@ const ProjectDetails = ({ pollId, project, action = undefined }: IProjectDetails
           {fundingSources && fundingSources.length > 0 && (
             <ProjectDescriptionSection fundings={fundingSources} title="past grants and funding" />
           )}
-
-          {action}
         </div>
       </div>
     </div>
