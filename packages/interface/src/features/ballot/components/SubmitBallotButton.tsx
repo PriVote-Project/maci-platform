@@ -1,3 +1,4 @@
+import { track } from "@vercel/analytics";
 import { useRouter } from "next/router";
 import { useCallback, useMemo } from "react";
 import { toast } from "sonner";
@@ -48,6 +49,10 @@ export const SubmitBallotButton = ({ pollId }: ISubmitBallotButtonProps): JSX.El
 
     await onVote(votes, pollId, onVotingError, () => {
       publishBallot(pollId);
+
+      // Track successful voting event
+      track("vote_submitted");
+
       router.push(`/rounds/${pollId}/ballot/confirmation`);
     });
   }, [ballot, router, onVote, publishBallot, onVotingError, pollId, isLoading, ableToSubmit, round?.mode]);
