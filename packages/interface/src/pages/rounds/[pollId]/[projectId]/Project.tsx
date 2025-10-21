@@ -5,9 +5,8 @@ import { useAccount } from "wagmi";
 
 import { StatusBar } from "~/components/ui/StatusBar";
 import { useRound } from "~/contexts/Round";
-import { AppealButton } from "~/features/projects/components/AppealButton";
 import ProjectDetails from "~/features/projects/components/ProjectDetails";
-import { useProjectById, useProjectMetadata } from "~/features/projects/hooks/useProjects";
+import { useProjectById } from "~/features/projects/hooks/useProjects";
 import { ReviewBar } from "~/features/proposals/components/ReviewBar";
 import { useChangeRequestByRecipientIndex } from "~/hooks/useRequests";
 import { LayoutWithSidebar } from "~/layouts/DefaultLayout";
@@ -29,7 +28,6 @@ const ProjectDetailsPage = ({ projectId = "", pollId }: IProjectDetailsProps): J
   const round = useMemo(() => getRoundByPollId(pollId), [pollId, getRoundByPollId]);
 
   const project = useProjectById(projectId, round?.registryAddress ?? zeroAddress);
-  const metadata = useProjectMetadata(project.data?.metadataUrl ?? "");
 
   const roundState = useRoundState({ pollId });
 
@@ -69,17 +67,7 @@ const ProjectDetailsPage = ({ projectId = "", pollId }: IProjectDetailsProps): J
         />
       )}
 
-      {project.data && (
-        <ProjectDetails
-          action={
-            roundState === ERoundState.VOTING || roundState === ERoundState.APPLICATION ? (
-              <AppealButton projectName={metadata.data?.name ?? "this project"} />
-            ) : undefined
-          }
-          pollId={pollId}
-          project={project.data as unknown as IRecipient}
-        />
-      )}
+      {project.data && <ProjectDetails pollId={pollId} project={project.data as unknown as IRecipient} />}
     </LayoutWithSidebar>
   );
 };

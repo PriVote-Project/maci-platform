@@ -4,6 +4,7 @@ import Markdown from "react-markdown";
 import { Heading } from "~/components/ui/Heading";
 import { markdownComponents } from "~/components/ui/MarkdownComponents";
 import { Navigation } from "~/components/ui/Navigation";
+import { StatusBar } from "~/components/ui/StatusBar";
 import { ProjectAvatar } from "~/features/projects/components/ProjectAvatar";
 import { ProjectBanner } from "~/features/projects/components/ProjectBanner";
 import { VotingWidget } from "~/features/projects/components/VotingWidget";
@@ -14,6 +15,7 @@ import type { IRecipient } from "~/utils/types";
 
 import { useProjectMetadata } from "../hooks/useProjects";
 
+import { AppealButton } from "./AppealButton";
 import { ImpactCategories } from "./ImpactCategories";
 import { ProjectContacts } from "./ProjectContacts";
 import { ProjectDescriptionSection } from "./ProjectDescriptionSection";
@@ -35,6 +37,10 @@ const ProjectDetails = ({ pollId, project, action = undefined }: IProjectDetails
   return (
     <div className="markdown-support relative flex flex-col gap-[30px]">
       <Navigation pollId={pollId} projectName={metadata.data?.name ?? "project name"} />
+
+      {!project.initialized && roundState === ERoundState.VOTING && (
+        <StatusBar content="This project is not approved and cannot receive votes in this round." status="warning" />
+      )}
 
       <div className="flex flex-col gap-5">
         <div className="flex flex-col">
@@ -65,7 +71,10 @@ const ProjectDetails = ({ pollId, project, action = undefined }: IProjectDetails
               <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
                 {action}
 
-                {roundState === ERoundState.VOTING && (
+                {(roundState === ERoundState.VOTING || roundState === ERoundState.APPLICATION) &&
+                  project.initialized && <AppealButton projectName={metadata.data?.name ?? "this project"} />}
+
+                {roundState === ERoundState.VOTING && project.initialized && (
                   <VotingWidget
                     pollId={pollId}
                     projectId={project.id}
