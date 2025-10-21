@@ -13,7 +13,7 @@ import {
   getGatekeeperTrait,
   getHatsSingleGatekeeperData,
 } from "maci-cli/sdk";
-import React, { createContext, useContext, useCallback, useEffect, useMemo, useState } from "react";
+import React, { createContext, useContext, useCallback, useEffect, useMemo, useState, useRef } from "react";
 import { useAccount, useSignMessage } from "wagmi";
 
 import { config } from "~/config";
@@ -54,6 +54,9 @@ export const MaciProvider: React.FC<MaciProviderProps> = ({ children }: MaciProv
 
   const [gatekeeperTrait, setGatekeeperTrait] = useState<GatekeeperTrait | undefined>();
   const [sgData, setSgData] = useState<string | undefined>();
+
+  // Ref to prevent multiple simultaneous keypair generation attempts
+  const isGeneratingKeypair = useRef(false);
 
   const { signMessageAsync } = useSignMessage();
   const user = api.maci.user.useQuery(
@@ -249,15 +252,26 @@ export const MaciProvider: React.FC<MaciProviderProps> = ({ children }: MaciProv
       return;
     }
 
-    const signature = await signMessageAsync({ message: signatureMessage });
-    const newSemaphoreIdentity = new Identity(signature);
-    const userKeyPair = genKeyPair({ seed: BigInt(signature) });
-    localStorage.setItem("maciPrivKey", userKeyPair.privateKey);
-    localStorage.setItem("maciPubKey", userKeyPair.publicKey);
-    localStorage.setItem("semaphoreIdentity", newSemaphoreIdentity.privateKey.toString());
-    setMaciPrivKey(userKeyPair.privateKey);
-    setMaciPubKey(userKeyPair.publicKey);
-    setSemaphoreIdentity(newSemaphoreIdentity);
+    // Prevent multiple simultaneous generation attempts
+    if (isGeneratingKeypair.current) {
+      return;
+    }
+
+    isGeneratingKeypair.current = true;
+
+    try {
+      const signature = await signMessageAsync({ message: signatureMessage });
+      const newSemaphoreIdentity = new Identity(signature);
+      const userKeyPair = genKeyPair({ seed: BigInt(signature) });
+      localStorage.setItem("maciPrivKey", userKeyPair.privateKey);
+      localStorage.setItem("maciPubKey", userKeyPair.publicKey);
+      localStorage.setItem("semaphoreIdentity", newSemaphoreIdentity.privateKey.toString());
+      setMaciPrivKey(userKeyPair.privateKey);
+      setMaciPubKey(userKeyPair.publicKey);
+      setSemaphoreIdentity(newSemaphoreIdentity);
+    } finally {
+      isGeneratingKeypair.current = false;
+    }
   }, [address, signatureMessage, signMessageAsync, setMaciPrivKey, setMaciPubKey, setSemaphoreIdentity]);
 
   // callback to be called from external component to store the zupass proof
@@ -418,14 +432,18 @@ export const MaciProvider: React.FC<MaciProviderProps> = ({ children }: MaciProv
       localStorage.removeItem("maciPubKey");
       localStorage.removeItem("semaphoreIdentity");
       localStorage.removeItem("zupassProof");
+      isGeneratingKeypair.current = false;
     }
   }, [isDisconnected]);
 
+  // Generate keypair when wallet connects and no keypair exists
   useEffect(() => {
-    if (!localStorage.getItem("maciPrivKey") || !localStorage.getItem("maciPubKey")) {
+    // Only generate if wallet is connected and no keypair exists
+    if (isConnected && address && !localStorage.getItem("maciPrivKey") && !localStorage.getItem("maciPubKey")) {
       generateKeypair().catch(console.error);
     }
-  }, [generateKeypair]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isConnected, address]); // Intentionally not including generateKeypair to avoid loops
 
   useEffect(() => {
     if (!maciPubKey || user.data) {
