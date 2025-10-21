@@ -79,9 +79,7 @@ export const BallotConfirmation = ({ pollId }: IBallotConfirmationProps): JSX.El
           Your ballot has been successfully submitted 🥳
         </Heading>
 
-        <p className="mb-14 mt-4 text-gray-400">
-          {`Thank you for participating in ${config.eventName} ${round?.roundId} round.`}
-        </p>
+        <p className="mb-14 mt-4 text-gray-400">{`Thank you for participating in ${round?.roundId} round.`}</p>
 
         <div className="mb-7 rounded-lg border border-gray-200 p-5 dark:text-white">
           <b className="font-mono text-2xl uppercase">Summary of your ballot</b>
