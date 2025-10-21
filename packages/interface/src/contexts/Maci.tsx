@@ -252,6 +252,13 @@ export const MaciProvider: React.FC<MaciProviderProps> = ({ children }: MaciProv
       return;
     }
 
+    // Prevent signing empty messages which would result in "0x"
+    // Temp workaround for wrong msg signature during theme change
+    if (!signatureMessage) {
+      console.warn("Cannot generate keypair: signature message is empty");
+      return;
+    }
+
     // Prevent multiple simultaneous generation attempts
     if (isGeneratingKeypair.current) {
       return;
