@@ -12,6 +12,7 @@ import { useTokenMeta } from "~/hooks/useTokenMeta";
 
 interface IDepositButtonProps {
   tallyAddress: string;
+  className?: string;
 }
 
 const TALLY_ABI = ["function token() view returns (address)", "function deposit(uint256 amount)"];
@@ -24,7 +25,7 @@ const ERC20_ABI = [
   "function balanceOf(address owner) view returns (uint256)",
 ];
 
-export const DepositButton = ({ tallyAddress }: IDepositButtonProps): JSX.Element | null => {
+export const DepositButton = ({ tallyAddress, className }: IDepositButtonProps): JSX.Element | null => {
   const { address, isConnected } = useAccount();
   const signer = useEthersSigner();
   const tokenMeta = useTokenMeta(tallyAddress);
@@ -168,7 +169,7 @@ export const DepositButton = ({ tallyAddress }: IDepositButtonProps): JSX.Elemen
   return (
     <>
       <Button
-        className="w-full sm:w-auto"
+        className={className}
         size="auto"
         variant="primary"
         onClick={() => {

@@ -95,7 +95,7 @@ export const JoinButton = (): JSX.Element => {
           <div className="flex items-center gap-2 rounded-md bg-blue-50 p-3 text-sm text-blue-900 dark:bg-blue-900/20 dark:text-blue-200">
             <Info className="h-4 w-4 flex-shrink-0" />
 
-            <span>Requires Gitcoin Passport score ≥ {gitcoinPassport.passingScore / 100}.</span>
+            <span>Requires Gitcoin Passport score ≥ {gitcoinPassport.passingScore / 100}. Minted on Arbitrum.</span>
 
             <a
               className="underline hover:text-blue-700 dark:hover:text-blue-100"

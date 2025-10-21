@@ -184,9 +184,7 @@ export const Projects = ({ pollId = "" }: IProjectsProps): JSX.Element => {
             (roundState === ERoundState.APPLICATION ||
               roundState === ERoundState.VOTING ||
               roundState === ERoundState.TALLYING) && (
-              <div className="w-full sm:w-auto">
-                <DepositButton tallyAddress={round.tallyAddress} />
-              </div>
+              <DepositButton className="w-full sm:w-auto" tallyAddress={round.tallyAddress} />
             )}
 
           <div className="w-full sm:w-auto">
