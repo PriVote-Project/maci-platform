@@ -69,7 +69,7 @@ export const BallotConfirmation = ({ pollId }: IBallotConfirmationProps): JSX.El
 
   const shareText = useMemo(
     () =>
-      `I+successfully+submitted+my+vote+in+the+GG24+Privacy+round+through+@privoteweb3!+🚀%0AEven+though+it's+on-chain,+no+one+can+see+how+I+voted.+True+privacy.%0AANY+HUMAN+CAN+VOTE.+Don't+miss+your+chance+to+shape+the+future+of+privacy!`,
+      `I+successfully+submitted+my+vote+in+the+GG24+Privacy+round+through+@privoteweb3!+🚀%0AEven+though+it's+on-chain,+no+one+can+see+how+I+voted.+True+privacy.%0AANY+HUMAN+CAN+VOTE.+Don't+miss+your+chance+to+shape+the+future+of+privacy!%0AVote+now+at+gitcoin.privote.live`,
     [],
   );
 
