@@ -28,7 +28,7 @@ export const RoundInfo = ({ roundId }: IRoundInfoProps): JSX.Element => {
           />
         )}
 
-        <Heading as="h3" size="3xl">
+        <Heading as="h3" className="!text-[28px]" size="3xl">
           {roundId}
         </Heading>
       </div>
