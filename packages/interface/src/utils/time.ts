@@ -11,8 +11,12 @@ export const calculateTimeLeft = (date: Date): [number, number, number, number] 
 
 export const formatDate = (date: Date | number): string => format(date, "dd MMM yyyy HH:mm");
 
-export function formatPeriod({ start, end }: { start: Date; end: Date }): string {
+export function formatPeriod({ start, end }: { start: Date; end?: Date }): string {
   const fullFormat = "d MMM yyyy";
+
+  if (!end) {
+    return format(start, fullFormat);
+  }
 
   if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
     return `${start.getDate()} - ${format(end, fullFormat)}`;

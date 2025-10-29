@@ -64,13 +64,17 @@ export const Info = ({
       label: "tallying",
       state: ERoundState.TALLYING,
       start: round?.votingEndsAt ? new Date(round.votingEndsAt) : new Date(),
-      end: round?.votingEndsAt ? new Date(round.votingEndsAt) : new Date(),
+      end: round?.votingEndsAt
+        ? new Date(new Date(round.votingEndsAt).getTime() + 2 * 24 * 60 * 60 * 1000)
+        : new Date(),
     },
     {
       label: "results",
       state: ERoundState.RESULTS,
-      start: round?.votingEndsAt ? new Date(round.votingEndsAt) : new Date(),
-      end: round?.votingEndsAt ? new Date(round.votingEndsAt) : new Date(),
+      start: round?.votingEndsAt
+        ? new Date(new Date(round.votingEndsAt).getTime() + 2 * 24 * 60 * 60 * 1000)
+        : new Date(),
+      end: undefined, // No end date - results are permanent
     },
   ];
 

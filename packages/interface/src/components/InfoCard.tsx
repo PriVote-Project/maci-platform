@@ -22,7 +22,7 @@ interface InfoCardProps {
   state: EInfoCardState;
   title: string;
   start: Date;
-  end: Date;
+  end?: Date;
 }
 
 export const InfoCard = ({ state, title, start, end }: InfoCardProps): JSX.Element => (
