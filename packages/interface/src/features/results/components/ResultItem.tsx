@@ -1,11 +1,9 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useMemo } from "react";
-import { formatUnits } from "viem";
+import { useEffect } from "react";
 
 import { useProjectMetadata } from "~/features/projects/hooks/useProjects";
 import { useClaimsByRecipient } from "~/hooks/useResults";
-import { useTokenMeta } from "~/hooks/useTokenMeta";
 
 import type { IRecipientWithVotes } from "~/utils/types";
 
@@ -19,23 +17,23 @@ export interface IResultItemProps {
 export const ResultItem = ({ pollId, rank, project, tallyAddress }: IResultItemProps): JSX.Element => {
   const metadata = useProjectMetadata(project.metadataUrl);
   const claimsByRecipient = useClaimsByRecipient(tallyAddress);
-  const tokenMeta = useTokenMeta(tallyAddress);
-  const claimedFormatted = useMemo(() => {
-    const indexKey = String(project.index);
-    const raw = claimsByRecipient.data?.[indexKey];
-    if (raw == null) {
-      return null;
-    }
-    try {
-      const { decimals } = tokenMeta;
-      const value = formatUnits(BigInt(raw), decimals);
-      const [int, dec] = value.split(".");
-      const trimmed = dec ? `${int}.${dec.slice(0, 4)}` : int;
-      return trimmed;
-    } catch {
-      return null;
-    }
-  }, [claimsByRecipient.data, project.index, tokenMeta.decimals]);
+  // const tokenMeta = useTokenMeta(tallyAddress);
+  // const claimedFormatted = useMemo(() => {
+  //   const indexKey = String(project.index);
+  //   const raw = claimsByRecipient.data?.[indexKey];
+  //   if (raw == null) {
+  //     return null;
+  //   }
+  //   try {
+  //     const { decimals } = tokenMeta;
+  //     const value = formatUnits(BigInt(raw), decimals);
+  //     const [int, dec] = value.split(".");
+  //     const trimmed = dec ? `${int}.${dec.slice(0, 4)}` : int;
+  //     return trimmed;
+  //   } catch {
+  //     return null;
+  //   }
+  // }, [claimsByRecipient.data, project.index, tokenMeta.decimals]);
 
   useEffect(() => {
     if (!claimsByRecipient.data && !claimsByRecipient.isLoading) {
@@ -66,11 +64,11 @@ export const ResultItem = ({ pollId, rank, project, tallyAddress }: IResultItemP
           </div>
         </div>
 
-        <div className="flex-1 font-sans text-lg font-medium leading-[28px] dark:text-white dark:group-hover:text-white">
-          <span className="truncate">{metadata.data?.name}</span>
+        <div className="min-w-0 flex-1 font-sans text-lg font-medium leading-[28px] dark:text-white dark:group-hover:text-white">
+          <div className="truncate">{metadata.data?.name}</div>
         </div>
 
-        {claimedFormatted && (
+        {/* {claimedFormatted && (
           <div className="flex-none">
             <span className="ring-[var(--brand-300)]/60 dark:ring-[var(--brand-300)]/60 inline-flex h-6 items-center gap-1 rounded-full bg-[var(--brand-50)] px-2 text-[10px] font-semibold uppercase leading-none text-black ring-1 dark:bg-[var(--brand-300)] dark:text-white">
               <svg className="h-3 w-3" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
@@ -86,7 +84,7 @@ export const ResultItem = ({ pollId, rank, project, tallyAddress }: IResultItemP
               <span>{tokenMeta.symbol}</span>
             </span>
           </div>
-        )}
+        )} */}
 
         <div className="flex-none text-end font-sans text-base font-normal text-black dark:text-white dark:group-hover:text-white">{`${project.votes} votes`}</div>
       </div>
