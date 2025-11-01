@@ -1,45 +1,22 @@
+import { Contract, JsonRpcProvider } from "ethers";
 import { useEffect, useState } from "react";
-import { Hex, createPublicClient, http } from "viem";
 
-import { config } from "~/config";
+import { getRPCURL } from "~/config";
 
 interface TokenMeta {
   symbol: string;
   decimals: number;
   isLoading: boolean;
-  tokenAddress?: Hex;
+  tokenAddress?: string;
 }
 
-const TALLY_ABI = [
-  {
-    type: "function",
-    name: "token",
-    stateMutability: "view",
-    inputs: [],
-    outputs: [{ name: "", type: "address" }],
-  },
-] as const;
+const TALLY_ABI = ["function token() view returns (address)"];
 
-const ERC20_ABI = [
-  {
-    type: "function",
-    name: "symbol",
-    stateMutability: "view",
-    inputs: [],
-    outputs: [{ name: "", type: "string" }],
-  },
-  {
-    type: "function",
-    name: "decimals",
-    stateMutability: "view",
-    inputs: [],
-    outputs: [{ name: "", type: "uint8" }],
-  },
-] as const;
+const ERC20_ABI = ["function symbol() view returns (string)", "function decimals() view returns (uint8)"];
 
 export function useTokenMeta(tallyAddress: string | undefined): TokenMeta {
   const [meta, setMeta] = useState<TokenMeta>({
-    symbol: "TOKEN",
+    symbol: "WETH",
     decimals: 18,
     isLoading: false,
     tokenAddress: undefined,
@@ -52,26 +29,30 @@ export function useTokenMeta(tallyAddress: string | undefined): TokenMeta {
       }
       setMeta((m) => ({ ...m, isLoading: true }));
       try {
-        const client = createPublicClient({ chain: config.network, transport: http() });
-        const tokenAddress = await client.readContract({
-          abi: TALLY_ABI,
-          address: tallyAddress as Hex,
-          functionName: "token",
-        });
+        const provider = new JsonRpcProvider(getRPCURL());
+
+        interface TallyContract {
+          token: () => Promise<string>;
+        }
+        const tally = new Contract(tallyAddress, TALLY_ABI, provider) as unknown as TallyContract;
+        const tokenAddress = await tally.token();
 
         let symbol = "TOKEN";
         let decimals = 18;
+
+        interface ERC20Contract {
+          symbol: () => Promise<string>;
+          decimals: () => Promise<bigint>;
+        }
+        const erc20 = new Contract(tokenAddress, ERC20_ABI, provider) as unknown as ERC20Contract;
+
         try {
-          symbol = await client.readContract({
-            abi: ERC20_ABI,
-            address: tokenAddress,
-            functionName: "symbol",
-          });
+          symbol = await erc20.symbol();
         } catch {
           symbol = "TOKEN";
         }
         try {
-          const dec = await client.readContract({ abi: ERC20_ABI, address: tokenAddress, functionName: "decimals" });
+          const dec = await erc20.decimals();
           decimals = Number(dec);
         } catch {
           decimals = 18;

@@ -1,7 +1,7 @@
 import { Contract, JsonRpcProvider } from "ethers";
 import { useEffect, useState } from "react";
 
-import { config } from "~/config";
+import { getRPCURL } from "~/config";
 
 interface TallyTotals {
   available: bigint;
@@ -30,7 +30,7 @@ export function useTallyContractBalance(tallyAddress: string | undefined): Tally
       setTotals((prev) => ({ ...prev, isLoading: true }));
 
       try {
-        const provider = new JsonRpcProvider(config.network.rpcUrls.default.http[0]);
+        const provider = new JsonRpcProvider(getRPCURL());
         interface TallyContract {
           totalAmount: () => Promise<bigint>;
         }
