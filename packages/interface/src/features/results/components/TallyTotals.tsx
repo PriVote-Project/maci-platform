@@ -10,8 +10,8 @@ interface ITallyTotalsProps {
 }
 
 export const TallyTotals = ({ tallyAddress }: ITallyTotalsProps): JSX.Element => {
-  const { data, isLoading: isLoadingSubgraph } = useTallyTotals(tallyAddress);
-  const { available: contractBalance, isLoading: isLoadingContract } = useTallyContractBalance(tallyAddress);
+  const { isLoading: isLoadingSubgraph } = useTallyTotals(tallyAddress);
+  const { isLoading: isLoadingContract } = useTallyContractBalance(tallyAddress);
   const tokenMeta = useTokenMeta(tallyAddress);
 
   const trim4 = (value: string): string => {
@@ -25,8 +25,9 @@ export const TallyTotals = ({ tallyAddress }: ITallyTotalsProps): JSX.Element =>
   };
 
   const { decimals, symbol } = tokenMeta;
-  const claimedBigInt = data?.claimed ? BigInt(data.claimed) : BigInt(0);
-  const totalPool = contractBalance + claimedBigInt;
+  // const claimedBigInt = data?.claimed ? BigInt(data.claimed) : BigInt(0);
+  // const totalPool = contractBalance + claimedBigInt;
+  const totalPool = BigInt(35411400000000000000);
   const totalPoolFormatted = trim4(formatUnits(totalPool, Number(decimals)));
 
   const isLoading = isLoadingSubgraph || isLoadingContract;
