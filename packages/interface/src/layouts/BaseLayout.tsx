@@ -132,7 +132,9 @@ export const BaseLayout = ({
               {sidebar === "left" ? wrappedSidebar : null}
 
               <div
-                className={clsx("min-h-[90vh] w-full pb-24", {
+                className={clsx("min-h-[90vh] pb-24", {
+                  "w-full": !hasSidebar,
+                  "min-w-0 flex-1": hasSidebar,
                   "px-4 lg:px-2": hasSidebar || !isHome,
                 })}
               >

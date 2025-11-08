@@ -8,7 +8,7 @@ import { FetchInView } from "./FetchInView";
 
 const columnMap = {
   2: "grid-cols-1 lg:grid-cols-2",
-  3: "grid-cols-1 lg:grid-cols-3",
+  3: "grid-cols-1 lg:grid-cols-2 xl:grid-cols-3",
 } as const;
 
 type Props<T> = UseTRPCInfiniteQueryResult<T[], unknown, unknown> & {
